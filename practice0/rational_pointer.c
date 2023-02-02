@@ -1,5 +1,5 @@
 #include "rational_pointer.h"
-//Opertaion to create a rational number
+
 Rational createRational(int n,int d){
     Rational temp;
     temp= malloc(sizeof(*temp));
@@ -7,7 +7,20 @@ Rational createRational(int n,int d){
     temp->den=d;
     return temp;
 }
-//Opereration that returns the numerator of a rational number
+
 int numerator(Rational r){
     return r->num;
 }
+
+int denominator(Rational r){
+    return r->den;
+}
+
+Rational sum(Rational r1, Rational r2){
+    Rational s;
+    s= malloc(sizeof(*s));
+    s->num= r1->num * r2->den + r2->num * r1->den;
+    s->den= r1->den *r2->den;
+    return s;
+}
+

@@ -1,3 +1,7 @@
+#ifndef RATIONAL_RATIONAL_POINTER_H
+#define RATIONAL_RATIONAL_POINTER_H
+
+
 typedef struct Data* Rational;
 struct Data {
     int num;
