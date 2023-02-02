@@ -1,1 +1,0 @@
-/usr/bin/cc CMakeFiles/mandelbrot.dir/rational_pointer.c.o CMakeFiles/mandelbrot.dir/rational_struct.c.o -o mandelbrot 

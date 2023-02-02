@@ -1,3 +1,0 @@
-/home/fic/programming/proII/practice0/build/CMakeFiles/rebuild_cache.dir
-/home/fic/programming/proII/practice0/build/CMakeFiles/edit_cache.dir
-/home/fic/programming/proII/practice0/build/CMakeFiles/rational.dir
