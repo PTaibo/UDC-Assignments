@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/fic/programming/proII/practice0/rational_pointer.c
+rational_pointer.h
+/home/fic/programming/proII/practice0/rational_pointer.h
+
+/home/fic/programming/proII/practice0/rational_pointer.h
+
+/home/fic/programming/proII/practice0/rational_struct.c
+rational_struct.h
+/home/fic/programming/proII/practice0/rational_struct.h
+
+/home/fic/programming/proII/practice0/rational_struct.h
+
