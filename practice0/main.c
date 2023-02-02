@@ -8,7 +8,7 @@ int main(){
     r3= createRational(7,3);
     r4= createRational(5,4);
     s=sum(r1,r2);
-    printf("The sum is %d/%d\n",numerators(s),denominator(s));
+    printf("The sum is %d/%d\n",numerator(s),denominator(s));
     s=sum(r3,r4);
     printf("The sum is %d/%d\n",numerator(s),denominator(s));
     return 0;
