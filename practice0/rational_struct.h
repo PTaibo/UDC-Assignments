@@ -1,6 +1,12 @@
+/*
+TITLE: PROGRAMMING II LABS      SUBTITLE: P0
+AUTHOR 1: SIYUAN HE             LOGIN: SIYUAN.HE
+AUTHOR 2: PAULA TAIBO SUAREZ    LOGIN: P.TAIBO 
+GROUP: 6.1                      DATE: 03/02/2023
+*/
+
 #ifndef RATIONAL_RATIONAL_STRUCT_H
 #define RATIONAL_RATIONAL_STRUCT_H
-//?????
 
 typedef struct Data Rational;
 struct Data {

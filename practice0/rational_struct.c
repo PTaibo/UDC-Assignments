@@ -1,3 +1,10 @@
+/*
+TITLE: PROGRAMMING II LABS      SUBTITLE: P0
+AUTHOR 1: SIYUAN HE             LOGIN: SIYUAN.HE
+AUTHOR 2: PAULA TAIBO SUAREZ    LOGIN: P.TAIBO 
+GROUP: 6.1                      DATE: 03/02/2023
+*/
+
 #include "rational_struct.h"
 
 Rational createRational(int n, int d){
