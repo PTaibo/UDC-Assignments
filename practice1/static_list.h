@@ -12,7 +12,20 @@
 #define STATIC_LIST_H
 
 #include "types.h"
+#define LNULL -1
+#define MAX_LIST 1000
 
-/* Write your code here... */
+typedef tItemL tList[MAX_LIST];
+typedef int tPosL; 
+
+void createEmptyList (tList* newList);
+bool isEmptyList(tList list);
+tPosL first(tList list);
+tPosL last (tList list);
+tPosL next (tPosL pos, tList list);
+tPosL previous (tPosL pos, tList list);
+bool insertItem (tItemL item, tPosL pos, tList* list);
+void deleteAtPosition(tPosL pos, tList* list);
+tItemL getItem(tPosL pos, tList list);
 
 #endif
