@@ -9,4 +9,7 @@
 
 #include "static_list.h"
 
-/* Write your code here... */
+void createEmptyList (tList* newList)
+{
+    newList->lastPs = LNULL
+}
