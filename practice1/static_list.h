@@ -15,8 +15,12 @@
 #define LNULL -1
 #define MAX_LIST 1000
 
-typedef tItemL tList[MAX_LIST];
 typedef int tPosL; 
+
+typedef struct {
+    tItemL elements[MAX_LIST];
+    tPosL lastPos;
+} tList;
 
 void createEmptyList (tList* newList);
 bool isEmptyList(tList list);
@@ -27,5 +31,7 @@ tPosL previous (tPosL pos, tList list);
 bool insertItem (tItemL item, tPosL pos, tList* list);
 void deleteAtPosition(tPosL pos, tList* list);
 tItemL getItem(tPosL pos, tList list);
+void updateItem (tItemL item, tPosL pos, tList* list);
+tPosL findItem (tParticipantName participant, tList list);
 
 #endif
