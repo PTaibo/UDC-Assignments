@@ -11,5 +11,5 @@
 
 void createEmptyList (tList* newList)
 {
-    newList->lastPs = LNULL
+    newList->lastPos = LNULL;
 }
