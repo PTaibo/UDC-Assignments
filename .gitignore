@@ -1,3 +1,5 @@
 com
 main
 build/
+.vscode
+.gitignore

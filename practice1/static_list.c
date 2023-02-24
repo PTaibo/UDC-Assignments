@@ -13,3 +13,33 @@ void createEmptyList (tList* newList)
 {
     newList->lastPos = LNULL;
 }
+
+tPosL first (tList list)
+{
+    return 0;
+}
+
+tPosL last(tList list)
+{
+    return list.lastPos;
+}
+
+tPosL next (tPosL pos,tList list)
+{
+    if (pos==list.lastPos)
+        return LNULL;
+//else return pos+1;
+    return pos+1;
+}
+
+tPosL previous (tPosL pos, tList list)
+{
+    if (pos==0)
+        return LNULL;
+    return pos-1;
+}
+
+bool insertItem (tItemL item, tPosL pos, tList* list)
+{
+    printf()
+}
