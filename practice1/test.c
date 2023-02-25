@@ -7,7 +7,9 @@
 // #ifdef STATIC_LIST
 // #include "static_list.h"
 // #endif
-#include "static_list.h"
+
+// #include "static_list.h"
+#include "dynamic_list.h"
 
 void print_list(tList list) {
     tPosL pos;

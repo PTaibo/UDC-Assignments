@@ -20,5 +20,3 @@ add_executable(test_lists types.h test.c ${dependencies})
 target_compile_options(main PRIVATE -Wall -Wextra)
 target_compile_options(test_lists PRIVATE -Wall -Wextra)
 set_target_properties(main test_lists PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../bin)
-
-
