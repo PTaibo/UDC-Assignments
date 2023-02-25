@@ -14,6 +14,11 @@ void createEmptyList(tList *newList)
     newList->lastPos = LNULL;
 }
 
+bool isEmptyList(tList list)
+{
+    return list.lastPos==LNULL;
+}
+
 tPosL first(tList list)
 {
     return 0;
