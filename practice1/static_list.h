@@ -12,6 +12,7 @@
 #define STATIC_LIST_H
 
 #include "types.h"
+#include <strings.h>
 #define LNULL -1
 #define MAX_LIST 1000
 

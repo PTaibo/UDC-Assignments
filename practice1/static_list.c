@@ -83,7 +83,7 @@ void updateItem (tItemL item, tPosL pos, tList* list)
 tPosL findItem (tParticipantName participant, tList list)
 {
     for (int i=0;i<=list.lastPos;i++){
-        if(list.elements[i].participantName==participant)
+        if(strcmp(list.elements[i].participantName,participant)==0)
             return i;
     }
     return LNULL;
