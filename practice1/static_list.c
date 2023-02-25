@@ -9,12 +9,12 @@
 
 #include "static_list.h"
 
-void createEmptyList (tList* newList)
+void createEmptyList(tList *newList)
 {
     newList->lastPos = LNULL;
 }
 
-tPosL first (tList list)
+tPosL first(tList list)
 {
     return 0;
 }
@@ -24,22 +24,62 @@ tPosL last(tList list)
     return list.lastPos;
 }
 
-tPosL next (tPosL pos,tList list)
+tPosL next(tPosL pos, tList list)
 {
-    if (pos==list.lastPos)
+    if (pos == list.lastPos)
         return LNULL;
-//else return pos+1;
-    return pos+1;
+    // else return pos+1;
+    return pos + 1;
 }
 
-tPosL previous (tPosL pos, tList list)
+tPosL previous(tPosL pos, tList list)
 {
-    if (pos==0)
+    if (pos == 0)
         return LNULL;
-    return pos-1;
+    return pos - 1;
 }
 
-bool insertItem (tItemL item, tPosL pos, tList* list)
+bool insertItem(tItemL item, tPosL pos, tList *list)
 {
-    printf()
+    if (list->lastPos == MAX_LIST - 1){
+        return 0;
+    }
+    if (pos == LNULL){
+        list->lastPos++;
+        list->elements[list->lastPos] = item;
+        return 1;
+    }
+
+    for (int i = list->lastPos; i >= pos; i--)
+        list->elements[i+1] = list->elements[i];
+
+    list->elements[pos]=item;
+    list->lastPos++;
+    return 1;
+}
+
+void deleteAtPosition(tPosL pos, tList* list)
+{
+    list->lastPos--;
+    for (int i=pos;i<=list->lastPos;i++)
+            list->elements[i]=list->elements[i+1];   
+}
+
+tItemL getItem(tPosL pos, tList list)
+{
+    return list.elements[pos];
+}
+
+void updateItem (tItemL item, tPosL pos, tList* list)
+{
+    list->elements[pos]=item;
+}
+
+tPosL findItem (tParticipantName participant, tList list)
+{
+    for (int i=0;i<=list.lastPos;i++){
+        if(list.elements[i].participantName==participant)
+            return i;
+    }
+    return LNULL;
 }
