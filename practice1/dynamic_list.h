@@ -24,15 +24,10 @@ typedef struct node tNode;
 
 struct node {
     tItemL element;
-    tNode* prev;
     tNode* next;
 };
 
-typedef struct {
-    tNode* lastPos;
-    tNode* first;
-} tList;
-
+typedef tNode* tList;
 typedef tNode* tPosL;
 
 void createEmptyList(tList* newList);
