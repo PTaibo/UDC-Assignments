@@ -8,6 +8,7 @@
  */
 
 #include "dynamic_list.h"
+#define UNUSED __attribute__((unused)) //Gets rid of unused parameter warnings
 
 void createEmptyList(tList* newList)
 {
@@ -31,7 +32,7 @@ tPosL last (tList list)
     return it;
 }
 
-tPosL next (tPosL pos, tList list)
+tPosL next (tPosL pos, UNUSED tList list)
 {
     return pos->next;
 }
@@ -100,12 +101,12 @@ void deleteAtPosition(tPosL pos, tList* list)
     return;
 }
 
-tItemL getItem (tPosL pos, tList list)
+tItemL getItem (tPosL pos, UNUSED tList list)
 {
     return pos->element;
 }
 
-void updateItem (tItemL item, tPosL pos, tList* list)
+void updateItem (tItemL item, tPosL pos, UNUSED tList* list)
 {
     pos->element = item;
 }
