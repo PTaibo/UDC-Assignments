@@ -78,10 +78,11 @@ int insertItem (tItemL item, tPosL pos, tList* list)
     }
 
     //Case 4: add to middle of list
-    tNode* prev = previous(pos, *list);
-    tmp->next = pos;
-    prev->next = tmp;
-    return 1;    
+    tmp->element = pos->element;
+    tmp->next = pos->next;
+    pos->element = item;
+    pos->next = tmp;
+    return 1;
 }
 
 void deleteAtPosition(tPosL pos, tList* list)
