@@ -50,7 +50,7 @@ bool insertItem(tItemL item, tPosL pos, tList *list)
         return 0;
     }
     if (pos == LNULL){
-        list->lastPos++;
+        ++(list->lastPos);
         list->elements[list->lastPos] = item;
         return 1;
     }
@@ -59,7 +59,7 @@ bool insertItem(tItemL item, tPosL pos, tList *list)
         list->elements[i+1] = list->elements[i];
 
     list->elements[pos]=item;
-    list->lastPos++;
+    ++(list->lastPos);
     return 1;
 }
 
