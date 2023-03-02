@@ -1,0 +1,3 @@
+Command: 01 N Country1 eu
+Command: 03 N Country2 non-eu
+Command: 05 N Country3 eu
