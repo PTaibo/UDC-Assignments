@@ -1,10 +1,8 @@
 /*
- * TITLE: PROGRAMMING II LABS
- * SUBTITLE: Practical 1
- * AUTHOR 1: ***************************** LOGIN 1: **********
- * AUTHOR 2: ***************************** LOGIN 2: **********
- * GROUP: *.*
- * DATE: ** / ** / **
+ * TITLE: PROGRAMMING II LABS       * SUBTITLE: Practical 1
+ * AUTHOR 1: Siyuan He              * LOGIN 1: siyuan.he
+ * AUTHOR 2: Paula Taibo Suárez     * LOGIN 2: p.taibo
+ * GROUP: 6.1                       * DATE: 02 / 03 / 23
  */
 
 #include "dynamic_list.h"
