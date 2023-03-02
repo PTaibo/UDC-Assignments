@@ -11,17 +11,17 @@
 
 void createEmptyList(tList *newList)
 {
-    newList->lastPos = LNULL;
+    newList->lastPos = LNULL; //we set the last position as -1 so the next is the position 0.
 }
 
-bool isEmptyList(tList list)
+bool isEmptyList(tList list) 
 {
-    return list.lastPos==LNULL;
+    return list.lastPos==LNULL;//if it is -1 then it will retrun true otherwise it will be false
 }
 
 tPosL first(tList list)
 {
-    return 0;
+    return 0;//the first element in a array is 0.
 }
 
 tPosL last(tList list)
@@ -46,28 +46,28 @@ tPosL previous(tPosL pos, tList list)
 
 bool insertItem(tItemL item, tPosL pos, tList *list)
 {
-    if (list->lastPos == MAX_LIST - 1){
+    if (list->lastPos == MAX_LIST - 1){//Cheking if the list is full
         return 0;
     }
-    if (pos == LNULL){
+    if (pos == LNULL){//By the specs
         ++(list->lastPos);
         list->elements[list->lastPos] = item;
         return 1;
     }
 
-    for (int i = list->lastPos; i >= pos; i--)
+    for (int i = list->lastPos; i >= pos; i--)//we move the elememts one behind until the position inserted
         list->elements[i+1] = list->elements[i];
 
-    list->elements[pos]=item;
+    list->elements[pos]=item;//We put the item in the position
     ++(list->lastPos);
     return 1;
 }
 
 void deleteAtPosition(tPosL pos, tList* list)
 {
-    list->lastPos--;
-    for (int i=pos;i<=list->lastPos;i++)
-            list->elements[i]=list->elements[i+1];   
+    for (int i=pos;i<=list->lastPos;i++)//we move one previus to lap the position
+            list->elements[i]=list->elements[i+1];  
+    --(list->lastPos); //we quit one position
 }
 
 tItemL getItem(tPosL pos, tList list)
@@ -82,9 +82,10 @@ void updateItem (tItemL item, tPosL pos, tList* list)
 
 tPosL findItem (tParticipantName participant, tList list)
 {
-    for (int i=0;i<=list.lastPos;i++){
+    for (int i=0;i<=list.lastPos;i++){//we go through the list
         if(strcmp(list.elements[i].participantName,participant)==0)
+        //strcmp returns 0 if it is equal
             return i;
     }
-    return LNULL;
+    return LNULL;//If it doesnt find it it will retrun -1
 }
