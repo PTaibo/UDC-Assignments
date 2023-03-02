@@ -95,6 +95,7 @@ void deleteAtPosition(tPosL pos, tList* list)
         return;
     }
 
+    //Case 2: delete last or intermediate element
     tNode* prev = previous(pos, *list);
     prev->next = pos->next;
     free(pos);

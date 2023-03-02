@@ -18,8 +18,6 @@
 #define LNULL NULL
 #define MAX_LIST 1000
 
-///CAMBIAR VARIABLE tNode a tList
-
 typedef struct node tNode;
 
 struct node {
