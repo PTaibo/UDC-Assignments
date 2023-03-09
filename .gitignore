@@ -1,6 +1,7 @@
 com
-practice0/main
-build/
-.vscode
-.gitignore
 my/
+.vscode
+script_minimos/
+#Executables
+main
+build/
