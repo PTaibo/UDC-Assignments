@@ -8,9 +8,9 @@ set(CMAKE_C_FLAGS "-Wall -Wextra -g --std=c99")
 #set(CMAKE_VERBOSE_MAKEFILE on)
 
 set(SOURCES
-    test.c
+    main.c
     #static_list.c
     dynamic_list.c
     )
 
-add_executable(test ${SOURCES})
+add_executable(main ${SOURCES})
