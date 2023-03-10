@@ -19,21 +19,19 @@
 #include "static_list.h"
 #endif
 
-#include "dynamic_list.h"
-
 void vote (char* param1, tList contestants, int* nullVotes, int* totalVotes) 
 {
     //Adds a vote to the specified contestant
     tPosL participantPos = findItem(param1, contestants);
     if (participantPos == LNULL){
         printf("+ Error: Vote not possible. Participant %s not found. NULLVOTE\n", param1);
-        *nullVotes++;
+        (void)*nullVotes++; //(void) gets rid of "unused variable" warning
         return;
     }
 
     tItemL participant = getItem(participantPos, contestants);
     participant.numVotes++;
-    *totalVotes++;
+    (void)*totalVotes++; //(void) gets rid of "unused variable" warning
     printf("* Vote: participant %s location", param1);
     if(participant.EUParticipant)
         printf("eu");
