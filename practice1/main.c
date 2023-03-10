@@ -21,6 +21,33 @@
 
 #include "dynamic_list.h"
 
+void new(tList* newlist, char *participantName, bool EUparticipant)
+{
+    int pos;
+    tItemL tempconcursant;// this is my item
+    pos=findItem(*participantName,*newlist);
+    if (pos==LNULL){
+        int temp,cor;
+        strcpy(tempconcursant.participantName,*participantName);//we add the parameters
+        tempconcursant.numVotes=0;//we set votes to 0
+        tempconcursant.EUParticipant=EUparticipant;//we set the eu or non-eu
+        temp=last(*newlist);//to the last position
+        cor=insertItem(tempconcursant, temp, newlist);//insert item in the last position
+        if (cor==0)
+            printf("+ Error: New not possible");
+        else 
+            printf("* New: participant %s location ",*participantName);
+            if (tempconcursant.EUParticipant==true){
+                printf("eu");
+            }   
+            else 
+                printf("non-eu");
+        }
+    else {
+        printf("+ Error: New not possible");
+    }
+}
+
 void vote (char* param1, tList contestants, int* nullVotes, int* totalVotes) 
 {
     //Adds a vote to the specified contestant
