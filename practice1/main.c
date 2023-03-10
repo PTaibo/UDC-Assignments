@@ -19,38 +19,11 @@
 #include "static_list.h"
 #endif
 
-#include "dynamic_list.h"
+#include "dynamic_list.h" //REMOVE
+#include "mainFunctions.h" //REMOVE
 
-void newContestant(tList* newlist, char *participantName, bool EUparticipant)
+void addVote (char* param1, tList contestants, int* nullVotes, int* totalVotes) //Adds a vote to the specified contestant
 {
-    int pos;
-    tItemL tempconcursant;// this is my item
-    pos=findItem(*participantName,*newlist);
-    if (pos==LNULL){
-        int temp,cor;
-        strcpy(tempconcursant.participantName,*participantName);//we add the parameters
-        tempconcursant.numVotes=0;//we set votes to 0
-        tempconcursant.EUParticipant=EUparticipant;//we set the eu or non-eu
-        temp=last(*newlist);//to the last position
-        cor=insertItem(tempconcursant, temp, newlist);//insert item in the last position
-        if (cor==0)
-            printf("+ Error: New not possible");
-        else 
-            printf("* New: participant %s location ",*participantName);
-            if (tempconcursant.EUParticipant==true){
-                printf("eu");
-            }   
-            else 
-                printf("non-eu");
-        }
-    else {
-        printf("+ Error: New not possible");
-    }
-}
-
-void vote (char* param1, tList contestants, int* nullVotes, int* totalVotes) 
-{
-    //Adds a vote to the specified contestant
     tPosL participantPos = findItem(param1, contestants);
     if (participantPos == LNULL){
         printf("+ Error: Vote not possible. Participant %s not found. NULLVOTE\n", param1);
@@ -69,7 +42,7 @@ void vote (char* param1, tList contestants, int* nullVotes, int* totalVotes)
     printf(" numvotes %d\n", participant.numVotes);
 }
 
-void stats (tList contestants, int* totalVotes, int* nullVotes, char* param1)
+void printStats (tList contestants, int* totalVotes, int* nullVotes, char* param1)
 {
     if (isEmptyList(contestants)){
         printf("+ Error: Stats not possible\n");
@@ -97,27 +70,28 @@ void stats (tList contestants, int* totalVotes, int* nullVotes, char* param1)
 
 void processCommand(char *commandNumber, char command, char *param1, char *param2, tList contestants, int* nullVotes, int* totalVotes) {
     //printf("Command: %s %c %s %s\n", commandNumber, command, param1, param2);
-    //Input print part that is the same for every input type
+    //Input print: part that is the same for every input type
     for (int i = 0; i < 20; i++)
         printf("*");
     printf("\n");
     printf("%s %c: ", commandNumber, command);
 
     switch (command) { //Specific input prints and command function call
-        case 'N':
-            newContestant(contestants, param1, param2);
+        case 'N': //New
             printf("participant %s location %s\n", param1, param2);
+            addContestant(contestants, param1, param2);
             break;
-        case 'V':
+        case 'V': //Vote
             printf("participant %s\n", param1);
-            vote(param1, contestants, nullVotes, totalVotes);
+            addVote(param1, contestants, nullVotes, totalVotes);
             break;
-        case 'D':
+        case 'D': //Disqualify
             printf("participant %s\n", param1);
+            disqualifyContestant(param1, contestants, nullVotes);
             break;
-        case 'S':
+        case 'S': //Stats
             printf("totalvoters %s\n", param1);
-            stats(contestants, totalVotes, nullVotes, param1);
+            printStats(contestants, totalVotes, nullVotes, param1);
             break;
         default:
             break;
