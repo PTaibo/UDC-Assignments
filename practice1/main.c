@@ -19,11 +19,9 @@
 #include "static_list.h"
 #endif
 
-<<<<<<< HEAD
-=======
 #include "dynamic_list.h"
 
-void new(tList* newlist, char *participantName, bool EUparticipant)
+void newContestant(tList* newlist, char *participantName, bool EUparticipant)
 {
     int pos;
     tItemL tempconcursant;// this is my item
@@ -50,7 +48,6 @@ void new(tList* newlist, char *participantName, bool EUparticipant)
     }
 }
 
->>>>>>> e532908435521e9efba387b685e833a1d8fa3888
 void vote (char* param1, tList contestants, int* nullVotes, int* totalVotes) 
 {
     //Adds a vote to the specified contestant
@@ -108,6 +105,7 @@ void processCommand(char *commandNumber, char command, char *param1, char *param
 
     switch (command) { //Specific input prints and command function call
         case 'N':
+            newContestant(contestants, param1, param2);
             printf("participant %s location %s\n", param1, param2);
             break;
         case 'V':
