@@ -19,20 +19,64 @@
 #include "static_list.h"
 #endif
 
-void vote (char* param1, tList contestants, int* nullVotes, int* totalVotes) 
+void addContestant(tList* participants, char* participantName, char* EUParticipant)
 {
-    //Adds a vote to the specified contestant
-    tPosL participantPos = findItem(param1, contestants);
-    if (participantPos == LNULL){
-        printf("+ Error: Vote not possible. Participant %s not found. NULLVOTE\n", param1);
-        (void)*nullVotes++; //(void) gets rid of "unused variable" warning
+    //CREATE AND INITIALIZE NODE
+    tItemL tempconcursant;
+    strcpy(tempconcursant.participantName, participantName);
+    tempconcursant.numVotes=0;
+    if (strcmp("eu",EUParticipant)==0)
+        tempconcursant.EUParticipant=true;
+    else{
+        tempconcursant.EUParticipant=false;
+    }
+
+    //ADD NODE TO LIST
+    //Check if it already exists
+    tPosL pos;
+    pos = findItem(participantName,*participants);
+    if (pos != LNULL){
+        printf("+ Error: New not possible\n");
         return;
     }
 
-    tItemL participant = getItem(participantPos, contestants);
+    //If it doesn't, add to list
+    int itemInserted;
+    itemInserted = insertItem(tempconcursant, LNULL, participants);
+
+    //Check if it was added
+    if (!itemInserted){
+        printf("+ Error: New not possible\n");
+        return;
+    }
+
+    //Print information
+    printf("* New: participant %s location ", participantName);
+    if (tempconcursant.EUParticipant==true){
+        printf("eu\n");
+        return;
+    }    
+    printf("non-eu\n");
+}
+
+void addVote (char* param1, tList* contestants, int* nullVotes, int* totalVotes) //Adds a vote to the specified contestant
+{
+    //Check if contestant exists
+    tPosL participantPos = findItem(param1, *contestants);
+    if (participantPos == LNULL){
+        printf("+ Error: Vote not possible. Participant %s not found. NULLVOTE\n", param1);
+        *nullVotes += 1;
+        return;
+    }
+
+    //If it does, add the vote
+    tItemL participant = getItem(participantPos, *contestants);
     participant.numVotes++;
-    (void)*totalVotes++; //(void) gets rid of "unused variable" warning
-    printf("* Vote: participant %s location", param1);
+    updateItem(participant, participantPos, contestants);
+    *totalVotes += 1;
+
+    //Print information
+    printf("* Vote: participant %s location ", param1);
     if(participant.EUParticipant)
         printf("eu");
     else
@@ -40,54 +84,66 @@ void vote (char* param1, tList contestants, int* nullVotes, int* totalVotes)
     printf(" numvotes %d\n", participant.numVotes);
 }
 
-void stats (tList contestants, int* totalVotes, int* nullVotes, char* param1)
+void printStats (tList* contestants, int* totalVotes, int* nullVotes, char* totalVoters)
 {
-    if (isEmptyList(contestants)){
+    //Check if there are contestants
+    if (isEmptyList(*contestants)){
         printf("+ Error: Stats not possible\n");
         return;
     }
 
     //Print participant's information
-    for (tPosL it = first(contestants); it != LNULL; it = next(it, contestants)){
-        tItemL participant = getItem(it, contestants);
-        printf("Participant %s location )", participant.participantName);
+    for (tPosL it = first(*contestants); it != LNULL; it = next(it, *contestants)){
+        tItemL participant = getItem(it, *contestants);
+        printf("Participant %s location ", participant.participantName);
         if(participant.EUParticipant)
             printf("eu");
         else
             printf("non-eu");
-        float votePercentage = (participant.numVotes*100) / *totalVotes;
-        printf(" numvotes %d (%.2f%%)\n", participant.numVotes, votePercentage);
+        printf(" numvotes %d", participant.numVotes);
+        if (!*totalVotes){ //If there are no votes [to avoid dividing by 0]
+            printf(" (0.00%%)\n");
+        }
+        else {
+            printf(" (%.2f%%)\n", (float)( (participant.numVotes*100) / *totalVotes) );
+        }
     }
 
     //Print voter's information
     printf("Null votes %d\n", *nullVotes);
-
-    float votersPercentage = (*nullVotes + *totalVotes)*100 / atoi(param1);
-    printf("Participation: %d votes from %s voters (%.2f%%)\n", *nullVotes + *totalVotes, param1, votersPercentage);
+    printf("Participation: %d votes from %s voters ", *nullVotes + *totalVotes, totalVoters);
+    if (!atoi(totalVoters)){ //Avoid dividing by 0
+        printf("(0.00%%)\n");
+    }
+    else {
+        printf("(%.2f%%)\n", (float)( (*nullVotes + *totalVotes)*100 / atoi(totalVoters) ));
+    }
 }
 
-void processCommand(char *commandNumber, char command, char *param1, char *param2, tList contestants, int* nullVotes, int* totalVotes) {
+void processCommand(char *commandNumber, char command, char *param1, char *param2, tList* contestants, int* nullVotes, int* totalVotes) {
     //printf("Command: %s %c %s %s\n", commandNumber, command, param1, param2);
-    //Input print part that is the same for every input type
+    //Print generic input information
     for (int i = 0; i < 20; i++)
         printf("*");
     printf("\n");
     printf("%s %c: ", commandNumber, command);
 
     switch (command) { //Specific input prints and command function call
-        case 'N':
+        case 'N': //New
             printf("participant %s location %s\n", param1, param2);
+            addContestant(contestants, param1, param2);
             break;
-        case 'V':
+        case 'V': //Vote
             printf("participant %s\n", param1);
-            vote(param1, contestants, nullVotes, totalVotes);
+            addVote(param1, contestants, nullVotes, totalVotes);
             break;
-        case 'D':
+        case 'D': //Disqualify
             printf("participant %s\n", param1);
+            //disqualifyContestant(param1, contestants, nullVotes);
             break;
-        case 'S':
+        case 'S': //Stats
             printf("totalvoters %s\n", param1);
-            stats(contestants, totalVotes, nullVotes, param1);
+            printStats(contestants, totalVotes, nullVotes, param1);
             break;
         default:
             break;
@@ -115,7 +171,7 @@ void readTasks(char *filename) {
             param1 = strtok(NULL, delimiters);
             param2 = strtok(NULL, delimiters);
 
-            processCommand(commandNumber, command[0], param1, param2, contestants, &nullVotes, &totalVotes);
+            processCommand(commandNumber, command[0], param1, param2, &contestants, &nullVotes, &totalVotes);
         }
 
         fclose(f);
