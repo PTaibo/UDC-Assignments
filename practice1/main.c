@@ -21,13 +21,14 @@
 
 #include "dynamic_list.h" //REMOVE
 #include "mainFunctions.h" //REMOVE
+#include "disqualify.h" //REMOVE
 
-void addVote (char* param1, tList* contestants, int* nullVotes, int* totalVotes) //Adds a vote to the specified contestant
+void addVote (char* contestantName, tList* contestants, int* nullVotes, int* totalVotes)
 {
     //Check if contestant exists
-    tPosL participantPos = findItem(param1, *contestants);
+    tPosL participantPos = findItem(contestantName, *contestants);
     if (participantPos == LNULL){
-        printf("+ Error: Vote not possible. Participant %s not found. NULLVOTE\n", param1);
+        printf("+ Error: Vote not possible. Participant %s not found. NULLVOTE\n", contestantName);
         *nullVotes += 1;
         return;
     }
@@ -39,12 +40,9 @@ void addVote (char* param1, tList* contestants, int* nullVotes, int* totalVotes)
     *totalVotes += 1;
 
     //Print information
-    printf("* Vote: participant %s location ", param1);
-    if(participant.EUParticipant)
-        printf("eu");
-    else
-        printf("non-eu");
-    printf(" numvotes %d\n", participant.numVotes);
+    printf("* Vote: participant %s location %s numvotes %d\n", contestantName,
+                                                               EUboolToString(participant.EUParticipant),
+                                                               participant.numVotes);
 }
 
 void printStats (tList* contestants, int* totalVotes, int* nullVotes, char* totalVoters)
@@ -58,12 +56,9 @@ void printStats (tList* contestants, int* totalVotes, int* nullVotes, char* tota
     //Print participant's information
     for (tPosL it = first(*contestants); it != LNULL; it = next(it, *contestants)){
         tItemL participant = getItem(it, *contestants);
-        printf("Participant %s location ", participant.participantName);
-        if(participant.EUParticipant)
-            printf("eu");
-        else
-            printf("non-eu");
-        printf(" numvotes %d", participant.numVotes);
+        printf("Participant %s location %s numvotes %d", participant.participantName,
+                                                         EUboolToString(participant.EUParticipant),
+                                                         participant.numVotes);
         if (!*totalVotes){ //If there are no votes [to avoid dividing by 0]
             printf(" (0.00%%)\n");
         }
@@ -102,7 +97,7 @@ void processCommand(char *commandNumber, char command, char *param1, char *param
             break;
         case 'D': //Disqualify
             printf("participant %s\n", param1);
-            //disqualifyContestant(param1, contestants, nullVotes);
+            disqualifyContestant(param1, contestants, nullVotes, totalVotes);
             break;
         case 'S': //Stats
             printf("totalvoters %s\n", param1);
@@ -137,6 +132,10 @@ void readTasks(char *filename) {
             processCommand(commandNumber, command[0], param1, param2, &contestants, &nullVotes, &totalVotes);
         }
 
+        //Frees all remaining allocated memory from the list
+        while (!isEmptyList(contestants)){
+            deleteAtPosition(first(contestants), &contestants);
+        }
         fclose(f);
 
     } else {
