@@ -5,6 +5,6 @@
 #include "dynamic_list.h"
 
 void addContestant(tList* participants, char* participantName, char* EUParticipant);
-void disqualifyContestant (char* participantName, tList participants, int* nullVotes);
+void disqualifyContestant (char* participantName, tList* participants, int* nullVotes);
 
 #endif
