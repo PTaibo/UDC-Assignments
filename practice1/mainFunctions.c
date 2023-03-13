@@ -2,6 +2,7 @@
 
 void addContestant(tList* participants, char* participantName, char* EUParticipant)
 {
+    int itemInserted;
     //CREATE NODE
     tItemL tempconcursant;// this is my item
     strcpy(tempconcursant.participantName, participantName);//we add the parameters
@@ -20,7 +21,6 @@ void addContestant(tList* participants, char* participantName, char* EUParticipa
         return;
     }
 
-    int itemInserted;
     
     itemInserted = insertItem(tempconcursant, LNULL, participants);//insert item in the last position
     if (!itemInserted){
@@ -34,4 +34,30 @@ void addContestant(tList* participants, char* participantName, char* EUParticipa
         return;
     }    
     printf("non-eu\n");
+}
+
+void disqualifyContestant (char* participantName, tList* participants, int* nullVotes, int* totalVotes)
+{
+    tPosL pos;
+    tItemL contestant;
+    //We serach for the constestant
+    pos=findItem(participantName,*participants);
+
+    if(pos==LNULL){//contestant does not exit
+        printf("+Error: Disqualify not possible\n");
+        return;
+    }
+    
+    contestant=getItem(pos,*participants);
+    printf("*Disqualify: participant %s location ", contestant.participantName);
+    if (contestant.EUParticipant==true)
+        printf("eu\n");
+    else 
+        printf("non.eu\n");
+    
+    //we set null it's votes
+    *nullVotes+=contestant.numVotes;
+    *totalVotes-=contestant.numVotes;
+    
+    deleteAtPosition(pos,participants);
 }
