@@ -8,6 +8,7 @@
  */
 
 #include "static_list.h"
+#define UNUSED __attribute__((unused)) //Gets rid of unused parameter warnings
 
 void createEmptyList(tList *newList)
 {
@@ -19,7 +20,7 @@ bool isEmptyList(tList list)
     return list.lastPos==LNULL;
 }
 
-tPosL first(tList list)
+tPosL first(UNUSED tList list)
 {
     return 0;
 }
@@ -37,7 +38,7 @@ tPosL next(tPosL pos, tList list)
     return pos + 1;
 }
 
-tPosL previous(tPosL pos, tList list)
+tPosL previous(tPosL pos, tList UNUSED list)
 {
     if (pos == 0)
         return LNULL;
