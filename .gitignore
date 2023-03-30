@@ -2,6 +2,8 @@ com
 my/
 .vscode
 script_minimos/
+script/
+material/
 #Executables
 main
 build/
