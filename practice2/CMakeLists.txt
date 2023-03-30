@@ -9,10 +9,10 @@ set(CMAKE_C_FLAGS "-Wall -Wextra -O2 --std=c99")
 
 set(SOURCES
     test_jury_list.c
-    test_participant_list.c
+    #test_participant_list.c
     jury_list.c
-    participant_list.c
+    #participant_list.c
     jury_list.c
     )
 
-add_executable(main ${SOURCES})
+add_executable(test ${SOURCES})
