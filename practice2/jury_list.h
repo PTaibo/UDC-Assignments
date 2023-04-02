@@ -16,9 +16,6 @@
 #define MAX_LIST 1000
 #define NULLJ -1
 
-//REMOVE WHEN SIYUAN ADDES HIS THINGIE
-typedef int* tListP;
-
 typedef struct {
     tJuryName juryName;
     tNumVotes totalVoters;
