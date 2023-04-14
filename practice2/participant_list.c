@@ -71,20 +71,29 @@ bool insertItemP (tItemP item, tListP* list)
         *list = temp;
         return 1;
     }
-    //In a position
-    tPosP pos;
-    for (pos= *list; pos!=NULLP;pos=pos->next){
+
+
+
+    tPosP pos = *list;
+
+    //First position
+    if (strcmp(pos->participant.participantName,item.participantName)>0){
+        temp->next = *list;
+        *list = temp;
+        return 1;
+    }
+
+    //Middle position
+    tPosP prev = *list;
+    for (pos= pos->next; pos!=NULLP;prev = pos, pos=pos->next){
         if(strcmp(pos->participant.participantName,item.participantName)>0){
-            temp->participant=pos->participant;
-            temp->next=pos->next;
-            pos->participant=item;
-            pos->next=temp;
+            temp->next = pos;
+            prev->next = temp;
             return 1;
         }
     }
-    //if the first element is bigger
-    pos=lastP(*list);
-    pos->next=temp;
+    //Last position
+    prev->next = temp;
     return 1;
 }
 
