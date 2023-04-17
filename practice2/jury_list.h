@@ -13,7 +13,7 @@
 #include "types.h"
 #include "participant_list.h"
 
-#define MAX_LIST 1000
+#define MAX_LIST 10
 #define NULLJ -1
 
 typedef struct {
