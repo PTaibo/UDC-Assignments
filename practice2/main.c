@@ -128,6 +128,37 @@ void stats(tListJ* juryVotesList)
     }
 }
 
+void removeJuries(tListJ* juryVotesList)
+{
+    /*
+        Goal: removes juries with 0 valid votes
+        Input: a list of juries
+        Output: NONE
+        Preconditions: the list is initialized
+        Postconditions: all juries with 0 valid votes have been removed from the list
+    */
+
+    if (isEmptyListJ(*juryVotesList)){ //There are no juries
+        printf("+ Error: Remove not possible\n");
+        return;
+    }
+
+    bool removedJurys = false;
+    for (tPosJ pJury = firstJ(*juryVotesList); pJury != NULLJ; pJury = nextJ(pJury, *juryVotesList)){
+        tItemJ jury = getItemJ(pJury, *juryVotesList);
+
+        if (!jury.validVotes){
+            printf("* Remove: jury %s\n", jury.juryName);
+            deleteAtPositionJ(pJury, juryVotesList);
+            removedJurys = true;
+        }
+    }
+
+    if (!removedJurys){ //No juries were removed
+        printf("+ Error: Remove not possible\n");
+    }
+}
+
 void processCommand(char *commandNumber, char command, char *param1, char *param2, char *param3, tListJ* juryVotesList) {
     //Print general information
     for (int i = 0; i < 20; i++){
@@ -155,6 +186,8 @@ void processCommand(char *commandNumber, char command, char *param1, char *param
             stats(juryVotesList);
             break;
         case 'R': //Remove
+            printf("\n"); //There is nothing else to print
+            removeJuries(juryVotesList);
             break;
         case 'W': //Winners
             break;
