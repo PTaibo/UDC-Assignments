@@ -18,7 +18,7 @@
 #define MAX_BUFFER 255
 
 typedef struct {
-    char* name[100];
+    char* name;
     int votes;
     bool tie;
 } winner;
@@ -203,9 +203,11 @@ void getWinners(tListJ* juryVotesList)
         }
 
         winner eu;
+            eu.name = "";
             eu.votes = -1;
             eu.tie = false;
         winner non_eu;
+            non_eu.name = "";
             non_eu.votes = -1;
             non_eu.tie = false;
 
