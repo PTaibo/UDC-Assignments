@@ -26,6 +26,9 @@ void create(char *jury, int totalVoters, tListJ *juryVotesList)
     tItemJ judge;
     strcpy(judge.juryName,jury);
     judge.totalVoters=totalVoters;
+    judge.participantList=NULLP;
+    judge.nullVotes=0;
+    judge.validVotes=0;
     if(insertItemJ(judge,juryVotesList)==true){//we check if it is added correctly
         printf("* Create: jury %s totalvoters %d\n",judge.juryName,judge.totalVoters);
         return;
@@ -50,30 +53,35 @@ void addParticipant(char *juryName, char *ParticipantName, char *EUParticipant, 
         return;
     }
     tPosJ pos;
-    pos=findItemJ(juryName,*juryVotesList);
-    if (pos==NULLJ){//Look if the judge exit
+    pos=findItemJ(juryName,*juryVotesList);//Look if the judge exit
+    if (pos==NULLJ){
         printf("+ Error: New not possible\n");
         return;
     }
     tItemJ juri;
     juri=getItemJ(pos,*juryVotesList);
-    tPosP ppart=findItemP(ParticipantName,juri.participantList);
-    if(ppart!=NULLP){//Look if exits
-        printf("+ sdfswaError: New not possible\n");//el error me sale aquí
+
+    bool emptylist=isEmptyListP(juri.participantList);
+    if (!emptylist && findItemP(ParticipantName,juri.participantList)!=NULLP){
+        printf("+ Error: New not possible\n");
         return;
     }
+
     tItemP temp;//I create the participant
     strcpy(temp.participantName,ParticipantName);
     temp.numVotes=0;
     temp.EUParticipant=false;
     if (strcmp(EUParticipant,"eu")==0)
         temp.EUParticipant=true;
-    if(insertItemP(temp,juri.participantList)==false){
+
+    
+    if(!insertItemP(temp,&juri.participantList)){
         printf("+ Error: New not possible\n");
         return;
     }
-    updateItemJ(juri,pos,juryVotesList);
     printf("* New: jury %s participant %s location %s\n",juryName,temp.participantName,EUParticipant);
-        return;
+    if(emptylist)//if the list was empty we need to update the jury list
+        updateItemJ(juri,pos,juryVotesList);
 }
+
    
