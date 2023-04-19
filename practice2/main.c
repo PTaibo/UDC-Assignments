@@ -17,6 +17,12 @@
 
 #define MAX_BUFFER 255
 
+typedef struct {
+    char* name[100];
+    int votes;
+    bool tie;
+} winner;
+
 int EUstringToBool (char* str){
     if (!strcmp(str, "eu")){
         return 1;
@@ -160,6 +166,100 @@ void removeJuries(tListJ* juryVotesList)
     }
 }
 
+int getMax(int a, int b)
+{
+    /*
+        Goal: compares two numbers
+        Input: two integers
+        Output: 0 if they are equal, -1 if the first one is bigger and 1 if the second one is bigger
+        Preconditions: NONE
+        Postconditions: NONE
+    */    
+
+    if (a == b){
+        return 0;
+    }
+
+    if (a > b){
+        return -1;
+    }
+
+    return 1;
+}
+
+void getWinners(tListJ* juryVotesList)
+{
+    if (isEmptyListJ(*juryVotesList)){ //There are no juries
+        printf("+ Error: Winners is not possible\n");
+        return;
+    }
+
+    for (tPosJ pJury = firstJ(*juryVotesList); pJury != NULLJ; pJury = nextJ(pJury, *juryVotesList)){
+        tItemJ jury = getItemJ(pJury, *juryVotesList);
+        printf("Jury %s\n", jury.juryName);
+
+        if (isEmptyListP(jury.participantList)){ //There are no participants
+            printf("Location eu: No winner\nLocation non-eu: No winner\n");
+        }
+
+        winner eu;
+            eu.votes = -1;
+            eu.tie = false;
+        winner non_eu;
+            non_eu.votes = -1;
+            non_eu.tie = false;
+
+        for (tPosP pParticipant = firstP(jury.participantList); pParticipant != NULLP; pParticipant = nextP(pParticipant, jury.participantList)){
+            tItemP participant = getItemP(pParticipant, jury.participantList);
+
+            //Eu participants
+            if (participant.EUParticipant){
+                if (participant.numVotes > eu.votes){ //Found a new max
+                    strcpy(eu.name, participant.participantName);
+                    eu.votes = participant.numVotes;
+                    eu.tie = false;
+                    continue;
+                }
+
+                if (participant.numVotes == eu.votes){ //Max is repeated
+                    eu.tie = true;
+                }
+                continue;
+            }
+
+            //Non-eu participants
+            if (participant.numVotes > non_eu.votes){ //Found a new max
+                strcpy(non_eu.name, participant.participantName);
+                non_eu.votes = participant.numVotes;
+                non_eu.tie = false;
+                continue;
+            }
+
+            if (participant.numVotes == non_eu.votes){ //Max is repeated
+                non_eu.tie = true;
+            }
+        }
+
+        printf("Location eu: ");
+        if (eu.votes == -1 || eu.tie){ //There were no eu participants or there was a tie
+            printf("No winner\n");
+        }
+        else {
+            printf("Participant %s numvotes %d", eu.name, eu.votes);
+        }
+
+        printf("Location non-eu: ");
+        if (non_eu.votes == -1 || non_eu.tie){ //There were no eu participants or there was a tie
+            printf("No winner\n");
+        }
+        else {
+            printf("Participant %s numvotes %d\n", non_eu.name, non_eu.votes);
+        }
+    }
+
+    printf("\n"); //Separate juries with blank line
+}
+
 void processCommand(char *commandNumber, char command, char *param1, char *param2, char *param3, tListJ* juryVotesList) {
     //Print general information
     for (int i = 0; i < 20; i++){
@@ -191,6 +291,8 @@ void processCommand(char *commandNumber, char command, char *param1, char *param
             removeJuries(juryVotesList);
             break;
         case 'W': //Winners
+            printf("\n"); //There is nothing else to print
+            getWinners(juryVotesList);
             break;
         default:
             break;
