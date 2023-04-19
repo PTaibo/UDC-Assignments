@@ -125,6 +125,7 @@ void stats(tListJ* juryVotesList)
         else {
             printf("(%.2f%%)\n", ((float)(jury.validVotes + jury.nullVotes)*100.) / (float)jury.totalVoters);
         }
+        printf("\n"); //Blank line between the juries
     }
 }
 
