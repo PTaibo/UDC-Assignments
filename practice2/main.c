@@ -38,6 +38,13 @@ char* EUboolToString (int isEU){
 
 void vote (char* juryName, char* participantName, tListJ* juryVotesList, int* votes, int* nullVotes)
 {
+    /*
+        Goal: increase the number of votes of a participant
+        Input: name of the jury that votes, name of the voted participant, list of jurys, total votes and total null votes
+        Output: NONE
+        Preconditions: the jurys list is initialized
+        Postconditions: if the jury and participant exist the participant's and total votes are increased. If only the jury exists, the total null votes are increased
+    */
 
     tPosJ pJury = findItemJ(juryName, *juryVotesList);
 
@@ -50,7 +57,7 @@ void vote (char* juryName, char* participantName, tListJ* juryVotesList, int* vo
     tPosP pParticipant = findItemP(participantName, jury.participantList);
 
     if (pParticipant == NULLP){ //Participant doesn't exist for that judge
-        printf("+ Error: Vote not possible. Participant %c not found in jury %c. NULLVOTE\n", participantName, juryName);
+        printf("+ Error: Vote not possible. Participant %s not found in jury %s. NULLVOTE\n", participantName, juryName);
         *nullVotes += 1;
         return;
     }
@@ -61,11 +68,64 @@ void vote (char* juryName, char* participantName, tListJ* juryVotesList, int* vo
     *votes += 1;
 
     //Print information
-    printf("* Vote: jury %c participant %c location %c numvotes %d\n",
+    printf("* Vote: jury %s participant %s location %s numvotes %d\n",
                                                             juryName,
                                                             participantName,
                                                             EUboolToString(participant.EUParticipant),
                                                             participant.numVotes);
+}
+
+void stats(tListJ* juryVotesList, int* totalVotes, int* nullVotes)
+{
+    /*
+        Goal: print the voting statistics
+        Input: jurys list, total of votes and total of nullvotes
+        Output: NONE
+        Preconditions: jury's list is initialized
+        Postconditions: NONE
+    */
+
+    if (isEmptyListJ(*juryVotesList)) { //If there are no jurys
+        printf("+ Error: Stats not possible\n");
+        return;
+    }
+
+    //For each jury in the list
+    for (tPosJ pJury = firstJ(*juryVotesList); pJury != NULLJ; pJury = nextJ(pJury, *juryVotesList)){
+
+        tItemJ jury = getItemJ(pJury, *juryVotesList);
+        printf("Jury %s\n", jury.juryName);
+
+        if (isEmptyListP(jury.participantList)){ //There are no participats
+            printf("No participants\n");
+        }
+        else {
+            //For every participant in that jury
+            for (tPosP pParticipant = firstP(jury.participantList); pParticipant != NULLP; pParticipant = nextP(pParticipant, jury.participantList)){
+                tItemP participant = getItemP(pParticipant, jury.participantList);
+
+                printf("Participant %s location %s numvotes %d", participant.participantName,
+                                                                EUboolToString(participant.EUParticipant),
+                                                                participant.numVotes);
+                if (!*totalVotes){ //If there are no votes [to avoid dividing by 0]
+                    printf(" (0.00%%)\n");
+                }
+                else {
+                    printf(" (%.2f%%)\n", ((float)participant.numVotes*100.) / (float)*totalVotes);
+                }
+            }
+        }
+
+        //Print jury's information
+        printf("Nullvotes %d\n", *nullVotes);
+        printf("Participation: %d votes from %d voters ", *nullVotes + *totalVotes, jury.totalVoters);
+        if (!jury.totalVoters){ //Avoid dividing by 0
+            printf("(0.00%%)\n");
+        }
+        else {
+            printf("(%.2f%%)\n", ((float)(*nullVotes + *totalVotes)*100.) / (float)jury.totalVoters);
+        }
+    }
 }
 
 void processCommand(char *commandNumber, char command, char *param1, char *param2, char *param3, tListJ* juryVotesList, int* votes, int* nullVotes) {
@@ -73,24 +133,26 @@ void processCommand(char *commandNumber, char command, char *param1, char *param
     for (int i = 0; i < 20; i++){
         printf("*");
     }
-    printf("\n%d %d: ", commandNumber, command);
+    printf("\n%s %c:", commandNumber, command);
 
     switch (command) { //Print specific information and call command function
         case 'C': //Create
-            printf("jury %c totalvoters %c\n", param1, param2);
-            create(param1, atoi(param2), juryVotesList);
+            printf(" jury %s totalvoters %s\n", param1, param2);
+            //create(param1, atoi(param2), juryVotesList);
             break;
         case 'N': //New
-            printf("jury %c participant %c location %c\n", param1, param2, param3);
-            addParticipant(param1, param2, EUstringToBool(param3), );
+            printf(" jury %s participant %s location %s\n", param1, param2, param3);
+            //addParticipant(param1, param2, EUstringToBool(param3), juryVotesList);
             break;
         case 'V': //Vote
-            printf("jury %c participant %c location %c", param1, param2);
+            printf(" jury %s participant %s\n", param1, param2);
             vote(param1, param2, juryVotesList, votes, nullVotes);
             break;
         case 'D': //Disqualify
             break;
         case 'S': //Stats
+            printf("\n"); //There is nothing else to print
+            stats(juryVotesList, votes, nullVotes);
             break;
         case 'R': //Remove
             break;
