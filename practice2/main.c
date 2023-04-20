@@ -18,7 +18,7 @@
 #define MAX_BUFFER 255
 
 typedef struct {
-    char* name;
+    char name[100];
     int votes;
     bool tie;
 } winner;
@@ -65,13 +65,18 @@ void vote (char* juryName, char* participantName, tListJ* juryVotesList)
     if (pParticipant == NULLP){ //Participant doesn't exist for that judge
         printf("+ Error: Vote not possible. Participant %s not found in jury %s. NULLVOTE\n", participantName, juryName);
         jury.nullVotes++;
+
+        updateItemJ(jury, pJury, juryVotesList);
         return;
     }
 
     //Participant exists for that judge
     tItemP participant = getItemP(pParticipant, jury.participantList);
-    participant.numVotes++;
-    jury.validVotes++;
+    participant.numVotes += 1;
+    jury.validVotes += 1;
+
+    updateItemP(participant, pParticipant, &jury.participantList);
+    updateItemJ(jury, pJury, juryVotesList);
 
     //Print information
     printf("* Vote: jury %s participant %s location %s numvotes %d\n",
@@ -151,40 +156,22 @@ void removeJuries(tListJ* juryVotesList)
     }
 
     bool removedJurys = false;
-    for (tPosJ pJury = firstJ(*juryVotesList); pJury != NULLJ; pJury = nextJ(pJury, *juryVotesList)){
+    for (tPosJ pJury = firstJ(*juryVotesList); pJury != NULLJ;){
         tItemJ jury = getItemJ(pJury, *juryVotesList);
 
         if (!jury.validVotes){
             printf("* Remove: jury %s\n", jury.juryName);
             deleteAtPositionJ(pJury, juryVotesList);
             removedJurys = true;
+            continue;
         }
+
+        pJury = nextJ(pJury, *juryVotesList);
     }
 
     if (!removedJurys){ //No juries were removed
         printf("+ Error: Remove not possible\n");
     }
-}
-
-int getMax(int a, int b)
-{
-    /*
-        Goal: compares two numbers
-        Input: two integers
-        Output: 0 if they are equal, -1 if the first one is bigger and 1 if the second one is bigger
-        Preconditions: NONE
-        Postconditions: NONE
-    */    
-
-    if (a == b){
-        return 0;
-    }
-
-    if (a > b){
-        return -1;
-    }
-
-    return 1;
 }
 
 void getWinners(tListJ* juryVotesList)
@@ -199,15 +186,14 @@ void getWinners(tListJ* juryVotesList)
         printf("Jury %s\n", jury.juryName);
 
         if (isEmptyListP(jury.participantList)){ //There are no participants
-            printf("Location eu: No winner\nLocation non-eu: No winner\n");
+            printf("Location eu: No winner\nLocation non-eu: No winner\n\n"); //Two new lines to get blank line before next jury
+            break;
         }
 
         winner eu;
-            eu.name = "";
             eu.votes = -1;
             eu.tie = false;
         winner non_eu;
-            non_eu.name = "";
             non_eu.votes = -1;
             non_eu.tie = false;
 
@@ -247,7 +233,7 @@ void getWinners(tListJ* juryVotesList)
             printf("No winner\n");
         }
         else {
-            printf("Participant %s numvotes %d", eu.name, eu.votes);
+            printf("Participant %s numvotes %d\n", eu.name, eu.votes);
         }
 
         printf("Location non-eu: ");
@@ -257,9 +243,9 @@ void getWinners(tListJ* juryVotesList)
         else {
             printf("Participant %s numvotes %d\n", non_eu.name, non_eu.votes);
         }
-    }
 
-    printf("\n"); //Separate juries with blank line
+        printf("\n"); //Prints a blank line between the juries
+    }
 }
 
 void processCommand(char *commandNumber, char command, char *param1, char *param2, char *param3, tListJ* juryVotesList) {
@@ -272,11 +258,11 @@ void processCommand(char *commandNumber, char command, char *param1, char *param
     switch (command) { //Print specific information and call command function
         case 'C': //Create
             printf(" jury %s totalvoters %s\n", param1, param2);
-            //create(param1, atoi(param2), juryVotesList);
+            create(param1, atoi(param2), juryVotesList);
             break;
         case 'N': //New
             printf(" jury %s participant %s location %s\n", param1, param2, param3);
-            //addParticipant(param1, param2, EUstringToBool(param3), juryVotesList);
+            addParticipant(param1, param2, param3, juryVotesList);
             break;
         case 'V': //Vote
             printf(" jury %s participant %s\n", param1, param2);
@@ -324,6 +310,14 @@ void readTasks(char *filename) {
             param3 = strtok(NULL, delimiters);
 
             processCommand(commandNumber, command[0], param1, param2, param3, &juryVotesList);
+        }
+
+        //Free all remaining memory
+        for (tPosJ pJury = firstJ(juryVotesList); pJury != NULLJ; pJury = nextJ(pJury, juryVotesList)){
+            tItemJ jury = getItemJ(pJury, juryVotesList);
+            while (!isEmptyListP(jury.participantList)){
+                deleteAtPositionP(firstP(jury.participantList), jury.participantList);
+            }
         }
 
         fclose(f);
