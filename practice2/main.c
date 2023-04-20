@@ -316,7 +316,7 @@ void readTasks(char *filename) {
         for (tPosJ pJury = firstJ(juryVotesList); pJury != NULLJ; pJury = nextJ(pJury, juryVotesList)){
             tItemJ jury = getItemJ(pJury, juryVotesList);
             while (!isEmptyListP(jury.participantList)){
-                deleteAtPositionP(firstP(jury.participantList), jury.participantList);
+                deleteAtPositionP(firstP(jury.participantList), &jury.participantList);
             }
         }
 
