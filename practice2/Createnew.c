@@ -84,4 +84,53 @@ void addParticipant(char *juryName, char *ParticipantName, char *EUParticipant, 
         updateItemJ(juri,pos,juryVotesList);
 }
 
-   
+void disqualify(char *ParticipantName, tListJ *juryVotesList)
+{
+    /*
+        Goal: Disqualify participants from all the jury of the list
+        Input: Participant's name and jury list
+        Output: NONE
+        Preconditions: juries and participants lists are initialized
+        Postconditions: If the participant exits, will be disqualify
+    
+    */
+    
+    //we check if the jury list is emtpy
+    if(isEmptyListJ(*juryVotesList)){
+        printf("+ Error: Disqualify not possible\n");
+        return;
+    }
+
+    //we go through the list
+    for (tPosJ pjury=firstJ(*juryVotesList);pjury!=NULLJ;pjury=nextJ(pjury,*juryVotesList)){
+        
+        tItemJ jury;
+        jury=getItemJ(pjury,*juryVotesList);//we take the jury
+        printf("Jury %s\n",jury.juryName);
+
+        if(isEmptyListP(jury.participantList)){//if the participant list is empty
+            printf("No participant %s\n\n",ParticipantName);
+        }
+
+        else{
+            tPosP pdisparticipant;
+            tItemP disparticipant;
+
+            pdisparticipant=findItemP(ParticipantName,jury.participantList);//we search for the participant
+            
+            if(pdisparticipant==NULLP){//if participant doesn't exit
+                printf("No participant %s\n\n",ParticipantName);
+            }
+            else{
+                disparticipant=getItemP(pdisparticipant,jury.participantList);
+                jury.nullVotes=jury.nullVotes+disparticipant.numVotes;
+                jury.validVotes=jury.validVotes-disparticipant.numVotes;
+                printf("Participant %s disqualified\n\n",disparticipant.participantName);
+                deleteAtPositionP(pdisparticipant,&jury.participantList);
+                updateItemJ(jury,pjury,juryVotesList);
+                
+            }
+        }
+    }
+
+}
