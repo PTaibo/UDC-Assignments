@@ -14,7 +14,6 @@
 #include "types.h"
 #include "jury_list.h"
 
-
 #define MAX_BUFFER 255
 
 typedef struct {
@@ -42,16 +41,16 @@ char* EUboolToString (int isEU){
     return location;
 }
 
-void create(char *jury, int totalVoters, tListJ *juryVotesList)
+void create(char *juryName, int totalVoters, tListJ *juryVotesList)
 {
     /*
         Goal: Add the jury with his number of votes set.
         Input: jury name, number of voters and jury list.
         Output: NONE
-        Preconditions: jury's list is initialized, a valid name and a valid number of voters
-        Postconditions: NONE 
+        Preconditions: juries list is initialized, a valid name and a valid number of voters
+        Postconditions: if jury doens't exist already it is added to the list
     */
-    if(findItemJ(jury,*juryVotesList)!=NULLJ){//We check if the jury already exits
+    if(findItemJ(juryName,*juryVotesList)!=NULLJ){//We check if the jury already exits
         printf("+ Error: Create not possible\n");
         return;
     }
@@ -59,21 +58,24 @@ void create(char *jury, int totalVoters, tListJ *juryVotesList)
         printf("+ Error: Create not possible\n");
         return;
     }
-    tItemJ judge;
-    strcpy(judge.juryName,jury);
-    judge.totalVoters=totalVoters;
-    judge.participantList=NULLP;
-    judge.nullVotes=0;
-    judge.validVotes=0;
-    if(insertItemJ(judge,juryVotesList)==true){//we check if it is added correctly
-        printf("* Create: jury %s totalvoters %d\n",judge.juryName,judge.totalVoters);
+
+    //Create new jury
+    tItemJ jury;
+    strcpy(jury.juryName,juryName);
+    jury.totalVoters=totalVoters;
+    createEmptyListP(&jury.participantList);
+    //jury.participantList=NULLP;
+    jury.nullVotes=0;
+    jury.validVotes=0;
+
+    //We insert the new jury
+    if(insertItemJ(jury,juryVotesList)==true){//we check if it is added correctly
+        printf("* Create: jury %s totalvoters %d\n",jury.juryName,jury.totalVoters);
         return;
     }
     printf("+ Error: Create not possible\n");
     return;
 }
-
- 
 
 void addParticipant(char *juryName, char *ParticipantName, char *EUParticipant, tListJ *juryVotesList)
 {
@@ -81,41 +83,47 @@ void addParticipant(char *juryName, char *ParticipantName, char *EUParticipant, 
         Goal: Add participant to the jury 
         Input: jury name, participant name, if it is er or non-eu and the jury list
         Output: NONE
-        Preconditions: jury's list is initialized, valid names and a valid eu value
-        Postconditions: NONE 
+        Preconditions: juries and participants list are initialized and a valid eu value
+        Postconditions: if jury exists and participant doesn't exist already, participant is added to the jury
     */
-    if(isEmptyListJ(*juryVotesList)==true){//we check if there exits juries
+
+    if(isEmptyListJ(*juryVotesList)==true){ //the jury list is empty
         printf("+ Error: New not possible\n");
         return;
     }
+
     tPosJ pos;
-    pos=findItemJ(juryName,*juryVotesList);//Look if the judge exit
-    if (pos==NULLJ){
+    pos=findItemJ(juryName,*juryVotesList);
+
+    if (pos==NULLJ){ //Specified jury doesn't exist
         printf("+ Error: New not possible\n");
         return;
     }
+
     tItemJ juri;
     juri=getItemJ(pos,*juryVotesList);
 
     bool emptylist=isEmptyListP(juri.participantList);
-    if (!emptylist && findItemP(ParticipantName,juri.participantList)!=NULLP){
+    if (!emptylist && findItemP(ParticipantName,juri.participantList)!=NULLP){ //Participant already exists
         printf("+ Error: New not possible\n");
         return;
     }
 
-    tItemP temp;//I create the participant
-    strcpy(temp.participantName,ParticipantName);
-    temp.numVotes=0;
-    temp.EUParticipant=false;
+    //Create participant
+    tItemP newParticipant;
+    strcpy(newParticipant.participantName,ParticipantName);
+    newParticipant.numVotes=0;
+    newParticipant.EUParticipant=false;
     if (strcmp(EUParticipant,"eu")==0)
-        temp.EUParticipant=true;
+        newParticipant.EUParticipant=true;
 
     
-    if(!insertItemP(temp,&juri.participantList)){
+    if(!insertItemP(newParticipant,&juri.participantList)){ //Couldn't insert participant
         printf("+ Error: New not possible\n");
         return;
     }
-    printf("* New: jury %s participant %s location %s\n",juryName,temp.participantName,EUParticipant);
+
+    printf("* New: jury %s participant %s location %s\n",juryName,newParticipant.participantName,EUParticipant);
     if(emptylist)//if the list was empty we need to update the jury list
         updateItemJ(juri,pos,juryVotesList);
 }
@@ -124,15 +132,15 @@ void vote (char* juryName, char* participantName, tListJ* juryVotesList)
 {
     /*
         Goal: increase the number of votes of a participant
-        Input: name of the jury that votes, name of the voted participant, list of jurys, total votes and total null votes
+        Input: name of the jury that votes, name of the voted participant and list of jurys
         Output: NONE
-        Preconditions: the jurys list is initialized
+        Preconditions: the jurys and participants list are initialized
         Postconditions: if the jury and participant exist the participant's and total votes are increased. If only the jury exists, the total null votes are increased
     */
 
     tPosJ pJury = findItemJ(juryName, *juryVotesList);
 
-    if (pJury == NULLJ){ //Judge doesn't exist
+    if (pJury == NULLJ){ //Jury doesn't exist
         printf("+ Error: Vote not possible\n");
         return;
     }
@@ -140,7 +148,7 @@ void vote (char* juryName, char* participantName, tListJ* juryVotesList)
     tItemJ jury = getItemJ (pJury, *juryVotesList);
     tPosP pParticipant = findItemP(participantName, jury.participantList);
 
-    if (pParticipant == NULLP){ //Participant doesn't exist for that judge
+    if (pParticipant == NULLP){ //Participant doesn't exist for that jury
         printf("+ Error: Vote not possible. Participant %s not found in jury %s. NULLVOTE\n", participantName, juryName);
         jury.nullVotes++;
 
@@ -148,10 +156,9 @@ void vote (char* juryName, char* participantName, tListJ* juryVotesList)
         return;
     }
 
-    //Participant exists for that judge
     tItemP participant = getItemP(pParticipant, jury.participantList);
-    participant.numVotes += 1;
-    jury.validVotes += 1;
+    participant.numVotes++;
+    jury.validVotes++;
 
     updateItemP(participant, pParticipant, &jury.participantList);
     updateItemJ(jury, pJury, juryVotesList);
@@ -162,6 +169,60 @@ void vote (char* juryName, char* participantName, tListJ* juryVotesList)
                                                             participantName,
                                                             EUboolToString(participant.EUParticipant),
                                                             participant.numVotes);
+}
+
+void stats(tListJ* juryVotesList)
+{
+    /*
+        Goal: print the voting statistics
+        Input: jurys list, total of votes and total of nullvotes
+        Output: NONE
+        Preconditions: juries and participants list are initialized
+        Postconditions: NONE
+    */
+
+    if (isEmptyListJ(*juryVotesList)) { //If there are no juries
+        printf("+ Error: Stats not possible\n");
+        return;
+    }
+
+    //For each jury in the list
+    for (tPosJ pJury = firstJ(*juryVotesList); pJury != NULLJ; pJury = nextJ(pJury, *juryVotesList)){
+
+        tItemJ jury = getItemJ(pJury, *juryVotesList);
+        printf("Jury %s\n", jury.juryName);
+
+        if (isEmptyListP(jury.participantList)){ //There are no participats
+            printf("No participants\n");
+        }
+        else {
+            //For every participant in that jury
+            for (tPosP pParticipant = firstP(jury.participantList); pParticipant != NULLP; pParticipant = nextP(pParticipant, jury.participantList)){
+                tItemP participant = getItemP(pParticipant, jury.participantList);
+
+                printf("Participant %s location %s numvotes %d", participant.participantName,
+                                                                EUboolToString(participant.EUParticipant),
+                                                                participant.numVotes);
+                if (!jury.validVotes){ //If there are no votes [to avoid dividing by 0]
+                    printf(" (0.00%%)\n");
+                }
+                else {
+                    printf(" (%.2f%%)\n", ((float)participant.numVotes*100.) / (float)jury.validVotes);
+                }
+            }
+        }
+
+        //Print jury's information
+        printf("Nullvotes %d\n", jury.nullVotes);
+        printf("Participation: %d votes from %d voters ", jury.validVotes + jury.nullVotes, jury.totalVoters);
+        if (!jury.totalVoters){ //Avoid dividing by 0
+            printf("(0.00%%)\n");
+        }
+        else {
+            printf("(%.2f%%)\n", ((float)(jury.validVotes + jury.nullVotes)*100.) / (float)jury.totalVoters);
+        }
+        printf("\n"); //Blank line between the juries
+    }
 }
 
 void disqualify(char *ParticipantName, tListJ *juryVotesList)
@@ -215,67 +276,13 @@ void disqualify(char *ParticipantName, tListJ *juryVotesList)
 
 }
 
-void stats(tListJ* juryVotesList)
-{
-    /*
-        Goal: print the voting statistics
-        Input: jurys list, total of votes and total of nullvotes
-        Output: NONE
-        Preconditions: jury's list is initialized
-        Postconditions: NONE
-    */
-
-    if (isEmptyListJ(*juryVotesList)) { //If there are no jurys
-        printf("+ Error: Stats not possible\n");
-        return;
-    }
-
-    //For each jury in the list
-    for (tPosJ pJury = firstJ(*juryVotesList); pJury != NULLJ; pJury = nextJ(pJury, *juryVotesList)){
-
-        tItemJ jury = getItemJ(pJury, *juryVotesList);
-        printf("Jury %s\n", jury.juryName);
-
-        if (isEmptyListP(jury.participantList)){ //There are no participats
-            printf("No participants\n");
-        }
-        else {
-            //For every participant in that jury
-            for (tPosP pParticipant = firstP(jury.participantList); pParticipant != NULLP; pParticipant = nextP(pParticipant, jury.participantList)){
-                tItemP participant = getItemP(pParticipant, jury.participantList);
-
-                printf("Participant %s location %s numvotes %d", participant.participantName,
-                                                                EUboolToString(participant.EUParticipant),
-                                                                participant.numVotes);
-                if (!jury.validVotes){ //If there are no votes [to avoid dividing by 0]
-                    printf(" (0.00%%)\n");
-                }
-                else {
-                    printf(" (%.2f%%)\n", ((float)participant.numVotes*100.) / (float)jury.validVotes);
-                }
-            }
-        }
-
-        //Print jury's information
-        printf("Nullvotes %d\n", jury.nullVotes);
-        printf("Participation: %d votes from %d voters ", jury.validVotes + jury.nullVotes, jury.totalVoters);
-        if (!jury.totalVoters){ //Avoid dividing by 0
-            printf("(0.00%%)\n");
-        }
-        else {
-            printf("(%.2f%%)\n", ((float)(jury.validVotes + jury.nullVotes)*100.) / (float)jury.totalVoters);
-        }
-        printf("\n"); //Blank line between the juries
-    }
-}
-
 void removeJuries(tListJ* juryVotesList)
 {
     /*
         Goal: removes juries with 0 valid votes
         Input: a list of juries
         Output: NONE
-        Preconditions: the list is initialized
+        Preconditions: the list of juries is initialized
         Postconditions: all juries with 0 valid votes have been removed from the list
     */
 
@@ -284,7 +291,7 @@ void removeJuries(tListJ* juryVotesList)
         return;
     }
 
-    bool removedJurys = false;
+    bool removedJurys = false; //To check if at least one jury is removed
     for (tPosJ pJury = firstJ(*juryVotesList); pJury != NULLJ;){
         tItemJ jury = getItemJ(pJury, *juryVotesList);
 
@@ -305,6 +312,14 @@ void removeJuries(tListJ* juryVotesList)
 
 void getWinners(tListJ* juryVotesList)
 {
+    /*
+        Goal: for each country print the eu winner and the non-eu winner
+        Input: the list of juries
+        Output: NONE
+        Preconditions: the list of juries and the list of participants are initialized
+        Postconditions: NONE
+    */
+
     if (isEmptyListJ(*juryVotesList)){ //There are no juries
         printf("+ Error: Winners is not possible\n");
         return;
@@ -319,7 +334,7 @@ void getWinners(tListJ* juryVotesList)
             break;
         }
 
-        winner eu;
+        winner eu; //Struct defined at the top of the program
             eu.votes = -1;
             eu.tie = false;
         winner non_eu;
