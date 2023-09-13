@@ -17,10 +17,21 @@ int dismountLine(char* line, char* command[])
     return i;
 }
 
-
+void Cmd_quit ()
+{
+    exit(0);
+}
 
 void processCommand (char* command[])
 {
+    if (!strcmp(command[0], "quit"))
+        Cmd_quit();
+    if (!strcmp(command[0], "exit"))
+        Cmd_quit();
+    if (!strcmp(command[0], "bye"))
+        Cmd_quit();
+
+    printf("Command not found\n");
 }
 
 int main()
@@ -31,8 +42,7 @@ int main()
     while (1){
         printf("> ");
         fgets(line, MAXLINE, stdin);
-        int commandSize = 0;
-        commandSize = dismountLine(line, command);
-        processCommand(commandSize, command);
+        dismountLine(line, command);
+        processCommand(command);
     }
 }
