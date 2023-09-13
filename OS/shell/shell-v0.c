@@ -4,16 +4,15 @@
 
 #define MAXLINE 200
 
-int dismountLine(char* line, char* command[])
+int dismountLine(char* line, char* instruction [])
 {
-    int i = 1;
+    int i = 0;
 
-    command[0] = strtok(line, " \n\t");
-    if (command[0] == NULL)
-        return 0;
-    
-    while ((command[i] = strtok(NULL, " \n\t")) != NULL)
-        i++;
+    instruction[i] = strtok(line, " \n\t");
+
+    while (instruction[i] != NULL){
+        instruction[++i] = strtok(NULL, " \n\t");
+
     return i;
 }
 
@@ -22,14 +21,40 @@ void Cmd_quit ()
     exit(0);
 }
 
-void processCommand (char* command[])
+void Cmd_authors (int param, char* params[])
 {
-    if (!strcmp(command[0], "quit"))
+    // -n parameter
+    if (param == 1 && !strcmp(params[0], "-n")
+        printf("Siyuan He\nPaula Taibo Suárez");
+
+    // -l parameter
+    else if (param == 1 && !strcmp(params[0], "-l")
+        printf("siyuan.he\np.taibo\n");
+
+    // Invalid parameters
+    else if (param > 2)
+        printf("Invalid parameter\n");
+    else if (param == 2 && params[0] != "-n" && params[0] != "-l")
+        printf("Invalid parameter\n");
+    else if (param == 2 && params[1] != "-n" && params[1] != "-l")
+        printf("Invalid parameter\n");
+
+    // None or both parameters
+    else
+        printf("Siyuan He\t\tsiyuan.he\n
+                Paula Taibo Suárez\t\tp.taibo\n");
+}
+
+void processCommand (int instrucParts, char* instruction [])
+{
+    if (!strcmp(instruction[0], "quit"))
         Cmd_quit();
-    if (!strcmp(command[0], "exit"))
+    if (!strcmp(instruction[0], "exit"))
         Cmd_quit();
-    if (!strcmp(command[0], "bye"))
+    if (!strcmp(instruction[0], "bye"))
         Cmd_quit();
+    if (!strcmp(instruction[0], "authors"))
+        Cmd_authors(instrucParts - 1, instruction + 1);
 
     printf("Command not found\n");
 }
@@ -37,12 +62,13 @@ void processCommand (char* command[])
 int main()
 {
     char line[MAXLINE];
-    char* command[MAXLINE/2];
+    char* instruction [MAXLINE/2];
 
     while (1){
         printf("> ");
         fgets(line, MAXLINE, stdin);
-        dismountLine(line, command);
-        processCommand(command);
+        int instrucParts = 0;
+        instrucParts = dismountLine(line, instruction);
+        processCommand(instrucParts, instruction);
     }
 }
