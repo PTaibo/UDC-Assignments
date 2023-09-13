@@ -72,8 +72,6 @@ bool insertItemP (tItemP item, tListP* list)
         return 1;
     }
 
-
-
     tPosP pos = *list;
 
     //First position

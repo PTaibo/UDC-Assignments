@@ -64,7 +64,6 @@ void create(char *juryName, int totalVoters, tListJ *juryVotesList)
     strcpy(jury.juryName,juryName);
     jury.totalVoters=totalVoters;
     createEmptyListP(&jury.participantList);
-    //jury.participantList=NULLP;
     jury.nullVotes=0;
     jury.validVotes=0;
 
@@ -228,11 +227,11 @@ void stats(tListJ* juryVotesList)
 void disqualify(char *ParticipantName, tListJ *juryVotesList)
 {
     /*
-        Goal: Disqualify participants from all the jury of the list
-        Input: Participant's name and jury list
+        Goal: Disqualify a participant from all the juries of the list
+        Input: Participant's name and list of juries
         Output: NONE
-        Preconditions: juries and participants lists are initialized
-        Postconditions: If the participant exits, will be disqualify
+        Preconditions: juries and participants list are initialized
+        Postconditions: If the participant exists, it will be disqualify
     
     */
     
@@ -259,7 +258,7 @@ void disqualify(char *ParticipantName, tListJ *juryVotesList)
 
             pdisparticipant=findItemP(ParticipantName,jury.participantList);//we search for the participant
             
-            if(pdisparticipant==NULLP){//if participant doesn't exit
+            if(pdisparticipant==NULLP){//if participant doesn't exist
                 printf("No participant %s\n\n",ParticipantName);
             }
             else{
@@ -273,7 +272,6 @@ void disqualify(char *ParticipantName, tListJ *juryVotesList)
             }
         }
     }
-
 }
 
 void removeJuries(tListJ* juryVotesList)
@@ -459,10 +457,12 @@ void readTasks(char *filename) {
         }
 
         //Free all remaining memory
-        for (tPosJ pJury = firstJ(juryVotesList); pJury != NULLJ; pJury = nextJ(pJury, juryVotesList)){
-            tItemJ jury = getItemJ(pJury, juryVotesList);
-            while (!isEmptyListP(jury.participantList)){
-                deleteAtPositionP(firstP(jury.participantList), &jury.participantList);
+        if (!isEmptyListJ(juryVotesList)){
+            for (tPosJ pJury = firstJ(juryVotesList); pJury != NULLJ; pJury = nextJ(pJury, juryVotesList)){
+                tItemJ jury = getItemJ(pJury, juryVotesList);
+                while (!isEmptyListP(jury.participantList)){
+                    deleteAtPositionP(firstP(jury.participantList), &jury.participantList);
+                }
             }
         }
 
