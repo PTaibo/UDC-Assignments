@@ -9,3 +9,6 @@ main
 build/
 
 disqualify.h
+
+*.swp
+*.un~
