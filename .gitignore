@@ -1,3 +1,5 @@
+.gitignore
+
 com
 my/
 .vscode
@@ -9,6 +11,7 @@ main
 build/
 
 disqualify.h
+shell
 
 *.swp
 *.un~
