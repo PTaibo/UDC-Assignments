@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "instructions.h"
+#include "valid_commands.h"
 
 #define MAXLINE 200
 
-int dismountLine(char* line, char* instruction [])
+int destroyLine(char* line, char* instruction [])
 {
     int i = 0;
 
@@ -16,45 +18,19 @@ int dismountLine(char* line, char* instruction [])
     return i;
 }
 
-void Cmd_quit ()
-{
-    exit(0);
-}
-
-void Cmd_authors (int param, char* params[])
-{
-    // -n parameter
-    if (param == 1 && !strcmp(params[0], "-n"))
-        printf("Siyuan He\nPaula Taibo Suárez\n");
-
-    // -l parameter
-    else if (param == 1 && !strcmp(params[0], "-l"))
-        printf("siyuan.he\np.taibo\n");
-
-    // None or both parameters
-    else if (!param)
-        printf("Siyuan He\t\tsiyuan.he\nPaula Taibo Suárez\tp.taibo\n");
-    else if (param == 2 && (!strcmp(params[0], "-n") || !strcmp(params[0], "-l"))
-                && (!strcmp(params[1], "-n") || !strcmp(params[1], "-l")))
-        printf("Siyuan He\t\tsiyuan.he\nPaula Taibo Suárez\tp.taibo\n");
-
-    // Invalid or excesive parameters
-    else
-        printf("Invalid parameter\n");
-}
-
 void processCommand (int instrucParts, char* instruction [])
 {
-    if (!strcmp(instruction[0], "quit"))
-        Cmd_quit();
-    if (!strcmp(instruction[0], "exit"))
-        Cmd_quit();
-    if (!strcmp(instruction[0], "bye"))
-        Cmd_quit();
-    if (!strcmp(instruction[0], "authors"))
-        Cmd_authors(instrucParts - 1, instruction + 1);
-    else
-        printf("Command not found\n");
+    if (instruction[0] == NULL)
+        return;
+
+    for (int i = 0; valid_commands[i].name != NULL; i++){
+        if (!strcmp(instruction[0], valid_commands[i].name)){
+            (*valid_commands[i].funct)(instrucParts-1, instruction+1);
+            return;
+        }
+    }
+
+    printf("Command not valid\n");
 }
 
 int main()
@@ -66,7 +42,7 @@ int main()
         printf("> ");
         fgets(line, MAXLINE, stdin);
         int instrucParts = 0;
-        instrucParts = dismountLine(line, instruction);
+        instrucParts = destroyLine(line, instruction);
         processCommand(instrucParts, instruction);
     }
 
