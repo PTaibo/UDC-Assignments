@@ -21,7 +21,7 @@ struct cmd valid_commands[] = {
     /* {"dup", cmd_dup}, */
     /* {"listopen", cmd_listopen}, */
     {"infosys", cmd_infosys},
-    /* {"help", cmd_help}, */
+    {"help", cmd_help},
     {"quit", cmd_quit},
     {"exit", cmd_quit},
     {"bye", cmd_quit},

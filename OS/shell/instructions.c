@@ -92,6 +92,7 @@ void cmd_infosys (int paramN, UNUSED char* param[])
         return;
     }
 
+    printf("\n");
     printf(CYAN "Machine: " RESET_CLR "%s\n", info.nodename);
     printf(CYAN "OS: " RESET_CLR "%s\n", info.version);
     printf(CYAN "Kernel: " RESET_CLR "%s %s %s\n", info.sysname,
@@ -100,5 +101,6 @@ void cmd_infosys (int paramN, UNUSED char* param[])
 #ifdef _GNU_SOURCE 
     printf(CYAN "Domain name:" RESET_CLR "%s\n", info.__domainname);
 #endif
+    printf("\n");
 }
 
