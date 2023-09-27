@@ -70,7 +70,7 @@ void help_chdir()
 
 void help_infosys()
 {
-    printf(CMD_NAME_CLR "\nINFOSYS:\N" RESET_CLR
+    printf(CMD_NAME_CLR "\nINFOSYS:\n" RESET_CLR
             "\tPrints the information of the machine that's running the shell\n"
             "\tUsage: infosys\n"
 }
