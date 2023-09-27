@@ -40,8 +40,6 @@ void cmd_authors (int paramN, char* params[]){
 
 void cmd_pid (int paramN, char* param[])
 {
-    printf("Gets to pid\n");
-    fflush(stdin);
     if (paramN == 1 && !strcmp(param[0], "-p"))
         printf("Shell's parent's pid is %d\n", getppid());
     else if (paramN)
