@@ -1,5 +1,7 @@
-#include "instructions.h"
+#include "help.h"
 #include <stdio.h>
+#include "valid_commands.h"
+#include <string.h>
 
 #define RED         "\x1b[31m"
 #define GREEN       "\x1b[32m"
@@ -17,6 +19,33 @@ void cmd_help (int paramN, char* params[])
                 "\tUsage: help cmd\n\n");
         return;
     }
+
+    if (paramN > 1){
+        printf(RED "Error: " RESET_CLR "too many parameters\n");
+        return;
+    }
+
+    for (int i = 0; help_pages[i].command != NULL; i++){
+        if (!strcmp(params[0], help_pages[i].command)){
+            printf("\n");
+            (*help_pages[i].funct)();
+            printf("\n");
+            return;
+        }
+    }
     
-    printf(RED "Error: " RESET_CLR "command doesn't exist\n");
+    printf(RED "Error: " RESET_CLR "help page not found\n");
 }
+
+void help_authors()
+{
+    printf(YELLOW "\nAUTHORS:\n" RESET_CLR
+            "\tPrints the names and logins of the programmers\n"
+
+            "\tUsage: authors [-n] [-l]\n"
+            
+            "\tParameters:\n"
+            "\t\t-n : print only the names\n"
+            "\t\t-l : print only the logins\n");
+}
+
