@@ -182,3 +182,10 @@ void help_dup()
             "\t\t\t  files with their file descriptors\n");
 }
 
+void help_listopen()
+{
+    printf(CMD_NAME_CLR "\nLISTOPEN:\n" RESET_CLR
+            "\tLists the shells's opened files\n"
+            "\tFormat: file descriptor, name, opening mode\n");
+}
+
