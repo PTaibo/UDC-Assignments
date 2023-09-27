@@ -11,7 +11,6 @@ main
 build/
 
 disqualify.h
-shell
 
 *.swp
 *.un~

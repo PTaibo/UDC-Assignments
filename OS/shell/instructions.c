@@ -79,4 +79,26 @@ void cmd_chdir (int paramN, char* param[])
     perror(RED "Error: " RESET_CLR "Couldn't change directory");
 }
 
+void cmd_infosys (int paramN, UNUSED char* param[])
+{
+    if (paramN){
+        printf(RED "Error: " RESET_CLR "Invalid parameter\n");
+        return;
+    }
+
+    struct utsname info;
+    if (uname(&info) < 0){
+        perror("Could not read system info");
+        return;
+    }
+
+    printf(CYAN "Machine: " RESET_CLR "%s\n", info.nodename);
+    printf(CYAN "OS: " RESET_CLR "%s\n", info.version);
+    printf(CYAN "Kernel: " RESET_CLR "%s %s %s\n", info.sysname,
+                                                  info.release,
+                                                  info.machine);
+#ifdef _GNU_SOURCE 
+    printf(CYAN "Domain name:" RESET_CLR "%s\n", info.__domainname);
+#endif
+}
 
