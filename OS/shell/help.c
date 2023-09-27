@@ -75,3 +75,9 @@ void help_infosys()
             "\tUsage: infosys\n"
 }
 
+void help_quit()
+{
+    printf(CMD_NAME_CLR "\nQUIT/EXIT/BYE:\n" RESET_CLR
+            "\tExits the shell\n"
+            "\tUsage: quit/exit/bye\n");
+}
