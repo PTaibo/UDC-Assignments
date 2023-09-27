@@ -28,7 +28,6 @@ void cmd_help (int paramN, char* params[])
 
     for (int i = 0; help_pages[i].command != NULL; i++){
         if (!strcmp(params[0], help_pages[i].command)){
-            printf("\n");
             (*help_pages[i].funct)();
             printf("\n");
             return;
@@ -72,7 +71,7 @@ void help_infosys()
 {
     printf(CMD_NAME_CLR "\nINFOSYS:\n" RESET_CLR
             "\tPrints the information of the machine that's running the shell\n"
-            "\tUsage: infosys\n"
+            "\tUsage: infosys\n");
 }
 
 void help_quit()
