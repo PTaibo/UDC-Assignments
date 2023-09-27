@@ -35,7 +35,7 @@ tPosL previous (tPosL pos, tList list)
     if (pos == list){
         return NULL;
     }
-    tNode* it;
+    tPosL it;
     for (it = list; it -> next != pos; it = it->next);
     return it;
 }
@@ -65,6 +65,9 @@ void insertItem (void *data, tList* list)
 
 void deleteAtPosition(tPosL pos, tList* list)
 {
+    if (*list == NULL)
+        return;
+
     //Case 1: delete first element
     if (pos == *list){
         *list = pos->next;
@@ -73,7 +76,7 @@ void deleteAtPosition(tPosL pos, tList* list)
     }
 
     //Case 2: delete last or intermediate element
-    tNode* prev = previous(pos, *list);
+    tPosL prev = previous(pos, *list);
     prev->next = pos->next;
     free(pos);
     return;
@@ -103,7 +106,7 @@ void clearList(tList* list) {
     while (pos != NULL) {
         nextp = pos->next;  // It kepts the next pos to change after
         free(pos);
-        pos = next;  // Move to the next position
+        pos = nextp;  // Move to the next position
     }
 
     *list = NULL;  // It sets the list so it can be checked later to be emtpy
