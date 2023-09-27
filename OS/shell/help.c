@@ -123,3 +123,14 @@ void help_time()
             "\tFormat: hh:mm:ss\n");
 }
 
+void help_hist()
+{
+    printf(CMD_NAME_CLR "\nHIST:\n" RESET_CLR
+            "\tShows the historic of commands executed "
+            "by the shell and their order number\n"
+            "\tUsage: hist [-c | -N]\n"
+            "\tParameters:\n"
+            "\t\t-c: clears the historic\n"
+            "\t\t-N: prints the first N commands\n");
+}
+
