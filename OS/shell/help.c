@@ -134,3 +134,40 @@ void help_hist()
             "\t\t-N: prints the first N commands\n");
 }
 
+void help_command()
+{
+    printf(CMD_NAME_CLR "\nCOMMAND:\n" RESET_CLR
+            "\tRepeats command number N of the historic\n"
+            "\tUsage: command N\n");
+}
+
+void help_open()
+{
+    printf(CMD_NAME_CLR "\nOPEN:\n" RESET_CLR
+            "\tOpens a specified file\n"
+            "\tUsage: open [file] [mode]\n"
+            "\tOptions:\n"
+            "\t\tfile: file to open\n"
+            "\t\tmode: opening mode\n"
+            "\tOpening modes:\n"
+            "\t\tcr: create the file. If it already exists it opens it\n"
+            "\t\tap: append information to an existing file\n"
+            "\t\tex: used with cr. Forces the file to be opened.\n"
+            "\t\t    Returns error if file already exists\n"
+            "\t\tro: read only mode\n"
+            "\t\trw: read write mode\n"
+            "\t\two: write only mode\n"
+            "\t\ttr: truncates the file (length 0)\n");
+}
+
+void help_close()
+{
+    printf(CMD_NAME_CLR "\nCLOSE:\n" RESET_CLR
+            "\tCloses a specified file\n"
+            "\tUsage: cloase [fd]\n"
+            "\tOptions:\n"
+            "\t\tfd: file descriptor of the opened file\n"
+            "\tRelated commands: listopen (gives you the list of opened\n"
+            "\t\t\t  files with their file descriptors\n");
+}
+
