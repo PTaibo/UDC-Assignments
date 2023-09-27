@@ -55,6 +55,7 @@ void print_array(int v[], int n)
 
 void test1()
 {
+    printf("\nTEST 1:\n");
     int a=0, b=0;
     int v[30]={-9,2,-5,-4,6,4,0,9,2,5,-2,-1,-9,-7,-1,9,-2,1,-7,-8,15,-2,-5,-4,16,7,-5,6,7,-7};
     int v2[5];
@@ -76,7 +77,7 @@ void test2()
 {
     int i, a, b;
     int v[9];
-    printf("test\n");
+    printf("\nTEST 2:\n");
     printf("%33s%15s%15s\n", "", "  maxSubSum1", "  maxSubSum2");
     for (i = 0; i < 10; i++)
     {
@@ -92,6 +93,6 @@ int main()
 {
     init_seed();
     test1();
-    //test2();
+    test2();
     return 0;
 }
