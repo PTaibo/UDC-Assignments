@@ -49,3 +49,11 @@ void help_authors()
             "\t\t-l : print only the logins\n");
 }
 
+void help_pid()
+{
+    printf(YELLOW "\nPID:\n" RESET_CLR
+            "\tPrints the pid of the process executing the shell\n"
+            "\tUsage: pid [-p]\n"
+            "\tParameters:\n"
+            "\t\t-p: prints the pid of the shell's parent process\n");
+}
