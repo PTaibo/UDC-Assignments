@@ -27,14 +27,14 @@ struct help help_pages[] = {
     {"authors", help_authors},
     {"pid", help_pid},
     {"chdir", help_chdir},
-    /* {"date", cmd_date}, */
-    /* {"time", cmd_time}, */
-    /* {"hist", cmd_hist}, */
-    /* {"command", cmd_repeat}, */
-    /* {"open", cmd_open}, */
-    /* {"close", cmd_close}, */
-    /* {"dup", cmd_dup}, */
-    /* {"listopen", cmd_listopen}, */
+    {"date", help_date},
+    {"time", help_time},
+    {"hist", help_hist},
+    {"command", help_command},
+    {"open", help_open},
+    {"close", help_close},
+    {"dup", help_dup},
+    {"listopen", help_listopen},
     {"infosys", help_infosys},
     {"quit", help_quit},
     {"exit", help_quit},

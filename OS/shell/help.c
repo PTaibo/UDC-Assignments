@@ -80,3 +80,12 @@ void help_quit()
             "\tExits the shell\n"
             "\tUsage: quit/exit/bye\n");
 }
+
+void help_date()
+{
+    printf(CMD_NAME_CLR "\nDATE:\n" RESET_CLR
+            "\tPrints the current date\n"
+            "\tUsage: date\n"
+            "\tFormat: DD/MM/YYYY\n");
+}
+
