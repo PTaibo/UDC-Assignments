@@ -12,17 +12,23 @@
 #define RESET_CLR   "\x1b[0m"
 #define CMD_NAME_CLR "\x1b[33m" // Yellow
 
+void list_commands();
+void help_help();
+
 void cmd_help (int paramN, char* params[])
 {
     if (!paramN){
-        printf(CMD_NAME_CLR "\nHELP:\n" RESET_CLR
-                "\tPrints the help page for a command.\n"
-                "\tUsage: help cmd\n\n");
+        help_help();
         return;
     }
 
     if (paramN > 1){
         printf(RED "Error: " RESET_CLR "too many parameters\n");
+        return;
+    }
+
+    if (!strcmp(params[0], "-l")){
+        list_commands();
         return;
     }
 
@@ -35,6 +41,26 @@ void cmd_help (int paramN, char* params[])
     }
     
     printf(RED "Error: " RESET_CLR "help page not found\n");
+}
+
+void list_commands()
+{
+    printf("\nThe avaliable commands are:\n");
+        for (int i = 0; help_pages[i].command != NULL; i++){
+            printf("\t%s\n", help_pages[i].command);
+        }
+        printf("\n");
+        return;
+}
+
+void help_help()
+{
+    printf(CMD_NAME_CLR "\nHELP:\n" RESET_CLR
+                  "\tPrints the help page for a command.\n"
+                  "\tUsage: help [cmd|-l]\n"
+                  "\tOptions:\n"
+                  "\t\tcmd: prints the help page of the command\n"
+                  "\t\t-l: lists all the avaliable commands\n\n");
 }
 
 void help_authors()
@@ -96,3 +122,4 @@ void help_time()
             "\tUsage: time\n"
             "\tFormat: hh:mm:ss\n");
 }
+
