@@ -12,8 +12,8 @@ struct cmd valid_commands[] = {
     {"authors", cmd_authors},
     {"pid", cmd_pid},
     {"chdir", cmd_chdir},
-    /* {"date", cmd_date}, */
-    /* {"time", cmd_time}, */
+    {"date", cmd_date},
+    {"time", cmd_time},
     /* {"hist", cmd_hist}, */
     /* {"command", cmd_repeat}, */
     /* {"open", cmd_open}, */

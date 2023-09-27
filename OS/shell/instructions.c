@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/utsname.h>
+#include <time.h>
 
 #define RED         "\x1b[31m"
 #define GREEN       "\x1b[32m"
@@ -56,6 +57,33 @@ void cmd_pid (int paramN, char* param[])
     else
         printf("Shell's pid is%d\n", getpid());
 }
+
+void cmd_time (int paramN, char* params[])
+{
+    if(paramN!=0){
+        printf(RED "Error: " RESET_CLR "Invalid parameter\n");
+    }
+    else {
+        char tiempo[9];
+        time_t result = time(NULL);
+        strftime( tiempo, 9, "%T", localtime(&result));
+        printf("%s\n", tiempo);
+    }
+}
+
+void cmd_date (int paramN, char* params[])
+{
+    if(paramN!=0){
+        printf(RED "Error: " RESET_CLR "Invalid parameter\n");
+    }
+    else {
+        char tiempo[12];
+        time_t result = time(NULL);
+        strftime( tiempo, 12, "%d/%m/%Y", localtime(&result));
+        printf("%s\n", tiempo);
+    }
+}
+
 
 void cmd_chdir (int paramN, char* param[])
 {

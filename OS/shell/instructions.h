@@ -3,8 +3,8 @@
 void cmd_authors(int paramN, char* params[]);
 void cmd_pid(int paramN, char* param[]);
 void cmd_chdir(int paramN, char* params[]);
-/* void cmd_date(int paramN, char* params[]); */
-/* void cmd_time(int paramN, char* params[]); */
+void cmd_date(int paramN, char* params[]);
+void cmd_time(int paramN, char* params[]);
 /* void cmd_hist(int paramN, char* params[]); */
 /* void cmd_hist(int paramN, char* params[]); */
 /* void cmd_repeat(int paramN, char* params[]); */
