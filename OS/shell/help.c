@@ -89,3 +89,10 @@ void help_date()
             "\tFormat: DD/MM/YYYY\n");
 }
 
+void help_time()
+{
+    printf(CMD_NAME_CLR "\nTIME:\n" RESET_CLR
+            "\tPrints the current time\n"
+            "\tUsage: time\n"
+            "\tFormat: hh:mm:ss\n");
+}
