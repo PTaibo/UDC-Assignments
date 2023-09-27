@@ -171,3 +171,14 @@ void help_close()
             "\t\t\t  files with their file descriptors\n");
 }
 
+void help_dup()
+{
+    printf(CMD_NAME_CLR "\nDUP:\n" RESET_CLR
+            "\tDuplicates a specified file descriptor\n"
+            "\tUsage: dup [fd]\n"
+            "\tOptions:\n"
+            "\t\tfd: file descriptor to duplicate\n"
+            "\tRelated commands: listopen (gives you the list of opened\n"
+            "\t\t\t  files with their file descriptors\n");
+}
+
