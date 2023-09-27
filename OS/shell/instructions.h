@@ -13,5 +13,4 @@ void cmd_time(int paramN, char* params[]);
 /* void cmd_dup(int paramN, char* params[]); */
 /* void cmd_listopen(int paramN, char* params[]); */
 void cmd_infosys(int paramN, char* params[]);
-void cmd_help(int paramN, char* params[]);
 void cmd_quit(int paramN, char* params[]);
