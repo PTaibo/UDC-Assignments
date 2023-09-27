@@ -96,12 +96,16 @@ tPosL findItem (void *element, tList list)
     return NULL;
 }
 
-void clearList (tList* list){
-    if(isEmptyList(*list))
-        return;
-    for (tPosL pos; pos != NULL ; pos = pos -> next){
-        deleteAtPosition(pos, *list);
+void clearList(tList* list) {
+    tPosL pos = *list;
+    tPosL nextp;
+
+    while (pos != NULL) {
+        nextp = pos->next;  // It kepts the next pos to change after
+        free(pos);
+        pos = next;  // Move to the next position
     }
-    return;
+
+    *list = NULL;  // It sets the list so it can be checked later to be emtpy
 }
 
