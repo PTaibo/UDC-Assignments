@@ -68,3 +68,10 @@ void help_chdir()
             "\t\tdir: change the current working directory to the one specified\n");
 }
 
+void help_infosys()
+{
+    printf(CMD_NAME_CLR "\nINFOSYS:\N" RESET_CLR
+            "\tPrints the information of the machine that's running the shell\n"
+            "\tUsage: infosys\n"
+}
+
