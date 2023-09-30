@@ -59,17 +59,22 @@ void print_array(int v[], int n)
 void test1()
 {
     printf("\nTEST 1:\n");
+    printf("%25s%10s%15s\n", "", "maxSubSum1", "maxSubSum2");
+
     int a=0, b=0;
-    int v[30]={-9,2,-5,-4,6,4,0,9,2,5,-2,-1,-9,-7,
+    int v[30]={-9,2,-5,-4,6,4,0,9,2,5,-2,-1,-9,-7,//given data
                 -1,9,-2,1,-7,-8,15,-2,-5,-4,16,7,-5,6,7,-7};
     int v2[5];
-    printf("%25s%10s%15s\n", "", "maxSubSum1", "maxSubSum2");
-    for (int i=1;i<=30;i++){
+
+    for (int i=1; i<=30; i++){
         printf(" %02d",v[i-1]);
+
         if (i % 5 == 0 && i != 0){
-            for (int j=0,temp=i-1;j<5;j++,temp--){
+
+            for (int j=0,temp=i-1;j<5;j++,temp--){//we keep the given data for computation
                 v2[j]=v[temp];
             }
+
             a = maxSubSum1(v2, 5);
             b = maxSubSum2(v2, 5);
             printf("%15d%15d\n", a, b);
@@ -81,8 +86,11 @@ void test2()
 {
     int i, a, b;
     int v[9];
+
+    //printing titles
     printf("\nTEST 2:\n");
     printf("%33s%15s%15s\n", "", "  maxSubSum1", "  maxSubSum2");
+
     for (i = 0; i < 10; i++)
     {
         random_init(v, 9);
@@ -97,36 +105,41 @@ double microsegundos() { /* obtiene la hora del sistema en microsegundos */
     struct timeval t;
     if (gettimeofday(&t, NULL) < 0 )
         return 0.0;
+
     return (t.tv_usec + t.tv_sec * 1000000.0);
 }
 
 void timeA()
 {
-    printf("SubMax1:\n");
+    printf("\nSubMax1:\n");
     print_titlesa();
     printf("\n");
-    double timev[MAX_N]={0};
-    double ta,tb,t=0;
-    for (int i=500,h=0; i<=32000, h<7; i=i*2,h++){
+
+    double timev=0;
+    double ta,tb;
+
+    for (int i=500,h=0; i<=32000, h<7; i=i*2,h++){//for each n value
         int v[i];
+
         random_init(v,i);
         ta=microsegundos();
         maxSubSum1(v, i);
         tb=microsegundos();
-        timev[h]=tb-ta;
-        if(timev[h] < 500){
+        timev=tb-ta;
+
+        if(timev < 500){
             ta=microsegundos();
 
             for (int count=0;count<k;count++){
                 maxSubSum1(v,i);
             }
-
+            
             tb=microsegundos();
-            timev[h]=(tb-ta)/k;
+            timev=(tb-ta)/k;
         }
-        
-        printvaluesa(i,h,timev);
-}
+
+        printvaluesa(i,timev);
+    }
 }
 
 void timeB()
@@ -134,16 +147,20 @@ void timeB()
     printf("\nSubMax2:\n");
     print_titlesb();
     printf("\n");
-    double timev[MAX_N]={0};
-    double ta,tb,t=0;
-    for (int i=500,h=0; i<=32000,h<7; i=i*2,h++){
+
+    double timev=0;
+    double ta,tb;
+
+    for (int i=500,h=0; i<=32000,h<7; i=i*2,h++){ //for each n value 
         int v[i];
+
         random_init(v,i);
         ta=microsegundos();
-        maxSubSum1(v, i);
+        maxSubSum2(v, i);
         tb=microsegundos();
-        timev[h]=tb-ta;
-            if(timev[h] < 500){
+        timev=tb-ta;
+
+            if(timev < 500){ 
                 ta=microsegundos();
 
                 for (int count=0;count<k;count++){
@@ -151,65 +168,77 @@ void timeB()
                 }
 
                 tb=microsegundos();
-                timev[h]=(tb-ta)/k;
+                timev=(tb-ta)/k;
             }
 
-            printvaluesb(i,h,timev);
+        printvaluesb(i,timev);
     }  
 
 }
 
 void print_titlesa()
 {
-    printf("n\tt(n)\t\tt(n)/n^1.8\tt(n)n^2\t\t\tt(n)/n^2.2");
+    printf("n\tt(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
 }
 
 void print_titlesb()
 {
-    printf("n\tt(n)\t\tt(n)/n^0.8\tt(n)n\t\t\tt(n)/n^1.2");
+    printf("n\tt(n)\t\tt(n)/n^0.8\tt(n)/n\t\t       t(n)/n^1.2");
 }
 
-void printvaluesa(int i,int h,double v[])
+void printvaluesa(int i,double timev)
 {
     double t,t18,t2,t22;
+
+    t=timev;
+    double j = (double) i; //pow need doubles
+    t18=t/pow(j,1.6);
+    t2=t/pow(j,2);
+    t22=t/pow(j,2.3);
+    
+    //printing results
     printf("%d\t",i);
-    t=v[h];
     printf("%lf\t",t);
-    t18=t/pow(i,1.6);
     printf("%lf\t",t18);
-    t2=t/pow(i,2);
     printf("%lf\t\t",t2);
-    t22=t/pow(i,2.3);
     printf("%lf\t\t",t22);
     printf("\n");
 }
 
-void printvaluesb(int i,int h,double v[])
+void printvaluesb(int i,double v)
 {
     double t,t08,t1,t12;
-    printf("%d\t",i);
-    t=v[h];
-    printf("%lf\t",t);
-    t08=t/pow(i,0.8);
-    printf("%lf\t",t08);
+
+    t=v;
+    double j= (double) i; //pow needs doubles
+    t08=t/pow(j,0.8);
     t1=t/i;
+    t12=t/pow(j,1.2);
+
+    //printing results
+    printf("%d\t",i);
+    printf("%lf\t",t);
+    printf("%lf\t",t08);
     printf("%lf\t\t",t1);
-    t12=t/pow(i,1.2);
     printf("%lf\t\t",t12);
     printf("\n");
 }
 
 int main()
 {
-    
-    //for (int i=0;i<3;i++){
+    /*for (int i=0;i<3;i++){ //for testing
         init_seed();
-        //test1();
-        //test2();
-        //timeA();
+        test1();
+        test2();
+        timeA();
         timeB();
-        
-    //
+    }*/
+
+    init_seed();
+    test1();
+    test2();
+    timeA();
+    timeB();
     return 0;
     
 }
