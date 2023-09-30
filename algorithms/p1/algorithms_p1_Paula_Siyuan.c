@@ -14,7 +14,6 @@ GROUP:6.1                     DATE:03/02/2023
 #include <sys/time.h>
 #include <math.h>
 #define k 1000
-#define MAX_N 7
 
 
 int maxSubSum1(int v[], int n)
@@ -78,7 +77,7 @@ void print_array(int v[], int n)
 {
     printf("[");
     for (int i = 0; i < n ; i++)
-        printf(" %02d",v[i]);
+        printf(" %2d",v[i]);
     printf("]");
 }
 
@@ -94,7 +93,7 @@ void test1()
     int v2[5];
 
     for (int i=1; i<=30; i++){
-        printf(" %02d",v[i-1]);
+        printf(" %2d",v[i-1]);
 
         if (i % 5 == 0 && i != 0){
 
@@ -131,7 +130,7 @@ void test2()
 }
 
 
-double microsegundos() { /* obtiene la hora del sistema en microsegundos */
+double microseconds() { /* obtains the system time in microseconds */
     struct timeval t;
     if (gettimeofday(&t, NULL) < 0 )
         return 0.0;
@@ -145,14 +144,14 @@ void printvaluesa(int i,double timev)
     double t,t18,t2,t22;
 
     t=timev;
-    double j = (double) i; //pow need doubles
+    double j = (double) i; //pow needs type doubles
     t18=t/pow(j,1.6);
     t2=t/pow(j,2);
     t22=t/pow(j,2.3);
     
     //printing results
-    printf("%d\t",i);
-    printf("%lf\t",t);
+    printf("%5d\t",i);
+    printf("%7lf\t",t);
     printf("%lf\t",t18);
     printf("%lf\t\t",t2);
     printf("%lf\t\t",t22);
@@ -163,7 +162,7 @@ void printvaluesa(int i,double timev)
 void timeA()
 {
     printf("\nSubMax1:\n");
-    printf("n\tt(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
+    printf("   n\t  t(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
     printf("\n");
 
     double timev=0;
@@ -174,19 +173,19 @@ void timeA()
         int v[i];
 
         random_init(v,i);
-        ta=microsegundos();
+        ta=microseconds();
         maxSubSum1(v, i);
-        tb=microsegundos();
+        tb=microseconds();
         timev=tb-ta;
 
-        if (timev < 500){
-            ta=microsegundos();
+        if (timev < 500){ //confidence threshold
+            ta=microseconds();
 
             for (int count=0;count<k;count++){
                 maxSubSum1(v,i);
             }
             
-            tb=microsegundos();
+            tb=microseconds();
             timev=(tb-ta)/k;
         }
 
@@ -206,8 +205,8 @@ void printvaluesb(int i,double v)
     t12=t/pow(j,1.2);
 
     //printing results
-    printf("%d\t",i);
-    printf("%lf\t",t);
+    printf("%5d\t",i);
+    printf("%7lf\t",t);
     printf("%lf\t",t08);
     printf("%lf\t\t",t1);
     printf("%lf\t\t",t12);
@@ -218,7 +217,7 @@ void printvaluesb(int i,double v)
 void timeB()
 {
     printf("\nSubMax2:\n");
-    printf("n\tt(n)\t\tt(n)/n^0.8\tt(n)/n\t\t       t(n)/n^1.2");
+    printf("   n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n\t\t       t(n)/n^1.2");
     printf("\n");
 
     double timev=0;
@@ -228,19 +227,19 @@ void timeB()
         int v[i];
 
         random_init(v,i);
-        ta=microsegundos();
+        ta=microseconds();
         maxSubSum2(v, i);
-        tb=microsegundos();
+        tb=microseconds();
         timev=tb-ta;
 
-            if(timev < 500){ 
-                ta=microsegundos();
+            if(timev < 500){ //confidence threshold
+                ta=microseconds();
 
                 for (int count=0;count<k;count++){
                     maxSubSum2(v,i);
                 }
 
-                tb=microsegundos();
+                tb=microseconds();
                 timev=(tb-ta)/k;
             }
 
@@ -252,18 +251,21 @@ void timeB()
 
 int main()
 {
+    /*
     //for testing
-    /*for (int i=0;i<3;i++){ 
+    for (int i=0;i<4;i++){ 
         init_seed();
         timeA();
         timeB();
-    }*/
-
+    }
+    */
+    
     init_seed();
     test1();
     test2();
     timeA();
     timeB();
+    
     return 0;
     
 }
