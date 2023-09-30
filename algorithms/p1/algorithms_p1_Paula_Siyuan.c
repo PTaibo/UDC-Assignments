@@ -8,8 +8,9 @@ GROUP:6.1                     DATE:03/02/2023
 
 
 
-
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include <sys/time.h>
 #include <math.h>
 #define k 1000
@@ -36,6 +37,7 @@ int maxSubSum1(int v[], int n)
     return maxSum;
 }
 
+
 int maxSubSum2(int v[], int n)
 {
     long thisSum=0, maxSum=0;
@@ -55,18 +57,22 @@ int maxSubSum2(int v[], int n)
     return maxSum;
 }
 
+
 void init_seed()
 {
+    srand(time(NULL)); 
     /* set the seed of a new sequence of pseudo-random integers */
-    srand(time(NULL));
 }
+
 
 void random_init(int v [], int n)
 {
     int i, m=2*n+1;
     for (i=0; i < n; i++)
-        v[i] = (rand() % m) - n; /* generate pseudo-random numbers between -n and +n */
+        v[i] = (rand() % m) - n; 
+    /* generate pseudo-random numbers between -n and +n */
 }
+
 
 void print_array(int v[], int n)
 {
@@ -75,6 +81,7 @@ void print_array(int v[], int n)
         printf(" %02d",v[i]);
     printf("]");
 }
+
 
 void test1()
 {
@@ -103,6 +110,7 @@ void test1()
     }
 }
 
+
 void test2()
 {
     int i, a, b;
@@ -122,6 +130,7 @@ void test2()
     }
 }
 
+
 double microsegundos() { /* obtiene la hora del sistema en microsegundos */
     struct timeval t;
     if (gettimeofday(&t, NULL) < 0 )
@@ -129,6 +138,27 @@ double microsegundos() { /* obtiene la hora del sistema en microsegundos */
 
     return (t.tv_usec + t.tv_sec * 1000000.0);
 }
+
+
+void printvaluesa(int i,double timev)
+{
+    double t,t18,t2,t22;
+
+    t=timev;
+    double j = (double) i; //pow need doubles
+    t18=t/pow(j,1.6);
+    t2=t/pow(j,2);
+    t22=t/pow(j,2.3);
+    
+    //printing results
+    printf("%d\t",i);
+    printf("%lf\t",t);
+    printf("%lf\t",t18);
+    printf("%lf\t\t",t2);
+    printf("%lf\t\t",t22);
+    printf("\n");
+}
+
 
 void timeA()
 {
@@ -164,6 +194,27 @@ void timeA()
     }
 }
 
+
+void printvaluesb(int i,double v)
+{
+    double t,t08,t1,t12;
+
+    t=v;
+    double j= (double) i; //pow needs doubles
+    t08=t/pow(j,0.8);
+    t1=t/i;
+    t12=t/pow(j,1.2);
+
+    //printing results
+    printf("%d\t",i);
+    printf("%lf\t",t);
+    printf("%lf\t",t08);
+    printf("%lf\t\t",t1);
+    printf("%lf\t\t",t12);
+    printf("\n");
+}
+
+
 void timeB()
 {
     printf("\nSubMax2:\n");
@@ -198,44 +249,6 @@ void timeB()
 
 }
 
-
-void printvaluesa(int i,double timev)
-{
-    double t,t18,t2,t22;
-
-    t=timev;
-    double j = (double) i; //pow need doubles
-    t18=t/pow(j,1.6);
-    t2=t/pow(j,2);
-    t22=t/pow(j,2.3);
-    
-    //printing results
-    printf("%d\t",i);
-    printf("%lf\t",t);
-    printf("%lf\t",t18);
-    printf("%lf\t\t",t2);
-    printf("%lf\t\t",t22);
-    printf("\n");
-}
-
-void printvaluesb(int i,double v)
-{
-    double t,t08,t1,t12;
-
-    t=v;
-    double j= (double) i; //pow needs doubles
-    t08=t/pow(j,0.8);
-    t1=t/i;
-    t12=t/pow(j,1.2);
-
-    //printing results
-    printf("%d\t",i);
-    printf("%lf\t",t);
-    printf("%lf\t",t08);
-    printf("%lf\t\t",t1);
-    printf("%lf\t\t",t12);
-    printf("\n");
-}
 
 int main()
 {
