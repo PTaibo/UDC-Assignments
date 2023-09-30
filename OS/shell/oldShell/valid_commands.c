@@ -9,17 +9,25 @@ struct cmd valid_commands[] = {
     {"chdir", cmd_chdir},
     {"date", cmd_date},
     {"time", cmd_time},
-      /* {"hist", cmd_hist}, */
-      /* {"command", cmd_repeat}, */
-      /* {"open", cmd_open}, */
-      /* {"close", cmd_close}, */
-      /* {"dup", cmd_dup}, */
-      /* {"listopen", cmd_listopen}, */
     {"infosys", cmd_infosys},
     {"help", cmd_help},
     {"quit", cmd_quit},
     {"exit", cmd_quit},
     {"bye", cmd_quit},
+    {NULL, NULL}
+};
+
+struct cmd hist_commands[] = {
+    /* {"hist", cmd_hist}, */
+    /* {"command", cmd_repeat}, */
+    {NULL, NULL}
+};
+
+struct cmd file_commands[] = {
+    /* {"open", cmd_open}, */
+    /* {"close", cmd_close}, */
+    /* {"dup", cmd_dup}, */
+    /* {"listopen", cmd_listopen}, */
     {NULL, NULL}
 };
 

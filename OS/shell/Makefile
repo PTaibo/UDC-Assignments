@@ -1,27 +1,39 @@
-# CFLAGS = -Wall -Wextra -O2
-CFLAGS = -Wall -Wextra -g
+#CFLAGS = -Wall -Wextra -O2
+ CFLAGS = -Wall -Wextra -g
 
-# ADD NEW FILE HERE
-MAIN_SOURCES = build/instructions.o build/help.o build/valid_commands.o
+MAIN_OBJ = build/basic_commands.o build/help_pages.o build/file_commands.o build/list.o build/history_commands.o build/command_processor.o build/utils.o build/error_msgs.o
 
 all: build/shell
 
-build/shell: main.c ${MAIN_SOURCES} build
-	gcc ${CFLAGS} main.c ${MAIN_SOURCES} -o build/shell
+build/shell: main.c ${MAIN_OBJ} build
+	gcc ${CFLAGS} main.c ${MAIN_OBJ} -o build/shell
 
-build/instructions.o: instructions.c instructions.h build
-	gcc ${CLFAGS} -c instructions.c -o build/instructions.o
+build/basic_commands.o: basic_commands.c basic_commands.h build
+	gcc ${CFLAGS} -c basic_commands.c -o build/basic_commands.o
 
-build/help.o: help.c help.h build
-	gcc ${CFALGS} -c help.c -o build/help.o
+build/help_pages.o: help_pages.c help_pages.h build
+	gcc ${CFLAGS} -c help_pages.c -o build/help_pages.o
 
-build/valid_commands.o: valid_commands.c valid_commands.h build
-	gcc ${CFLAGS} -c valid_commands.c -o build/valid_commands.o
+build/file_commands.o: file_commands.c file_commands.h build
+	gcc ${CFLAGS} -c file_commands.c -o build/file_commands.o
 
-# ADD NEW FILE COMPILATION INSTRUCTIONS HERE
+build/history_commands.o: history_commands.c history_commands.h build
+	gcc ${CFLAGS} -c history_commands.c -o build/history_commands.o
+
+build/list.o: list.c list.h build
+	gcc ${CFLAGS} -c list.c -o build/list.o
+
+build/command_processor.o: command_processor.c command_processor.h build
+	gcc ${CFLAGS} -c command_processor.c -o build/command_processor.o
+
+build/utils.o: utils.c utils.h build
+	gcc ${CFLAGS} -c utils.c -o build/utils.o
+
+build/error_msgs.o: error_msgs.c error_msgs.h build
+	gcc ${CFLAGS} -c error_msgs.c -o build/error_msgs.o
 
 build:
-	mkdir -p build 
+	mkdir -p build
 
 clean:
 	rm build/*

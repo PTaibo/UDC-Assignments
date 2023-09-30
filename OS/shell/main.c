@@ -1,50 +1,30 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include "instructions.h"
-#include "valid_commands.h"
 
-#define MAXLINE 200
+#include "basic_commands.h"
+#include "history_commands.h"
+#include "file_commands.h"
+#include "help_pages.h"
+#include "colors.h"
 
-int destroyLine(char* line, char* instruction [])
-{
-    int i = 0;
-
-    instruction[i] = strtok(line, " \n\t");
-
-    while (instruction[i] != NULL)
-        instruction[++i] = strtok(NULL, " \n\t");
-
-    return i;
-}
-
-void processCommand (int instrucParts, char* instruction [])
-{
-    if (instruction[0] == NULL)
-        return;
-
-    for (int i = 0; valid_commands[i].name != NULL; i++){
-        if (!strcmp(instruction[0], valid_commands[i].name)){
-            (*valid_commands[i].funct)(instrucParts-1, instruction+1);
-            return;
-        }
-    }
-
-    printf("Command not valid\n");
-}
+#include "types.h"
+#include "command_processor.h"
 
 int main()
 {
-    char line[MAXLINE];
-    char* instruction [MAXLINE/2];
+    char line [MAX_COMMAND_SIZE];
 
-    while (1){
+    init_file_list();
+
+    init_history();
+
+    printf("> ");
+
+    while (fgets(line, MAX_COMMAND_SIZE, stdin) != NULL){
+        processCommand(line);
         printf("> ");
-        fgets(line, MAXLINE, stdin);
-        int instrucParts = 0;
-        instrucParts = destroyLine(line, instruction);
-        processCommand(instrucParts, instruction);
     }
 
     return 0;
 }
+

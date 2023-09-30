@@ -6,7 +6,6 @@ void cmd_chdir(int paramN, char* params[]);
 void cmd_date(int paramN, char* params[]);
 void cmd_time(int paramN, char* params[]);
 /* void cmd_hist(int paramN, char* params[]); */
-/* void cmd_hist(int paramN, char* params[]); */
 /* void cmd_repeat(int paramN, char* params[]); */
 /* void cmd_open(int paramN, char* params[]); */
 /* void cmd_close(int paramN, char* params[]); */

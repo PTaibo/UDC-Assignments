@@ -1,4 +1,5 @@
-#include "instructions.h"
+#include "basic_commands.h"
+
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -6,44 +7,69 @@
 #include <sys/utsname.h>
 #include <time.h>
 
-#define RED         "\x1b[31m"
-#define GREEN       "\x1b[32m"
-#define YELLOW      "\x1b[33m"
-#define BLUE        "\x1b[34m"
-#define MAGENTA     "\x1b[35m"
-#define CYAN        "\x1b[36m"
-#define RESET_CLR   "\x1b[0m"
+#include "types.h"
+#include "colors.h"
 
-#define UNUSED __attribute__((unused)) // Gets rid of unused parameter warnings
+struct cmd command_list[] = {
+    {"authors", cmd_authors},
+    {"pid", cmd_pid},
+    {"chdir", cmd_chdir},
+    {"date", cmd_date},
+    {"time", cmd_time},
+    {"infosys", cmd_infosys},
+    {"quit", cmd_quit},
+    {"exit", cmd_quit},
+    {"bye", cmd_quit},
+    {NULL, NULL}
+};
+
+int check_basic_commands (int paramN, char* command[])
+{
+    for (int i = 0; command_list[i].name != NULL; i++){
+        if (!strcmp(command[0], command_list[i].name)){
+            (*command_list[i].funct)(paramN, command+1);
+            return 1;
+        }
+    }
+    
+    return 0;
+}
 
 void cmd_quit(UNUSED int paramN, UNUSED char* params[])
 {
     exit(0);
 }
 
-void cmd_authors (int paramN, char* params[]){
-    const char *name1 = "Siyuan He";
-    const char *name2 = "Paula Taibo Suárez";
-    const char *login1 = "siyuan.he";
-    const char *login2 = "p.taibo";
+void print_names ()
+{
+    printf("Siyuan He\tPaula Taibo Suárez\n");
+}
 
+void print_logins ()
+{
+    printf("siyuan.he\tp.taibo\n");
+}
+
+void cmd_authors (int paramN, char* params[]){
     // -n parameter
     if (paramN == 1 && !strcmp(params[0], "-n")){
-        printf("%s\n%s\n", name1, name2);
+        print_names();
     }
-
     // -l parameter
-    else if (paramN == 1 && !strcmp(params[0], "-l"))
-        printf("%s\n%s\n", login1, login2);
-
+    else if (paramN == 1 && !strcmp(params[0], "-l")){
+        print_logins();
+    }
     // None or both parameters
-    else if (!paramN)
-        printf("%s\t\t%s\n%s\t%s\n", name1, login1, name2, login2);
+    else if (!paramN){
+        print_names();
+        print_logins();
+    }
     else if (paramN == 2 && (!strcmp(params[0], "-n") || !strcmp(params[0], "-l"))
-                && (!strcmp(params[1], "-n") || !strcmp(params[1], "-l")))
-        printf("%s\t\t%s\n%s\t%s\n", name1, login1, name2, login2);
-
-    // Invalid or excesive parameters
+                && (!strcmp(params[1], "-n") || !strcmp(params[1], "-l"))){
+        print_names();
+        print_logins();
+    }
+    // Invalid parameters (rest of cases)
     else
         printf(RED "Error: " RESET_CLR "Invalid parameter\n");
 }
@@ -52,13 +78,15 @@ void cmd_pid (int paramN, char* param[])
 {
     if (paramN == 1 && !strcmp(param[0], "-p"))
         printf("Shell's parent's pid is %d\n", getppid());
+
     else if (paramN)
-        printf("Invalid parameter\n");
+        printf(RED "Error: " RESET_CLR "Invalid parameter\n");
+
     else
-        printf("Shell's pid is%d\n", getpid());
+        printf("Shell's pid is %d\n", getpid());
 }
 
-void cmd_time (int paramN, char* params[])
+void cmd_time (int paramN, UNUSED char* params[])
 {
     if(paramN!=0){
         printf(RED "Error: " RESET_CLR "Invalid parameter\n");
@@ -71,7 +99,7 @@ void cmd_time (int paramN, char* params[])
     }
 }
 
-void cmd_date (int paramN, char* params[])
+void cmd_date (int paramN, UNUSED char* params[])
 {
     if(paramN!=0){
         printf(RED "Error: " RESET_CLR "Invalid parameter\n");
@@ -84,27 +112,22 @@ void cmd_date (int paramN, char* params[])
     }
 }
 
-
 void cmd_chdir (int paramN, char* param[])
 {
-#define MAX_CWD 1000
+    const int MAX_CWD = 1000;
 
-    if (paramN > 1){ 
+    if (paramN > 1){
         printf(RED "Error: " RESET_CLR "Invalid parameter\n");
         return;
-    }   
+    }
+
+    if (paramN == 1 && chdir(param[0])){
+        perror(RED "Error: " RESET_CLR "Couldn't change directory");
+    }
 
     char cwd[MAX_CWD];
-    if (!paramN){
-        getcwd(cwd, MAX_CWD);
-        printf("cwd: %s\n", cwd);
-        return;
-    }   
-
-    if (!chdir(param[0]))
-        return;
-
-    perror(RED "Error: " RESET_CLR "Couldn't change directory");
+    getcwd(cwd, MAX_CWD);
+    printf("%s\n", cwd);
 }
 
 void cmd_infosys (int paramN, UNUSED char* param[])
@@ -126,7 +149,7 @@ void cmd_infosys (int paramN, UNUSED char* param[])
     printf(CYAN "Kernel: " RESET_CLR "%s %s %s\n", info.sysname,
                                                   info.release,
                                                   info.machine);
-#ifdef _GNU_SOURCE 
+#ifdef _GNU_SOURCE
     printf(CYAN "Domain name:" RESET_CLR "%s\n", info.__domainname);
 #endif
     printf("\n");
