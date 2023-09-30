@@ -1,3 +1,14 @@
+/*
+TITLE: ALGORITHMS             SUBTITLE:P1
+AUTHOR 1:PAULA TAIBO SUAREZ   LOGIN:P.TAIBO
+AUTHOR 2:SIYUAN HE            LOGIN:SIYUAN.HE
+GROUP:6.1                     DATE:03/02/2023
+*/
+
+
+
+
+
 #include <stdio.h>
 #include <sys/time.h>
 #include <math.h>
@@ -9,36 +20,45 @@ int maxSubSum1(int v[], int n)
 {
     int i, j;
     long thisSum, maxSum = 0;
+    
     for (i = 0; i < n; i++){
         thisSum = 0;
+
         for (j = i; j < n; j++){
             thisSum += v[j];
+
             if (thisSum > maxSum){
                 maxSum = thisSum;
             }
         }
     }
+
     return maxSum;
 }
 
 int maxSubSum2(int v[], int n)
 {
     long thisSum=0, maxSum=0;
+
     for (int i=0;i<n;i++){
         thisSum=thisSum+v[i];
+
         if (thisSum > maxSum) {
             maxSum=thisSum;
-        } 
+        }
+
         else if (thisSum<0){
             thisSum=0;
         }
-    } 
+    }
+
     return maxSum;
 }
 
 void init_seed()
 {
-    srand(time(NULL)); /* set the seed of a new sequence of pseudo-random integers */
+    /* set the seed of a new sequence of pseudo-random integers */
+    srand(time(NULL));
 }
 
 void random_init(int v [], int n)
@@ -71,7 +91,8 @@ void test1()
 
         if (i % 5 == 0 && i != 0){
 
-            for (int j=0,temp=i-1;j<5;j++,temp--){//we keep the given data for computation
+            //we take each 5 numbers during loop for compute
+            for (int j=0,temp=i-1;j<5;j++,temp--){
                 v2[j]=v[temp];
             }
 
@@ -112,13 +133,14 @@ double microsegundos() { /* obtiene la hora del sistema en microsegundos */
 void timeA()
 {
     printf("\nSubMax1:\n");
-    print_titlesa();
+    printf("n\tt(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
     printf("\n");
 
     double timev=0;
     double ta,tb;
 
-    for (int i=500,h=0; i<=32000, h<7; i=i*2,h++){//for each n value
+    //each value of n is a multiple of 2 
+    for (int i=500; i<=32000; i=i*2){
         int v[i];
 
         random_init(v,i);
@@ -127,7 +149,7 @@ void timeA()
         tb=microsegundos();
         timev=tb-ta;
 
-        if(timev < 500){
+        if (timev < 500){
             ta=microsegundos();
 
             for (int count=0;count<k;count++){
@@ -145,13 +167,13 @@ void timeA()
 void timeB()
 {
     printf("\nSubMax2:\n");
-    print_titlesb();
+    printf("n\tt(n)\t\tt(n)/n^0.8\tt(n)/n\t\t       t(n)/n^1.2");
     printf("\n");
 
     double timev=0;
     double ta,tb;
 
-    for (int i=500,h=0; i<=32000,h<7; i=i*2,h++){ //for each n value 
+    for (int i=500; i<=32000; i=i*2){ //for each n value 
         int v[i];
 
         random_init(v,i);
@@ -176,15 +198,6 @@ void timeB()
 
 }
 
-void print_titlesa()
-{
-    printf("n\tt(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
-}
-
-void print_titlesb()
-{
-    printf("n\tt(n)\t\tt(n)/n^0.8\tt(n)/n\t\t       t(n)/n^1.2");
-}
 
 void printvaluesa(int i,double timev)
 {
@@ -226,10 +239,9 @@ void printvaluesb(int i,double v)
 
 int main()
 {
-    /*for (int i=0;i<3;i++){ //for testing
+    //for testing
+    /*for (int i=0;i<3;i++){ 
         init_seed();
-        test1();
-        test2();
         timeA();
         timeB();
     }*/
