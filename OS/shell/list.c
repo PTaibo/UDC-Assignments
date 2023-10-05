@@ -94,6 +94,9 @@ void initialize_file_list (List* newList)
     newList->elements[0] = "stdin";
     newList->elements[1] = "stdout";
     newList->elements[2] = "stderr";
+    for (int i = 3; i < MAX_ELEMENTS; i++){
+        newList->elements[i] = NULL;
+    }
 }
 
 char* get_file(int pos, char* dest, List* list)
