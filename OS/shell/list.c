@@ -144,7 +144,7 @@ int delete_element (int pos, List* list)
 
 int dup_element (int pos, List* list)
 {
-    for (int i = 0; i < MAX_ELEMENTS - 1; i++){
+    for (int i = 0; i < MAX_ELEMENTS; i++){
         if (list->elements[i] == NULL){
             list->elements[i] = list->elements[pos];
             return 0;
@@ -156,7 +156,7 @@ int dup_element (int pos, List* list)
 
 int get_next_fd (int pos, List* list)
 {
-    for (int i = pos+1; i < MAX_ELEMENTS - 1; i++){
+    for (int i = pos+1; i < MAX_ELEMENTS; i++){ // Estaba antes con -1 (???)
         if (list->elements[i] != NULL){
             return i;
         }
