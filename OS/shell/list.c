@@ -134,7 +134,7 @@ int delete_element (int pos, List* list)
     }
 
     if (list->elements[pos] == NULL)
-        return -1; //TODO: -1 o 0???
+        return 0;
 
     free(list->elements[pos]);
     list->elements[pos] = NULL;
