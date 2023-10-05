@@ -114,7 +114,11 @@ int add_element (int pos, char* element, List* list)
         return -1;
     }
 
-    list->elements[pos] = malloc(sizeof(strlen(element)));
+    list->elements[pos] = malloc(strlen(element) + 1);
+    if (list->elements[pos] == NULL){
+        printf("Could not allocate memory\n");
+        return -1;
+    }
     strcpy(list->elements[pos], element);
 
     return 0;
