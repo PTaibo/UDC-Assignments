@@ -47,8 +47,8 @@ void cmd_hist (int paramN, char* command[])
         return;
     }
 
-    if (paramN == 1 && is_number(command[0])){
-        print_n_elements(-atoi(command[0]), &history);
+    if (paramN == 1 && atoi(command[0]) < 0){
+        print_n_elements((-1)*atoi(command[0]), &history);
         return;
     }
 
