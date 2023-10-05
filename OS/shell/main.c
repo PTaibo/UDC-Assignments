@@ -1,12 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "basic_commands.h"
-#include "history_commands.h"
-#include "file_commands.h"
-#include "help_pages.h"
-#include "colors.h"
-
 #include "types.h"
 #include "command_processor.h"
 

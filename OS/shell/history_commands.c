@@ -6,7 +6,6 @@
 #include "types.h"
 #include "colors.h"
 #include "list.h"
-#include "utils.h"
 #include "error_msgs.h"
 #include "command_processor.h"
 
