@@ -1,2 +1,0 @@
-- [ ] hist 1000 creates bug
-- [ ] Valgrind gives more leaks than a strainer

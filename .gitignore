@@ -1,4 +1,5 @@
 .gitignore
+*.todo.md
 
 com
 my/
@@ -12,6 +13,7 @@ build/
 
 disqualify.h
 ref_shell
+lab_classes
 
 *.swp
 *.un~
