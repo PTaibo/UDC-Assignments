@@ -129,7 +129,7 @@ int add_element (int pos, char* element, List* list)
 
 int delete_element (int pos, List* list)
 {
-    if (pos < 0 || pos >= MAX_ELEMENTS){
+    if (pos < 3 || pos >= MAX_ELEMENTS){
         return -1;
     }
 
