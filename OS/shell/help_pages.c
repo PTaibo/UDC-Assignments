@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "colors.h"
+#include "error_msgs.h"
 
 #define CMD_NAME_CLR "\x1b[33m" // Yellow
 
@@ -40,7 +41,7 @@ void cmd_help (int paramN, char* params[])
         return;
     }
     if (paramN > 1){
-        printf(RED "Error: " RESET_CLR "too many parameters\n");
+        invalid_param();
         return;
     }
 

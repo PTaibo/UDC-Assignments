@@ -9,6 +9,7 @@
 
 #include "types.h"
 #include "colors.h"
+#include "error_msgs.h"
 
 struct cmd command_list[] = {
     {"authors", cmd_authors},
@@ -71,7 +72,7 @@ void cmd_authors (int paramN, char* params[]){
     }
     // Invalid parameters (rest of cases)
     else
-        printf(RED "Error: " RESET_CLR "Invalid parameter\n");
+        invalid_param();
 }
 
 void cmd_pid (int paramN, char* param[])
@@ -80,7 +81,7 @@ void cmd_pid (int paramN, char* param[])
         printf("Shell's parent's pid is %d\n", getppid());
 
     else if (paramN)
-        printf(RED "Error: " RESET_CLR "Invalid parameter\n");
+        invalid_param();
 
     else
         printf("Shell's pid is %d\n", getpid());
@@ -89,7 +90,7 @@ void cmd_pid (int paramN, char* param[])
 void cmd_time (int paramN, UNUSED char* params[])
 {
     if(paramN!=0){
-        printf(RED "Error: " RESET_CLR "Invalid parameter\n");
+        invalid_param();
     }
     else {
         char tiempo[9];
@@ -102,7 +103,7 @@ void cmd_time (int paramN, UNUSED char* params[])
 void cmd_date (int paramN, UNUSED char* params[])
 {
     if(paramN!=0){
-        printf(RED "Error: " RESET_CLR "Invalid parameter\n");
+        invalid_param();
     }
     else {
         char tiempo[12];
@@ -117,7 +118,7 @@ void cmd_chdir (int paramN, char* param[])
     const int MAX_CWD = 1000;
 
     if (paramN > 1){
-        printf(RED "Error: " RESET_CLR "Invalid parameter\n");
+        invalid_param();
         return;
     }
 
@@ -133,7 +134,7 @@ void cmd_chdir (int paramN, char* param[])
 void cmd_infosys (int paramN, UNUSED char* param[])
 {
     if (paramN){
-        printf(RED "Error: " RESET_CLR "Invalid parameter\n");
+        invalid_param();
         return;
     }
 
