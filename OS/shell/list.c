@@ -3,11 +3,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char* make_cpy (char* element)
+char* make_cpy (char* src, char* dest)
 {
-    char* element_cpy = malloc(sizeof(strlen(element)));
-    strcpy(element_cpy, element);
-    return element_cpy;
+    if (dest == NULL)
+        dest = malloc(strlen(src) + 1);
+    strcpy(dest, src);
+    return dest;
 }
 
 // History-specific methods
@@ -35,12 +36,12 @@ void append_element (char* element, List* list)
 {
     if (list->start == -1) {
         list->start = list->end = 0;
-        list->elements[0] = make_cpy(element);
+        list->elements[0] = make_cpy(element, NULL);
         return;
     }
 
     list->end = (list->end + 1) % MAX_ELEMENTS;
-    list->elements[list->end] = make_cpy(element);
+    list->elements[list->end] = make_cpy(element, NULL);
 
     if (list->end == list->start){
         list->start++;
@@ -76,11 +77,11 @@ int print_n_elements (int n, List* list)
     return 0;
 }
 
-char* get_command (int pos, List* list)
+char* get_command (int pos, char* dest, List* list)
 {
     int list_pos = (pos - list->start) % MAX_ELEMENTS;
 
-    return make_cpy(list->elements[list_pos]);
+    return make_cpy(list->elements[list_pos], dest);
 }
 
 // File-list-specific methods
@@ -95,12 +96,12 @@ void initialize_file_list (List* newList)
     newList->elements[2] = "stderr";
 }
 
-char* get_file(int pos, List* list)
+char* get_file(int pos, char* dest, List* list)
 {
     if (pos < 0 || pos > MAX_ELEMENTS - 1)
         return NULL;
 
-    return make_cpy(list->elements[pos]);
+    return make_cpy(list->elements[pos], dest);
 }
 
 int add_element (int pos, char* element, List* list)

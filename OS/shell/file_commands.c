@@ -159,7 +159,8 @@ void cmd_listopen(int paramN, UNUSED char* params[])
 
     int fd = -1;
     while ((fd = get_next_fd(fd, &opened_files)) != -1){
-        char* file = get_file(fd, &opened_files);
+        char file [MAX_COMMAND_SIZE];
+        get_file(fd, file, &opened_files);
         int mode = get_opening_mode(fd);
 
         printf("%5d%5s   %s\n", fd, flags[mode].name, file);

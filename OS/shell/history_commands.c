@@ -63,7 +63,8 @@ void cmd_hist (int paramN, char* command[])
 void cmd_repeat (int paramN, char* params[])
 {
     if (paramN == 1 && is_number(params[0])){
-        char* command = get_command(atoi(params[0]), &history);
+        char command[MAX_COMMAND_SIZE];
+        get_command(atoi(params[0]), command, &history);
         processCommand(command);
         return;
     }
