@@ -22,6 +22,24 @@ int basicList_size (List* list)
 
     return MAX_ELEMENTS - list->start + list->end;
 }
+
+int basicList_pos (int pos, List* list)
+{
+    if (pos >= basicList_size (list))
+        return -1;
+
+    if (list->end >= list->start){
+        return list->start + pos;
+    }
+
+    if (pos <= MAX_ELEMENTS - list->start){
+        return list->start + pos;
+    }
+
+    pos -= MAX_ELEMENTS - list->start;
+    return pos;
+}
+
 // History-specific methods
 
 void initialize_hist (List* newList)
@@ -90,7 +108,7 @@ int print_n_elements (int n, List* list)
 
 char* get_command (int pos, char* dest, List* list)
 {
-    int list_pos = (pos - list->start) % MAX_ELEMENTS;
+    int list_pos = basicList_pos (pos, list);
 
     return make_cpy(list->elements[list_pos], dest);
 }
