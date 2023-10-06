@@ -65,6 +65,7 @@ void cmd_repeat (int paramN, char* params[])
     if (paramN == 1  && strlen(params[0]) < 5
         && (!strcmp(params[0], "0") || atoi(params[0]) > 0)){
         char command[MAX_COMMAND_SIZE];
+            printf(GREEN "%s" RESET_CLR, command); // Print command to be executed
         get_command(atoi(params[0]), command, &history);
         processCommand(command);
         return;
