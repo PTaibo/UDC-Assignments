@@ -46,7 +46,7 @@ void cmd_hist (int paramN, char* command[])
         return;
     }
 
-    if (paramN == 1 && atoi(command[0]) < 0){
+    if (paramN == 1 && strlen(command[0]) < 5 && atoi(command[0]) < 0){
         print_n_elements((-1)*atoi(command[0]), &history);
         return;
     }
@@ -62,7 +62,8 @@ void cmd_hist (int paramN, char* command[])
 void cmd_repeat (int paramN, char* params[])
 {
     // Atoi gives 0 as error and hist starts at 0
-    if (paramN == 1 && (!strcmp(params[0], "0") || atoi(params[0]) > 0)){
+    if (paramN == 1  && strlen(params[0]) < 5
+        && (!strcmp(params[0], "0") || atoi(params[0]) > 0)){
         char command[MAX_COMMAND_SIZE];
         get_command(atoi(params[0]), command, &history);
         processCommand(command);
