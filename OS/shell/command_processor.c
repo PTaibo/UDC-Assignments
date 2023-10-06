@@ -46,8 +46,10 @@ void processCommand (char* line)
         valid_command++;
     }
 
-    if (valid_command)
-        add_history_entry(original);
+    if (valid_command) {
+        if (strcmp(command_chunks[0], "command"))
+            add_history_entry(original);
+    }
     else
         printf(RED "Error: " RESET_CLR "not a valid command\n");
 }
