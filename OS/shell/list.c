@@ -110,6 +110,10 @@ char* get_command (int pos, char* dest, List* list)
 {
     int list_pos = basicList_pos (pos, list);
 
+    if (list_pos < 0){
+        return NULL;
+    }
+
     return make_cpy(list->elements[list_pos], dest);
 }
 
