@@ -3,6 +3,8 @@
 
 #include "types.h"
 #include "command_processor.h"
+#include "history_commands.h"
+#include "file_commands.h"
 
 int main()
 {
