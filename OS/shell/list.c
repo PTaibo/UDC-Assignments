@@ -11,6 +11,17 @@ char* make_cpy (char* src, char* dest)
     return dest;
 }
 
+int basicList_size (List* list)
+{
+    if (list->start == -1)
+        return 0;
+
+    if (list->end >= list->start){
+        return list->end - list->start + 1;
+    }
+
+    return MAX_ELEMENTS - list->start + list->end;
+}
 // History-specific methods
 
 void initialize_hist (List* newList)
