@@ -5,8 +5,14 @@
 
 char* make_cpy (char* src, char* dest)
 {
-    if (dest == NULL)
+    if (dest == NULL){
         dest = malloc(strlen(src) + 1);
+        if (dest == NULL){
+            mem_fail();
+            return NULL;
+        }
+    }
+        
     strcpy(dest, src);
     return dest;
 }
