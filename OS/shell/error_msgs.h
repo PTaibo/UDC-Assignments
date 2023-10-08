@@ -4,3 +4,4 @@
 
 void invalid_param();
 void missing_param();
+void mem_fail();

@@ -14,3 +14,8 @@ void missing_param()
     printf(RED "Error: " RESET_CLR "Missing parameters\n");
 }
 
+void mem_fail()
+{
+    printf(RED "Error: " RESET_CLR "Could not allocate memory\n");
+}
+
