@@ -3,6 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "error_msgs.h"
+
+// Generic functions
+
 char* make_cpy (char* src, char* dest)
 {
     if (dest == NULL){
@@ -17,7 +21,28 @@ char* make_cpy (char* src, char* dest)
     return dest;
 }
 
-int basicList_size (List* list)
+// Basic list implementation
+
+void basicList_initialize (basic_list* newList)
+{
+    newList->start = -1;
+    newList->end = -1;
+}
+
+void basicList_clear (basic_list* list)
+{
+    if (list->start == -1)
+        return;
+
+    for (int i = list->start; i < list->end; i++){
+        free(list->elements[i]);
+        list->elements[i] = NULL;
+    }
+
+    basicList_initialize(list);
+}
+
+int basicList_size (basic_list* list)
 {
     if (list->start == -1)
         return 0;
@@ -29,7 +54,7 @@ int basicList_size (List* list)
     return MAX_ELEMENTS - list->start + list->end;
 }
 
-int basicList_pos (int pos, List* list)
+int basicList_pos (int pos, basic_list* list)
 {
     if (pos >= basicList_size (list))
         return -1;
@@ -46,28 +71,7 @@ int basicList_pos (int pos, List* list)
     return pos;
 }
 
-// History-specific methods
-
-void initialize_hist (List* newList)
-{
-    newList->start = -1;
-    newList->end = -1;
-}
-
-void clear_list (List* list)
-{
-    if (list->start == -1)
-        return;
-
-    for (int i = list->start; i < list->end; i++){
-        free(list->elements[i]);
-        list->elements[i] = NULL;
-    }
-
-    initialize_hist(list);
-}
-
-void append_element (char* element, List* list)
+void basicList_append (char* element, basic_list* list)
 {
     if (list->start == -1) {
         list->start = list->end = 0;
@@ -83,17 +87,9 @@ void append_element (char* element, List* list)
     }
 }
 
-int get_size (List* list)
+int basicList_print (int n, basic_list* list)
 {
-    if (list->end < list->start)
-        return MAX_ELEMENTS;
-
-    return list->end + 1;
-}
-
-int print_n_elements (int n, List* list)
-{
-    if (list->start < 0 || n > get_size(list))
+    if (list->start < 0 || n > basicList_size(list))
         return -1;
 
     int end;
@@ -112,7 +108,7 @@ int print_n_elements (int n, List* list)
     return 0;
 }
 
-char* get_command (int pos, char* dest, List* list)
+char* basicList_getter (int pos, char* dest, basic_list* list)
 {
     int list_pos = basicList_pos (pos, list);
 
@@ -123,13 +119,10 @@ char* get_command (int pos, char* dest, List* list)
     return make_cpy(list->elements[list_pos], dest);
 }
 
-// File-list-specific methods
+// File list implementation
 
-void initialize_file_list (List* newList)
+void fileList_initialize (file_list* newList)
 {
-    newList->start = 0;
-    newList->end = MAX_ELEMENTS - 1;
-
     newList->elements[0] = "stdin";
     newList->elements[1] = "stdout";
     newList->elements[2] = "stderr";
@@ -138,7 +131,17 @@ void initialize_file_list (List* newList)
     }
 }
 
-char* get_file(int pos, char* dest, List* list)
+void fileList_clear (file_list* list)
+{
+    for (int i = 0; i < MAX_ELEMENTS; i++){
+        if (list->elements[i] != NULL){
+            free(list->elements[i]);
+            list->elements[i] = NULL;
+        }
+    }
+}
+
+char* fileList_getter (int pos, char* dest, file_list* list)
 {
     if (pos < 0 || pos > MAX_ELEMENTS - 1)
         return NULL;
@@ -146,9 +149,10 @@ char* get_file(int pos, char* dest, List* list)
     return make_cpy(list->elements[pos], dest);
 }
 
-int add_element (int pos, char* element, List* list)
+int fileList_add (int pos, char* element, file_list* list)
 {
     if (pos < 0 || pos >= MAX_ELEMENTS){
+        printf("Shouldn't enter this condition\n");
         return -1;
     }
 
@@ -156,17 +160,12 @@ int add_element (int pos, char* element, List* list)
         return -1;
     }
 
-    list->elements[pos] = malloc(strlen(element) + 1);
-    if (list->elements[pos] == NULL){
-        printf("Could not allocate memory\n");
-        return -1;
-    }
-    strcpy(list->elements[pos], element);
+    list->elements[pos] = make_cpy(element, NULL);
 
     return 0;
 }
 
-int delete_element (int pos, List* list)
+int fileList_delete (int pos, file_list* list)
 {
     if (pos < 3 || pos >= MAX_ELEMENTS){
         return -1;
@@ -181,11 +180,11 @@ int delete_element (int pos, List* list)
     return 0;
 }
 
-int dup_element (int pos, List* list)
+int fileList_dup (int pos, file_list* list)
 {
     for (int i = 0; i < MAX_ELEMENTS; i++){
         if (list->elements[i] == NULL){
-            list->elements[i] = list->elements[pos];
+            list->elements[i] = make_cpy(list->elements[pos], NULL);
             return 0;
         }
     }
@@ -193,7 +192,7 @@ int dup_element (int pos, List* list)
     return -1;
 }
 
-int get_next_fd (int pos, List* list)
+int fileList_nextFD (int pos, file_list* list)
 {
     for (int i = pos+1; i < MAX_ELEMENTS; i++){ // Estaba antes con -1 (???)
         if (list->elements[i] != NULL){

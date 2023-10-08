@@ -13,11 +13,13 @@
 #include "list.h"
 #include "error_msgs.h"
 
-List opened_files;
+file_list opened_files;
 
 void init_file_list()
 {
-    initialize_file_list(&opened_files);
+    fileList_initialize(&opened_files);
+}
+
 }
 
 struct cmd file_commands[] = {
@@ -60,7 +62,7 @@ void open_file (char* file, int mode)
         return;
     }
 
-    add_element(fd, file, &opened_files);
+    fileList_add (fd, file, &opened_files);
 }
 
 void cmd_open (int paramN, char* params[])
@@ -98,7 +100,7 @@ void cmd_close (int paramN, char* params[])
         return;
     }
 
-    if (delete_element(fd, &opened_files) < 0){
+    if (fileList_delete(fd, &opened_files) < 0){
         invalid_param();
         return;
     }
@@ -120,7 +122,7 @@ void cmd_dup (int paramN, char* params[])
         return;
     }
 
-    if (dup_element(fd, &opened_files) < 0){
+    if (fileList_dup(fd, &opened_files) < 0){
         printf("Could not duplicate file descriptor");
         return;
     }
@@ -158,9 +160,9 @@ void cmd_listopen(int paramN, UNUSED char* params[])
     printf("   FD  MODE  FILE\n");
 
     int fd = -1;
-    while ((fd = get_next_fd(fd, &opened_files)) != -1){
+    while ((fd = fileList_nextFD(fd, &opened_files)) != -1){
         char file [MAX_COMMAND_SIZE];
-        get_file(fd, file, &opened_files);
+        fileList_getter(fd, file, &opened_files);
         int mode = get_opening_mode(fd);
 
         printf("%5d%5s   %s\n", fd, flags[mode].name, file);

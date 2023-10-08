@@ -9,11 +9,13 @@
 #include "error_msgs.h"
 #include "command_processor.h"
 
-List history;
+basic_list history;
 
 void init_history()
 {
-    initialize_hist(&history);
+    basicList_initialize(&history);
+}
+
 }
 
 struct cmd history_commands[] = {
@@ -36,23 +38,23 @@ int check_history_commands (int paramN, char* command[])
 
 void add_history_entry (char* command)
 {
-    append_element(command, &history);
+    basicList_append(command, &history);
 }
 
 void cmd_hist (int paramN, char* command[])
 {
     if (!paramN){
-        print_n_elements(-1, &history);
+        basicList_print(-1, &history);
         return;
     }
 
     if (paramN == 1 && strlen(command[0]) < 5 && atoi(command[0]) < 0){
-        print_n_elements((-1)*atoi(command[0]), &history);
+        basicList_print((-1)*atoi(command[0]), &history);
         return;
     }
 
     if (paramN == 1 && !strcmp(command[0], "-c")){
-        clear_list(&history);
+        basicList_clear(&history);
         return;
     }
 
@@ -65,7 +67,7 @@ void cmd_repeat (int paramN, char* params[])
     if (paramN == 1  && strlen(params[0]) < 5
         && (!strcmp(params[0], "0") || atoi(params[0]) > 0)){
         char command[MAX_COMMAND_SIZE];
-        if (get_command(atoi(params[0]), command, &history) != NULL){
+        if (basicList_getter(atoi(params[0]), command, &history) != NULL){
             printf(GREEN "%s" RESET_CLR, command); // Print command to be executed
             processCommand(command);
             return;

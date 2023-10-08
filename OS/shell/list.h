@@ -6,22 +6,25 @@
 typedef struct {
     int start, end;
     char* elements[MAX_ELEMENTS];
-} List;
+} basic_list;
 
-char* make_cpy (char* src, char* dest);
+typedef struct {
+    char* elements[MAX_ELEMENTS];
+} file_list;
 
 // History-specific methods
-void initialize_hist (List* newList);
-void clear_list (List* list);
-void append_element (char* element, List* list);
-int print_n_elements (int n, List* list);
-char* get_command (int pos, char* dest, List* list);
+void basicList_initialize (basic_list* newList);
+void basicList_clear (basic_list* list);
+void basicList_append (char* element, basic_list* list);
+int basicList_print (int n, basic_list* list);
+char* basicList_getter (int pos, char* dest, basic_list* list);
 
 // File-specific methods
-void initialize_file_list (List* newList);
-char* get_file (int pos, char* dest, List* list);
-int add_element (int pos, char* element, List* list);
-int delete_element (int pos, List* list);
-int dup_element (int pos, List* list);
-int get_next_fd (int pos, List* list);
+void fileList_initialize (file_list* newList);
+void fileList_clear (file_list* list);
+char* fileList_getter (int pos, char* dest, file_list* list);
+int fileList_add (int pos, char* element, file_list* list);
+int fileList_delete (int pos, file_list* list);
+int fileList_dup (int pos, file_list* list);
+int fileList_nextFD (int pos, file_list* list);
 
