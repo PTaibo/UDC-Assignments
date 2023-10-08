@@ -34,7 +34,7 @@ void basicList_clear (basic_list* list)
     if (list->start == -1)
         return;
 
-    for (int i = list->start; i < list->end; i++){
+    for (int i = list->start; i <= list->end; i++){
         free(list->elements[i]);
         list->elements[i] = NULL;
     }
@@ -133,7 +133,7 @@ void fileList_initialize (file_list* newList)
 
 void fileList_clear (file_list* list)
 {
-    for (int i = 0; i < MAX_ELEMENTS; i++){
+    for (int i = 3; i < MAX_ELEMENTS; i++){
         if (list->elements[i] != NULL){
             free(list->elements[i]);
             list->elements[i] = NULL;

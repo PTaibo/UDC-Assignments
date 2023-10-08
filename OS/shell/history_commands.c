@@ -16,6 +16,9 @@ void init_history()
     basicList_initialize(&history);
 }
 
+void rm_history ()
+{
+    basicList_clear(&history);
 }
 
 struct cmd history_commands[] = {

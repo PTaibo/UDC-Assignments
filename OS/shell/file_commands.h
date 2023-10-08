@@ -1,6 +1,7 @@
 #pragma once
 
 void init_file_list();
+void rm_file_list();
 int check_file_commands(int paramN, char* command[]);
 
 void cmd_open (int paramN, char* params[]);

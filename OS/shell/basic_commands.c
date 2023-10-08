@@ -10,6 +10,8 @@
 #include "types.h"
 #include "colors.h"
 #include "error_msgs.h"
+#include "file_commands.h"
+#include "history_commands.h"
 
 struct cmd command_list[] = {
     {"authors", cmd_authors},
@@ -38,6 +40,9 @@ int check_basic_commands (int paramN, char* command[])
 
 void cmd_quit(UNUSED int paramN, UNUSED char* params[])
 {
+    rm_file_list();
+    rm_history();
+    
     exit(0);
 }
 

@@ -20,6 +20,9 @@ void init_file_list()
     fileList_initialize(&opened_files);
 }
 
+void rm_file_list()
+{
+    fileList_clear(&opened_files);
 }
 
 struct cmd file_commands[] = {
