@@ -1,0 +1,38 @@
+- [ ] Programa
+    - [ ] Implementar algoritmos
+        - [ ] Insertion sort
+        - [ ] Shell sort
+    - [ ] Comprobar funcionamiento de algoritmos
+        - [ ] Insertion sort
+        - [ ] Shell sort
+    - [ ] Determinar tiempos de ejecución para diferentes valores de n
+        - [ ] Insertion sort
+            - [ ] Array ordenado ascendientemente
+            - [ ] Array ordenado descendientemente
+            - [ ] Array desordenado
+        - [ ] Shell sort
+            - [ ] Array ordenado ascendientemente
+            - [ ] Array ordenado descendientemente
+            - [ ] Array desordenado
+    - [ ] Calcular empiricamente la complejidad de los algoritmos
+        - [ ] Insertion sort
+            - [ ] Array ordenado ascendientemente
+            - [ ] Array ordenado descendientemente
+            - [ ] Array desordenado
+        - [ ] Shell sort
+            - [ ] Array ordenado ascendientemente
+            - [ ] Array ordenado descendientemente
+            - [ ] Array desordenado
+- [ ] Report
+    - [ ] Datos del proyecto (título, autores...)
+    - [ ] Características del ordenador
+        - [ ] OS
+        - [ ] Kernel
+        - [ ] CPU
+        - [ ] RAM
+        - [ ] Batería
+        - [ ] Compilador y flags
+    - [ ] Tests a los que fueron sometidos los algoritmos
+    - [ ] Tiempos de los algoritmos
+    - [ ] Anomalías
+    - [ ] Conclusión
