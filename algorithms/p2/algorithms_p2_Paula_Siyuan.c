@@ -5,7 +5,12 @@ AUTHOR 2:SIYUAN HE            LOGIN:SIYUAN.HE
 GROUP:6.1                     DATE:09/10/2023
 */
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
+#include <sys/time.h>
+#include <math.h>
+#define k 1000
 
 
 
