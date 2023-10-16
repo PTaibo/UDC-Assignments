@@ -127,6 +127,7 @@ void checkAlgorithms(int arrayToOrder[], int arraySize)
     shell_sort(arrayToOrder, arraySize);
     print_array(arrayToOrder, arraySize);
     printf("Sorted? %d\n", isSorted(arrayToOrder, arraySize) ? 1 : 0);
+    printf("\n");
 }
 
 void test ()
