@@ -120,5 +120,25 @@ void checkAlgorithms(int arrayToOrder[], int arraySize)
     printf("Sorted? %d\n", isSorted(arrayToOrder, arraySize) ? 1 : 0);
 }
 
+void test ()
+{
+    printf("Random initialization\n");
+
+    const int arraySize = 15;
+    int unorderedArray[arraySize];
+    random_init(unorderedArray, arraySize);
+
+    checkAlgorithms(unorderedArray, arraySize);
+
+    printf("Descending initialization\n");
+
+    int descendingArray[arraySize];
+    for (int i = arraySize; i > 0; i--){
+        descendingArray[arraySize - i] = i;
+    }
+
+    checkAlgorithms(descendingArray, arraySize);
+}
+    
     
 }
