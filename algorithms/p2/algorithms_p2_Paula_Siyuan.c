@@ -10,7 +10,7 @@ GROUP:6.1                     DATE:09/10/2023
 #include <time.h>
 #include <sys/time.h>
 #include <math.h>
-#define k 1000
+#define K 1000
 
 
 
@@ -73,7 +73,6 @@ void init_seed()
     /* set the seed of a new sequence of pseudo-random integers */
 }
 
-
 void random_init(int v [], int n)
 {
     int i, m=2*n+1;
@@ -81,6 +80,18 @@ void random_init(int v [], int n)
         v[i] = (rand() % m) - n;
     /* generate pseudo-random numbers between -n and +n */
 }
+
+//For computing time
+
+double microseconds() { /* obtains the system time in microseconds */
+    struct timeval t;
+    if (gettimeofday(&t, NULL) < 0 )
+        return 0.0;
+
+    return (t.tv_usec + t.tv_sec * 1000000.0);
+}
+
+//Creating arrays
 
 void ascending_order_init(int v [], int n)
 {
@@ -96,6 +107,15 @@ void descending_order_init (int v [], int n)
     }
 }
 
+void copyArray (int size, int src[], int dest[])
+{
+    for (int i = 0; i < size; i++){
+        dest[i] = src[i];
+    }
+}
+
+//Printing arrays
+
 void print_array(int v[], int n)
 {
     printf("[");
@@ -103,6 +123,8 @@ void print_array(int v[], int n)
         printf(" %2d",v[i]);
     printf("]\n");
 }
+
+//Cheking sorts methods
 
 int isSorted (int arrayToCheck[], int arraySize)
 {
@@ -115,13 +137,6 @@ int isSorted (int arrayToCheck[], int arraySize)
     }
 
     return 1;
-}
-
-void copyArray (int size, int src[], int dest[])
-{
-    for (int i = 0; i < size; i++){
-        dest[i] = src[i];
-    }
 }
 
 void checkAlgorithms(int arrayToOrder[], int arraySize)
@@ -144,6 +159,8 @@ void checkAlgorithms(int arrayToOrder[], int arraySize)
     printf("\n");
 }
 
+
+
 void test ()
 {
     printf("Random initialization\n");
@@ -161,11 +178,146 @@ void test ()
 
     checkAlgorithms(descendingArray, arraySize);
 }
+
+
+// Calculating time for insertion sort
+
+
+void printvaluesa(int i,double timev)
+{
+    double t,t18,t2,t22;
+
+    t=timev;
+    double j = (double) i; //pow needs type doubles
+    t18=t/pow(j,1.6);
+    t2=t/pow(j,2);
+    t22=t/pow(j,2.3);
     
+    //printing results
+    printf("%5d\t",i);
+    printf("%7lf\t",t);
+    printf("%lf\t",t18);
+    printf("%lf\t\t",t2);
+    printf("%lf\t\t",t22);
+    printf("\n");
+}
+
+
+void timeA()
+{
+    printf("\nInsertion Sort:\n");
+    printf("   n\t  t(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
+    printf("\n");
+
+    double timev=0;
+    double ta,tb,trandoma,trandomb;
+
+
+    for (int i=500; i<=32000; i=i*2){
+        int v[i];
+
+        random_init(v,i);
+        ta=microseconds();
+        ins_sort(v, i);
+        tb=microseconds();
+        timev=tb-ta;
+
+        if (timev < 500){ //confidence threshold
+            ta=microseconds();
+
+            for (int count=0;count<K;count++){
+                random_init(v,i);
+                ins_sort(v,i);
+            }
+            tb=microseconds();
+
+            trandoma = microseconds();
+
+            for (int count=0;count<K;count++){
+                random_init(v,i);
+            }
+
+            trandomb = microseconds();
+
+            timev=((tb-ta)-(trandoma-trandomb))/K;
+        }
+
+        printvaluesa(i,timev);
+    }
+}
+
+
+// Calculating time for shell sort
+
+void printvaluesb(int i,double v)
+{
+    double t,t08,t1,t12;
+
+    t=v;
+    double j= (double) i; //pow needs doubles
+    t08=t/pow(j,0.8);
+    t1=t/i;
+    t12=t/pow(j,1.2);
+
+    //printing results
+    printf("%5d\t",i);
+    printf("%7lf\t",t);
+    printf("%lf\t",t08);
+    printf("%lf\t\t",t1);
+    printf("%lf\t\t",t12);
+    printf("\n");
+}
+
+void timeB()
+{
+    printf("\nShell sort:\n");
+    printf("   n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n\t\t       t(n)/n^1.2");
+    printf("\n");
+
+    double timev=0;
+    double ta,tb,trandoma,trandomb;
+
+    for (int i=500; i<=32000; i=i*2){ //for each n value 
+        int v[i];
+
+        random_init(v,i);
+        ta=microseconds();
+        shell_sort(v, i);
+        tb=microseconds();
+        timev=tb-ta;
+
+            if(timev < 500){ //confidence threshold
+                ta=microseconds();
+
+                for (int count=0;count<K;count++){
+                    random_init(v,i);
+                    shell_sort(v,i);
+                }
+                tb=microseconds();
+
+                trandoma = microseconds();
+                for (int count=0;count<K;count++){
+                    random_init(v,i);
+                }
+                trandomb = microseconds();
+
+                timev=((tb-ta)-(trandoma-trandomb))/K;
+
+            }
+
+        printvaluesb(i,timev);
+    }  
+
+}
+
+
+
 int main()
 {
     init_seed();
     test();
+    timeA();
+    timeB();
     return 0;
 }
 
