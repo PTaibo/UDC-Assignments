@@ -140,5 +140,11 @@ void test ()
     checkAlgorithms(descendingArray, arraySize);
 }
     
+int main()
+{
+    init_seed();
+    test();
     
+    return 0;
 }
+
