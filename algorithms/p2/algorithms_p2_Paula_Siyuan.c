@@ -24,12 +24,12 @@ void ins_sort (int v [], int n)
         x = v [i];
         j = i - 1;;
 
-        while (j > 0 && v[j] > x){
+        while (j >= 0 && v[j] > x){
             v[j + 1] = v[j];
             j = j - 1;
         }
 
-        v [j + 1] = x;;
+        v [j + 1] = x;
     }
 
 }
@@ -64,7 +64,7 @@ void shell_sort (int v [], int n)
         
         }        
     } 
-    while (increment > 0);
+    while (increment >= 1);
 }
 
 void init_seed()
@@ -143,7 +143,10 @@ void test ()
 int main()
 {
     init_seed();
-    test();
+    //test();
+    int v[5]={3,2,1,0,4};
+    shell_sort(v,5);
+    print_array(v,5);
     
     return 0;
 }
