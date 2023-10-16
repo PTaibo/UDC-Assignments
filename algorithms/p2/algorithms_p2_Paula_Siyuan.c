@@ -90,5 +90,19 @@ void print_array(int v[], int n)
     printf("]\n");
 }
 
+int isSorted (int arrayToCheck[], int arraySize)
+{
+    int prev = arrayToCheck[0];
+
+    for (int i = 1; i < arraySize; i++){
+        if (arrayToCheck[i] < prev){
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+
     
 }
