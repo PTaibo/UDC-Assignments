@@ -82,6 +82,20 @@ void random_init(int v [], int n)
     /* generate pseudo-random numbers between -n and +n */
 }
 
+void ascending_order_init(int v [], int n)
+{
+    for (int i = 0; i < n; i++){
+        v[i] = i+1;
+    }
+}
+
+void descending_order_init (int v [], int n)
+{
+    for (int i = n; i > 0; i--){
+        v[n - i] = i;
+    }
+}
+
 void print_array(int v[], int n)
 {
     printf("[");
@@ -143,9 +157,7 @@ void test ()
     printf("Descending initialization\n");
 
     int descendingArray[arraySize];
-    for (int i = arraySize; i > 0; i--){
-        descendingArray[arraySize - i] = i;
-    }
+    descending_order_init(descendingArray, arraySize);
 
     checkAlgorithms(descendingArray, arraySize);
 }
