@@ -1,4 +1,5 @@
-CFLAGS = -Wall
+# CFLAGS = -Wall
+CFLAGS = -Wall -g
 SOURCE = algorithms_p2_Paula_Siyuan
 
 test: $(SOURCE).c build
