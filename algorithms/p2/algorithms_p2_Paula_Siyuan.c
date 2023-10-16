@@ -82,5 +82,13 @@ void random_init(int v [], int n)
     /* generate pseudo-random numbers between -n and +n */
 }
 
+void print_array(int v[], int n)
+{
+    printf("[");
+    for (int i = 0; i < n ; i++)
+        printf(" %2d",v[i]);
+    printf("]\n");
+}
+
     
 }
