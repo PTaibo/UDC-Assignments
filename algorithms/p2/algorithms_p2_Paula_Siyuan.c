@@ -103,6 +103,12 @@ int isSorted (int arrayToCheck[], int arraySize)
     return 1;
 }
 
+void copyArray (int size, int src[], int dest[])
+{
+    for (int i = 0; i < size; i++){
+        dest[i] = src[i];
+    }
+}
 
 void checkAlgorithms(int arrayToOrder[], int arraySize)
 {
