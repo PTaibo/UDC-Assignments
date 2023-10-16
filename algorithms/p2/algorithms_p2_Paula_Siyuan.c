@@ -65,5 +65,22 @@ void shell_sort (int v [], int n)
         }        
     } 
     while (increment > 0);
+}
+
+void init_seed()
+{
+    srand(time(NULL));
+    /* set the seed of a new sequence of pseudo-random integers */
+}
+
+
+void random_init(int v [], int n)
+{
+    int i, m=2*n+1;
+    for (i=0; i < n; i++)
+        v[i] = (rand() % m) - n;
+    /* generate pseudo-random numbers between -n and +n */
+}
+
     
 }
