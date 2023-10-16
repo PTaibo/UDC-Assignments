@@ -104,5 +104,21 @@ int isSorted (int arrayToCheck[], int arraySize)
 }
 
 
+void checkAlgorithms(int arrayToOrder[], int arraySize)
+{
+    print_array(arrayToOrder, arraySize);
+    printf("Sorted? %d\n", isSorted(arrayToOrder, arraySize) ? 1 : 0);
+
+    printf("Insertion sort\n");
+    print_array(arrayToOrder, arraySize);
+    ins_sort(arrayToOrder, arraySize);
+    printf("Sorted? %d\n", isSorted(arrayToOrder, arraySize) ? 1 : 0);
+
+    printf("Shell sort\n");
+    shell_sort(arrayToOrder, arraySize);
+    print_array(arrayToOrder, arraySize);
+    printf("Sorted? %d\n", isSorted(arrayToOrder, arraySize) ? 1 : 0);
+}
+
     
 }
