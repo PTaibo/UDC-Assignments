@@ -115,10 +115,13 @@ void checkAlgorithms(int arrayToOrder[], int arraySize)
     print_array(arrayToOrder, arraySize);
     printf("Sorted? %d\n", isSorted(arrayToOrder, arraySize) ? 1 : 0);
 
+    int cpyOfArray[arraySize];
+    copyArray(arraySize, arrayToOrder, cpyOfArray);
+
     printf("Insertion sort\n");
-    print_array(arrayToOrder, arraySize);
-    ins_sort(arrayToOrder, arraySize);
-    printf("Sorted? %d\n", isSorted(arrayToOrder, arraySize) ? 1 : 0);
+    ins_sort(cpyOfArray, arraySize);
+    print_array(cpyOfArray, arraySize);
+    printf("Sorted? %d\n", isSorted(cpyOfArray, arraySize) ? 1 : 0);
 
     printf("Shell sort\n");
     shell_sort(arrayToOrder, arraySize);
