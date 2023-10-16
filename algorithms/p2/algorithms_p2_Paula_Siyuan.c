@@ -48,7 +48,7 @@ void shell_sort (int v [], int n)
             j = i;
             keepgoing = true;
 
-            while (( (j - increment) > 0 ) && keepgoing){
+            while (( (j - increment) >= 0 ) && keepgoing){
 
                 if (tmp < v[j - increment]){
                     v[j] = v[j-increment];
@@ -64,7 +64,7 @@ void shell_sort (int v [], int n)
         
         }        
     } 
-    while (increment >= 1);
+    while (increment > 0);
 }
 
 void init_seed()
@@ -153,11 +153,7 @@ void test ()
 int main()
 {
     init_seed();
-    //test();
-    int v[5]={3,2,1,0,4};
-    shell_sort(v,5);
-    print_array(v,5);
-    
+    test();
     return 0;
 }
 
