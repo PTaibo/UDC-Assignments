@@ -201,4 +201,12 @@ void help_listopen()
             "\tFormat: file descriptor, name, opening mode\n");
 }
 
+void help_create()
+{
+    printf(CMD_NAME_CLR "\nCREATE\n" RESET_CLR
+            "\tCreates files or directories\n"
+            "\tUsage: create [-f] [name]\n"
+            "\tParameters:\n"
+            "\t\t-f: creates a file instead of a directory\n");
+}
 
