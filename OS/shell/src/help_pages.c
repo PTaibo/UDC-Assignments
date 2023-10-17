@@ -242,3 +242,10 @@ void help_delete()
             "\tUsage: delete [NAMES]\n");
 }
 
+void help_deltree()
+{
+    printf(CMD_NAME_CLR "\nDELTREE:\n" RESET_CLR
+            "\tDeletes files and/or empty directories recursively\n"
+            "\tUsage: deltree [NAMES]\n");
+}
+
