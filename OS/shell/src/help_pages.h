@@ -17,4 +17,9 @@ void help_open();
 void help_close();
 void help_dup();
 void help_listopen();
+void help_create();
+void help_stat();
+void help_list();
+void help_delete();
+void help_deltree();
 
