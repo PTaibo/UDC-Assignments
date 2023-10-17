@@ -216,8 +216,22 @@ void help_stat()
             "\tGives information on files or directories\n"
             "\tUsage: stat [-long][-link][-acc] name1 name2..\n"
             "\tParameters:\n"
-            "\t\t-long: long list\n"
+            "\t\t-long: long listing\n"
             "\t\t-acc: accesstime\n"
-            "\t\t-link: if symbolic link, prints contained path\n");
+            "\t\t-link: prints contained path of symbolic links\n");
+}
+
+void help_list()
+{
+    printf(CMD_NAME_CLR "\nLIST:\n" RESET_CLR
+            "\tLists directory contents\n"
+            "\tUsage: list [-reca][-recb][-hid][-long][-link][-acc] [FILES]\n"
+            "\tParameters:\n"
+            "\t\t-reca: recursive (after)\n"
+            "\t\t-recb: recursive (before)\n"
+            "\t\t-hid: includes hidden files\n"
+            "\t\t-long: long listing\n"
+            "\t\t-link: prints contained path of symbolic links\n"
+            "\t\t-acc: accesstime\n");
 }
 
