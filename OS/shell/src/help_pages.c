@@ -203,10 +203,21 @@ void help_listopen()
 
 void help_create()
 {
-    printf(CMD_NAME_CLR "\nCREATE\n" RESET_CLR
+    printf(CMD_NAME_CLR "\nCREATE:\n" RESET_CLR
             "\tCreates files or directories\n"
             "\tUsage: create [-f] [name]\n"
             "\tParameters:\n"
             "\t\t-f: creates a file instead of a directory\n");
+}
+
+void help_stat()
+{
+    printf(CMD_NAME_CLR "\nSTAT:\n" RESET_CLR
+            "\tGives information on files or directories\n"
+            "\tUsage: stat [-long][-link][-acc] name1 name2..\n"
+            "\tParameters:\n"
+            "\t\t-long: long list\n"
+            "\t\t-acc: accesstime\n"
+            "\t\t-link: if symbolic link, prints contained path\n");
 }
 
