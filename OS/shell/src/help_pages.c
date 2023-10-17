@@ -235,3 +235,10 @@ void help_list()
             "\t\t-acc: accesstime\n");
 }
 
+void help_delete()
+{
+    printf(CMD_NAME_CLR "\nDELETE:\n" RESET_CLR
+            "\tDeltes files and/or emtpy directories\n"
+            "\tUsage: delete [NAMES]\n");
+}
+
