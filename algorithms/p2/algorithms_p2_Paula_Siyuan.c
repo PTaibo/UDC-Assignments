@@ -81,7 +81,7 @@ void random_init(int v [], int n)
     /* generate pseudo-random numbers between -n and +n */
 }
 
-//For computing time
+//                      For computing time
 
 double microseconds() { /* obtains the system time in microseconds */
     struct timeval t;
@@ -91,7 +91,7 @@ double microseconds() { /* obtains the system time in microseconds */
     return (t.tv_usec + t.tv_sec * 1000000.0);
 }
 
-//Creating arrays
+//                      Creating arrays
 
 void ascending_order_init(int v [], int n)
 {
@@ -114,7 +114,7 @@ void copyArray (int size, int src[], int dest[])
     }
 }
 
-//Printing arrays
+//              Printing arrays
 
 void print_array(int v[], int n)
 {
@@ -179,9 +179,7 @@ void test ()
     checkAlgorithms(descendingArray, arraySize);
 }
 
-
-// Calculating time for insertion sort
-
+//              Printing the values
 
 void printvaluesa(int i,double timev)
 {
@@ -202,53 +200,6 @@ void printvaluesa(int i,double timev)
     printf("\n");
 }
 
-
-void timeA()
-{
-    printf("\nInsertion Sort:\n");
-    printf("   n\t  t(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
-    printf("\n");
-
-    double timev=0;
-    double ta,tb,trandoma,trandomb;
-
-
-    for (int i=500; i<=32000; i=i*2){
-        int v[i];
-
-        random_init(v,i);
-        ta=microseconds();
-        ins_sort(v, i);
-        tb=microseconds();
-        timev=tb-ta;
-
-        if (timev < 500){ //confidence threshold
-            ta=microseconds();
-
-            for (int count=0;count<K;count++){
-                random_init(v,i);
-                ins_sort(v,i);
-            }
-            tb=microseconds();
-
-            trandoma = microseconds();
-
-            for (int count=0;count<K;count++){
-                random_init(v,i);
-            }
-
-            trandomb = microseconds();
-
-            timev=((tb-ta)-(trandoma-trandomb))/K;
-        }
-
-        printvaluesa(i,timev);
-    }
-}
-
-
-// Calculating time for shell sort
-
 void printvaluesb(int i,double v)
 {
     double t,t08,t1,t12;
@@ -268,14 +219,239 @@ void printvaluesb(int i,double v)
     printf("\n");
 }
 
-void timeB()
+
+
+//                  Calculating time for insertion sort
+
+void asc_timeA()
 {
-    printf("\nShell sort:\n");
+    printf("\nInsertion Sort for ascending order array:\n");
+    printf("   n\t  t(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
+    printf("\n");
+
+    double timev=0;
+    double ta,tb,tCreateA,tCreateB;
+
+
+    for (int i=500; i<=32000; i=i*2){
+        int v[i];
+
+        ascending_order_init(v,i);
+        ta=microseconds();
+        ins_sort(v, i);
+        tb=microseconds();
+        timev=tb-ta;
+
+        if (timev < 500){ //confidence threshold
+            printf("*");
+            ta=microseconds();
+
+            for (int count=0;count<K;count++){
+                ascending_order_init(v,i);
+                ins_sort(v,i);
+            }
+            tb=microseconds();
+
+            tCreateA = microseconds();
+
+            for (int count=0;count<K;count++){
+                ascending_order_init(v,i);
+            }
+
+            tCreateB = microseconds();
+
+            timev=((tb-ta)-(tCreateA-tCreateB))/K;
+        }
+
+        printvaluesa(i,timev);
+    }
+}
+
+void desc_timeA()
+{
+    printf("\nInsertion Sort for descending order:\n");
+    printf("   n\t  t(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
+    printf("\n");
+
+    double timev=0;
+    double ta,tb,tCreateA,tCreateB;
+
+
+    for (int i=500; i<=32000; i=i*2){
+        int v[i];
+
+        descending_order_init(v,i);
+        ta=microseconds();
+        ins_sort(v, i);
+        tb=microseconds();
+        timev=tb-ta;
+
+        if (timev < 500){ //confidence threshold
+            printf("*");
+            ta=microseconds();
+
+            for (int count=0;count<K;count++){
+                descending_order_init(v,i);
+                ins_sort(v,i);
+            }
+            tb=microseconds();
+
+            tCreateA = microseconds();
+
+            for (int count=0;count<K;count++){
+                descending_order_init(v,i);
+            }
+
+            tCreateB = microseconds();
+
+            timev=((tb-ta)-(tCreateA-tCreateB))/K;
+        }
+
+        printvaluesa(i,timev);
+    }
+}
+
+void random_timeA()
+{
+    printf("\nInsertion Sort:\n");
+    printf("   n\t  t(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
+    printf("\n");
+
+    double timev=0;
+    double ta,tb,tCreateA,tCreateB;
+
+
+    for (int i=500; i<=32000; i=i*2){
+        int v[i];
+
+        random_init(v,i);
+        ta=microseconds();
+        ins_sort(v, i);
+        tb=microseconds();
+        timev=tb-ta;
+
+        if (timev < 500){ //confidence threshold
+            printf("*");
+            ta=microseconds();
+
+            for (int count=0;count<K;count++){
+                random_init(v,i);
+                ins_sort(v,i);
+            }
+            tb=microseconds();
+
+            tCreateA = microseconds();
+
+            for (int count=0;count<K;count++){
+                random_init(v,i);
+            }
+
+            tCreateB = microseconds();
+
+            timev=((tb-ta)-(tCreateA-tCreateB))/K;
+        }
+
+        printvaluesa(i,timev);
+    }
+}
+
+
+//          Calculating time for shell sort
+
+void asc_timeB()
+{
+    printf("\nShell sort for ascending array:\n");
     printf("   n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n\t\t       t(n)/n^1.2");
     printf("\n");
 
     double timev=0;
-    double ta,tb,trandoma,trandomb;
+    double ta,tb,tCreateA,tCreateB;
+
+    for (int i=500; i<=32000; i=i*2){ //for each n value 
+        int v[i];
+
+        ascending_order_init(v,i);
+        ta=microseconds();
+        shell_sort(v, i);
+        tb=microseconds();
+        timev=tb-ta;
+
+            if(timev < 500){ //confidence threshold
+                printf("*");
+                ta=microseconds();
+
+                for (int count=0;count<K;count++){
+                    ascending_order_init(v,i);
+                    shell_sort(v,i);
+                }
+                tb=microseconds();
+
+                tCreateA = microseconds();
+                for (int count=0;count<K;count++){
+                    ascending_order_init(v,i);
+                }
+                tCreateB = microseconds();
+
+                timev=((tb-ta)-(tCreateA-tCreateB))/K;
+
+            }
+
+        printvaluesb(i,timev);
+    }  
+
+}
+
+void desc_timeB()
+{
+    printf("\nShell sort for descending array:\n");
+    printf("   n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n\t\t       t(n)/n^1.2");
+    printf("\n");
+
+    double timev=0;
+    double ta,tb,tCreateA,tCreateB;
+
+    for (int i=500; i<=32000; i=i*2){ //for each n value 
+        int v[i];
+
+        descending_order_init(v,i);
+        ta=microseconds();
+        shell_sort(v, i);
+        tb=microseconds();
+        timev=tb-ta;
+
+            if(timev < 500){ //confidence threshold
+                printf("*");
+                ta=microseconds();
+
+                for (int count=0;count<K;count++){
+                    descending_order_init(v,i);
+                    shell_sort(v,i);
+                }
+                tb=microseconds();
+
+                tCreateA = microseconds();
+                for (int count=0;count<K;count++){
+                    descending_order_init(v,i);
+                }
+                tCreateB = microseconds();
+
+                timev=((tb-ta)-(tCreateA-tCreateB))/K;
+
+            }
+
+        printvaluesb(i,timev);
+    }  
+
+}
+
+void random_timeB()
+{
+    printf("\nShell sort for random array:\n");
+    printf("   n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n\t\t       t(n)/n^1.2");
+    printf("\n");
+
+    double timev=0;
+    double ta,tb,tCreateA,tCreateB;
 
     for (int i=500; i<=32000; i=i*2){ //for each n value 
         int v[i];
@@ -287,6 +463,7 @@ void timeB()
         timev=tb-ta;
 
             if(timev < 500){ //confidence threshold
+                printf("*");
                 ta=microseconds();
 
                 for (int count=0;count<K;count++){
@@ -295,13 +472,13 @@ void timeB()
                 }
                 tb=microseconds();
 
-                trandoma = microseconds();
+                tCreateA = microseconds();
                 for (int count=0;count<K;count++){
                     random_init(v,i);
                 }
-                trandomb = microseconds();
+                tCreateB = microseconds();
 
-                timev=((tb-ta)-(trandoma-trandomb))/K;
+                timev=((tb-ta)-(tCreateA-tCreateB))/K;
 
             }
 
@@ -312,12 +489,27 @@ void timeB()
 
 
 
+
+
+
+
+
 int main()
 {
     init_seed();
     test();
-    timeA();
-    timeB();
+
+    //insertion sort
+    asc_timeA();
+    desc_timeA();
+    random_timeA();
+
+    //shell sort
+    asc_timeB();
+    desc_timeB();
+    random_timeB();
+
+
     return 0;
 }
 
