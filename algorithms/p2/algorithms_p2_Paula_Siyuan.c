@@ -36,14 +36,14 @@ void ins_sort (int v [], int n)
 
 void shell_sort (int v [], int n)
 {
-    int increment = n - 1;
+    int increment = n;
     int j = 0;
     bool keepgoing;
 
     do{
         increment = increment / 2;
 
-        for (int i = increment + 1; i < n; i++){
+        for (int i = increment; i < n; i++){
             int tmp = v[i];
             j = i;
             keepgoing = true;
@@ -496,6 +496,7 @@ void random_timeB()
 
 int main()
 {
+    /*
     init_seed();
     test();
 
@@ -508,7 +509,13 @@ int main()
     asc_timeB();
     desc_timeB();
     random_timeB();
+    */
 
+    for (int i=0; i < 5; i++){
+        init_seed();
+        test(); 
+        printf("-----------------------------\n");
+    }
 
     return 0;
 }
