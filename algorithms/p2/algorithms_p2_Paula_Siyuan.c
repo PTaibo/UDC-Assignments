@@ -243,9 +243,9 @@ void PrintShellValues(int i,double v)
 
     t=v;
     double j= (double) i; //pow needs doubles
-    t08=t/pow(j,1.3);
-    t1=t/pow(j,1.5);
-    t12=t/pow(j,1.7);
+    t08=t/pow(j,0.8);
+    t1=t/pow(j,1.12);
+    t12=t/pow(j,1.4);
 
     //printing results
     printf("%5d\t",i);
@@ -342,13 +342,13 @@ void desc_timeA()
             timev=((tb-ta)-(tCreateA-tCreateB))/K;
         }
 
-        PrintShellValues(i,timev);
+        PrintCuadraticValues(i,timev);
     }
 }
 
 void random_timeA()
 {
-    printf("\nInsertion Sort:\n");
+    printf("\nInsertion Sort for random array:\n");
     printCuadraticTitle();
     printf("\n");
 
@@ -386,7 +386,7 @@ void random_timeA()
             timev=((tb-ta)-(tCreateA-tCreateB))/K;
         }
 
-        PrintShellValues(i,timev);
+        PrintCuadraticValues(i,timev);
     }
 }
 
@@ -474,7 +474,7 @@ void desc_timeB()
 
             }
 
-        PrintCuadraticValues(i,timev);
+        PrintShellValues(i,timev);
     }  
 
 }
@@ -518,7 +518,7 @@ void random_timeB()
 
             }
 
-        PrintCuadraticValues(i,timev);
+        PrintShellValues(i,timev);
     }  
 
 }
