@@ -1,0 +1,19 @@
+TITLE: Algorithms               SUBTITLE: P2
+AUTHOR 1: Siyuan He             LOGIN: siyuan.he
+AUTHOR 2: Paula Taibo Suárez    LOGIN 2: p.taibo
+GROUP: 6.1                      DATE: 16/10/23
+
+This practical was executed in a laptop with the next specifications:
+
+OS: #1 SMP Debian 5.10.191-1 (2023-08-16)
+Kernel: Linux 5.10.0-25-amd64
+Window System: X11
+Windows Manager: i3
+CPU: Four 2.8GHz Intel i5 Skylake Processors
+RAM: 7.6GB RAM
+Battery: 100% and plugged
+
+And and was compiled with the next specifications:
+
+Compiler: gcc (Debian 10.2.1-6) 10.2.1 20210110
+Flags: -Wall -O2 -lm
