@@ -36,14 +36,14 @@ void ins_sort (int v [], int n)
 
 void shell_sort (int v [], int n)
 {
-    int increment = n - 1;
+    int increment = n;
     int j = 0;
     bool keepgoing;
 
     do{
         increment = increment / 2;
 
-        for (int i = increment + 1; i < n; i++){
+        for (int i = increment; i < n; i++){
             int tmp = v[i];
             j = i;
             keepgoing = true;
@@ -181,15 +181,15 @@ void test ()
 
 //              Printing the values
 
-void printvaluesa(int i,double timev)
+void PrintCuadraticValues(int i,double timev)
 {
     double t,t18,t2,t22;
 
     t=timev;
     double j = (double) i; //pow needs type doubles
-    t18=t/pow(j,1.6);
+    t18=t/pow(j,1.8);
     t2=t/pow(j,2);
-    t22=t/pow(j,2.3);
+    t22=t/pow(j,2.2);
     
     //printing results
     printf("%5d\t",i);
@@ -200,7 +200,7 @@ void printvaluesa(int i,double timev)
     printf("\n");
 }
 
-void printvaluesb(int i,double v)
+void PrintLinealValues(int i,double v)
 {
     double t,t08,t1,t12;
 
@@ -219,6 +219,43 @@ void printvaluesb(int i,double v)
     printf("\n");
 }
 
+void PrintShellValues(int i,double v)
+{
+    double t,t08,t1,t12;
+
+    t=v;
+    double j= (double) i; //pow needs doubles
+    t08=t/pow(j,0.8);
+    t1=t/pow(j,1.12);
+    t12=t/pow(j,1.4);
+
+    //printing results
+    printf("%5d\t",i);
+    printf("%7lf\t",t);
+    printf("%lf\t",t08);
+    printf("%lf\t\t",t1);
+    printf("%lf\t\t",t12);
+    printf("\n");
+}
+
+
+void printCuadraticTitle(){
+
+    printf(" n\t  t(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
+
+}
+
+void printLinealTitle(){
+
+   printf("   n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n^1\t\tt(n)/n^1.2");
+
+}
+
+void printshellTitles(){
+
+    printf(" n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n^1.12\t\tt(n)/n^1.4");
+
+}
 
 
 //                  Calculating time for insertion sort
@@ -226,7 +263,7 @@ void printvaluesb(int i,double v)
 void asc_timeA()
 {
     printf("\nInsertion Sort for ascending order array:\n");
-    printf("   n\t  t(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
+    printLinealTitle();
     printf("\n");
 
     double timev=0;
@@ -263,14 +300,14 @@ void asc_timeA()
             timev=((tb-ta)-(tCreateA-tCreateB))/K;
         }
 
-        printvaluesa(i,timev);
+        PrintLinealValues(i,timev);
     }
 }
 
 void desc_timeA()
 {
     printf("\nInsertion Sort for descending order:\n");
-    printf("   n\t  t(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
+    printCuadraticTitle();
     printf("\n");
 
     double timev=0;
@@ -307,14 +344,14 @@ void desc_timeA()
             timev=((tb-ta)-(tCreateA-tCreateB))/K;
         }
 
-        printvaluesa(i,timev);
+        PrintCuadraticValues(i,timev);
     }
 }
 
 void random_timeA()
 {
-    printf("\nInsertion Sort:\n");
-    printf("   n\t  t(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
+    printf("\nInsertion Sort for random array:\n");
+    printCuadraticTitle();
     printf("\n");
 
     double timev=0;
@@ -351,7 +388,7 @@ void random_timeA()
             timev=((tb-ta)-(tCreateA-tCreateB))/K;
         }
 
-        printvaluesa(i,timev);
+        PrintCuadraticValues(i,timev);
     }
 }
 
@@ -361,7 +398,7 @@ void random_timeA()
 void asc_timeB()
 {
     printf("\nShell sort for ascending array:\n");
-    printf("   n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n\t\t       t(n)/n^1.2");
+    printshellTitles();
     printf("\n");
 
     double timev=0;
@@ -396,15 +433,16 @@ void asc_timeB()
 
             }
 
-        printvaluesb(i,timev);
-    }  
+        PrintShellValues(i,timev);
+    }        
 
 }
+
 
 void desc_timeB()
 {
     printf("\nShell sort for descending array:\n");
-    printf("   n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n\t\t       t(n)/n^1.2");
+    printshellTitles();
     printf("\n");
 
     double timev=0;
@@ -439,15 +477,16 @@ void desc_timeB()
 
             }
 
-        printvaluesb(i,timev);
+        PrintShellValues(i,timev);
     }  
 
 }
 
+
 void random_timeB()
 {
     printf("\nShell sort for random array:\n");
-    printf("   n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n\t\t       t(n)/n^1.2");
+    printshellTitles(); 
     printf("\n");
 
     double timev=0;
@@ -482,7 +521,7 @@ void random_timeB()
 
             }
 
-        printvaluesb(i,timev);
+        PrintShellValues(i,timev);
     }  
 
 }
@@ -490,12 +529,10 @@ void random_timeB()
 
 
 
-
-
-
-
 int main()
+
 {
+
     init_seed();
     test();
 
@@ -508,6 +545,22 @@ int main()
     asc_timeB();
     desc_timeB();
     random_timeB();
+    
+
+    /*for (int i=0; i < 1; i++){
+
+        test();
+
+        //insertion sort
+        asc_timeA();
+        desc_timeA();
+        random_timeA();
+
+        //shell sort
+        asc_timeB();
+        desc_timeB();
+        random_timeB();
+    }*/
 
 
     return 0;
