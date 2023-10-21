@@ -17,3 +17,222 @@ And and was compiled with the next specifications:
 
 Compiler: gcc (Debian 10.2.1-6) 10.2.1 20210110
 Flags: -Wall -O2 -lm
+
+Te purpose of this practical is to implement the insertion sort and the
+shell sort algorithms.
+
+For the first test we run the algorithms with a random initialized array 
+and a decending ordered array and we checked it they were sorted correctly.
+
+Random inizalized arrays:
+
+    Random initialization
+    [  2  4 15 10 -2  4  1 -14  4 -5 -14  4 -14 -8 -9]
+    Sorted? 0
+    Insertion sort
+    [ -14 -14 -14 -9 -8 -5 -2  1  2  4  4  4  4 10 15]
+    Sorted? 1
+    Shell sort
+    [ -14 -14 -14 -9 -8 -5 -2  1  2  4  4  4  4 10 15]
+    Sorted? 1
+
+    Random initialization
+    [ 15 -2  8  2 -3 -14  6 -1 -8  7 12 -11  2 -4 -1]
+    Sorted? 0
+    Insertion sort
+    [ -14 -11 -8 -4 -3 -2 -1 -1  2  2  6  7  8 12 15]
+    Sorted? 1
+    Shell sort
+    [ -14 -11 -8 -4 -3 -2 -1 -1  2  2  6  7  8 12 15]
+    Sorted? 1
+
+    Random initialization
+    [ -4  8 -5 -14 13 -3  3 -7 12 -2 -3  5  9 -13 -13]
+    Sorted? 0
+    Insertion sort
+    [ -14 -13 -13 -7 -5 -4 -3 -3 -2  3  5  8  9 12 13]
+    Sorted? 1
+    Shell sort
+    [ -14 -13 -13 -7 -5 -4 -3 -3 -2  3  5  8  9 12 13]
+    Sorted? 1
+
+Descending ordered arrays:
+
+    Descending initialization
+    [ 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1]
+    Sorted? 0
+    Insertion sort
+    [  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15]
+    Sorted? 1
+    Shell sort
+    [  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15]
+    Sorted? 1
+
+    Descending initialization
+    [ 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1]
+    Sorted? 0
+    Insertion sort
+    [  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15]
+    Sorted? 1
+    Shell sort
+    [  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15]
+    Sorted? 1
+
+    Descending initialization
+    [ 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1]
+    Sorted? 0
+    Insertion sort
+    [  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15]
+    Sorted? 1
+    Shell sort
+    [  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15]
+    Sorted? 1
+
+We have confirmed after this first test that both algorithms works correctly
+by executing them several times, so now we can procede to determine their execution
+times. We will use arrays of size 500, 1000, 2000, 4000, 8000, 16000 and 32000 and
+we will test both of them with a ascending ordered array, a descending ordered array
+and a random initialized array.
+
+NOTES: 
+    -All the executions times were measured in microseconds.
+    -If the execution time is below 500 microseconds a * is indicated. In this cases 
+     to get a more accurated time we have executed it K times and computed the mean.
+     The constant K has to be a power of 10 for the measurement to be correct so we
+     chose 1000.
+
+Insertion sort:
+
+Insertion sort for ascending ordered array:
+    n	   t(n)	   t(n)/n^0.8	 t(n)/n		   t(n)/n^1.2
+*  500	  4.327000	0.029992	0.008654		0.002497		
+* 1000	  8.704000	0.034651	0.008704		0.002186		
+* 2000	 17.463000	0.039930	0.008731		0.001909		
+* 4000	 36.497000	0.047930	0.009124		0.001737		
+* 8000	 68.149000	0.051403	0.008519		0.001412		
+*16000	132.733000	0.057502	0.008296		0.001197		
+*32000	264.043000	0.065698	0.008251		0.001036
+
+Slightly underestimated bound: n^0.8.
+Tight bound: n.
+Slightly overestimated bound:n^1.2.
+
+We presumed lineal complexity in this case because it has to iterate thorough
+the list only once. To empericaly demostrate our hipothesis we made the
+calculations with our estimateted bound and a higher and a lower bounds. 
+Analysing the results we observe the hypothesized tight bound tends to the
+the constant 0.008 while the other two tend to zero and infinity, respectively.
+This proves that the complexity of the algorithm is indeed lineal.
+
+Insertion sort for descending ordered array:
+   n	     t(n)	   t(n)/n^1.8	t(n)/n^2	   t(n)/n^2.2
+* 500	   415.308000	0.005757	0.001661		0.000479		
+ 1000	  1667.000000	0.006636	0.001667		0.000419		
+ 2000	  6387.000000	0.007302	0.001597		0.000349		
+ 4000	 28120.000000	0.009232	0.001757		0.000335		
+ 8000	105871.000000	0.009982	0.001654		0.000274		
+16000	439301.000000	0.011895	0.001716		0.000248		
+32000	1714252.000000	0.013329	0.001674		0.000210		
+
+Slightly underestimated bound: n^1.8.
+Tight bound: n^2.
+Slightly overestimated bound:n^2.2.
+
+We presumed cuadratic complexity for this case. Analysing the results we observe 
+the hypothesized tight bound tends to the the constant 0.001 while the higher bound
+and the lower boud tend to zero and infinity, respectively. This proves that the 
+complexity of the algorithm is indeed cuadratic.
+
+Insertion sort for random array:
+   n	     t(n)	   t(n)/n^1.8	t(n)/n^2	   t(n)/n^2.2
+* 500	   223.179000	0.003094	0.000893		0.000258		
+ 1000	   871.000000	0.003468	0.000871		0.000219		
+ 2000	  3252.000000	0.003718	0.000813		0.000178		
+ 4000  	 13509.000000	0.004435	0.000844		0.000161		
+ 8000	 53480.000000	0.005042	0.000836		0.000138		
+16000	210010.000000	0.005686	0.000820		0.000118		
+32000	829654.000000	0.006451	0.000810		0.000102
+
+Slightly underestimated bound: n^1.8.
+Tight bound: n^2.
+Slightly overestimated bound:n^2.2.
+
+For this case we presumed cuadratic complexity. We can observe the results of the test
+that the tight bound tends to the constant 0.0008, meanwhile the lower bound tend to
+infinity and the higer bound to zero. So this proves that our hypothesis was correct
+and the complexity of this algorithm is indeed cuadratic.
+
+Shell sort for ascending ordered array:
+    n	    t(n)ll 	  t(n)/n^0.8  t(n)/n^1.1   t(n)/n^1.4
+*  500	  25.281000	   0.175234	   0.027160		0.004210		
+* 1000	  59.124000	   0.235377	   0.029632		0.003730		
+* 2000	 120.990000	   0.276647	   0.028289		0.002893		
+* 4000	 263.095000	   0.345513	   0.028698		0.002384		
+  8000	 541.000000	   0.408061	   0.027529		0.001857		
+ 16000	1149.000000	   0.497765	   0.027276		0.001495		
+ 32000	2463.000000	   0.612836	   0.027277		0.001214		
+
+Slightly underestimated bound: n^0.8.
+Tight bound: n^1.1.
+Slightly overestimated bound:n^1.4.
+
+Shell sort for descending ordered array:
+    n	    t(n)	  t(n)/n^0.8  t(n)/n^1.1   t(n)/n^1.4
+*  500	  36.508000	   0.253053	   0.039221		0.006079		
+* 1000	  78.559000	   0.312749	   0.039373		0.004957		
+* 2000	 170.613000	   0.390111	   0.039891		0.004079		
+* 4000	 363.143000	   0.476903	   0.039611		0.003290		
+  8000	 790.000000	   0.595875	   0.040200		0.002712		
+ 16000	1643.000000	   0.711773	   0.039004		0.002137		
+ 32000	3459.000000	   0.860658	   0.038308		0.001705		
+
+Slightly underestimated bound: n^0.8.
+Tight bound: n^1.1.
+Slightly overestimated bound:n^1.4.
+
+Shell sort for random array:
+    n	    t(n)	   t(n)/n^0.8  t(n)/n^1.1	t(n)/n^1.4
+*  500	  94.852000	    0.657462	0.101901	 0.015794		
+* 1000	  210.062000	0.836272	0.105280	 0.013254		
+* 2000	  503.074000	1.150291	0.117625	 0.012028		
+  4000	  870.000000	1.142540	0.094897	 0.007882		
+  8000	 2547.000000	1.921131	0.129607	 0.008744		
+ 16000	 6488.000000	2.810702	0.154021	 0.008440		
+ 32000	12008.000000	2.987794	0.132986	 0.005919
+
+Slightly underestimated bound: n^0.8.
+Tight bound: n^1.1.
+Slightly overestimated bound:n^1.4.
+
+In these cases our initial hypothesis was that it was cuadratic but after runing
+it we could see that it was incorrect. Our next guest was that it was of type n times
+logarithm of n but it was also incorrect altough it was getting closer. So after some 
+tries we set the tight bound to n ^ 1.1 and we can see that in these three cases it
+tends to the constants 0.02, 0.03 and 0.1. And the higher bounds and
+lower bounds tended to zero and infinity, respectively.
+
+Observations:
+
+As it is normal, at the start of the execution there are some irregularities
+in the data that are fixed by executing the tests automatically. For the first
+test, which is the one that remains anomalous, we executed the program
+several times to confirm the results were correct.
+
+     n      t(n)     t(n)/n^0.8   t(n)/n    t(n)/n^1.2
+*   500   20.726000   0.143661   0.041452<-  0.011961         
+*  1000   13.959000   0.055572   0.013959<-  0.003506         
+*  2000   17.070000   0.039031   0.008535    0.001866         
+*  4000   35.349000   0.046423   0.008837    0.001682         
+*  8000   66.791000   0.050379   0.008349    0.001384         
+* 16000  133.150000   0.057683   0.008322    0.001201         
+* 32000  264.813000   0.065890   0.008275    0.001039
+
+
+Conclusions:
+
+After running all these tests and emperically analysing the results we have
+demostrated that in the first case the complexity varies depending of how 
+the array is initially ordered, being the average case cuadratic. On the other hand,
+the shell sort has an empirical complexity of O(n^1.1), thus we can conclude
+that the shell sort is more efficient and fast than the insertion sort.
+
