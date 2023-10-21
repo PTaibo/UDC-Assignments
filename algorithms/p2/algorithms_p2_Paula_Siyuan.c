@@ -226,7 +226,7 @@ void PrintShellValues(int i,double v)
     t=v;
     double j= (double) i; //pow needs doubles
     t08=t/pow(j,0.8);
-    t1=t/pow(j,1.12);
+    t1=t/pow(j,1.1);
     t12=t/pow(j,1.4);
 
     //printing results
@@ -247,13 +247,13 @@ void printCuadraticTitle(){
 
 void printLinealTitle(){
 
-   printf("   n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n^1\t\tt(n)/n^1.2");
+   printf("   n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n\t\tt(n)/n^1.2");
 
 }
 
 void printshellTitles(){
 
-    printf(" n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n^1.12\t\tt(n)/n^1.4");
+    printf(" n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n^1.1\t\tt(n)/n^1.4");
 
 }
 
@@ -262,7 +262,7 @@ void printshellTitles(){
 
 void asc_timeA()
 {
-    printf("\nInsertion Sort for ascending order array:\n");
+    printf("\nInsertion sort for ascending ordered array:\n");
     printLinealTitle();
     printf("\n");
 
@@ -306,7 +306,7 @@ void asc_timeA()
 
 void desc_timeA()
 {
-    printf("\nInsertion Sort for descending order:\n");
+    printf("\nInsertion sort for descending ordered array:\n");
     printCuadraticTitle();
     printf("\n");
 
@@ -350,7 +350,7 @@ void desc_timeA()
 
 void random_timeA()
 {
-    printf("\nInsertion Sort for random array:\n");
+    printf("\nInsertion sort for random array:\n");
     printCuadraticTitle();
     printf("\n");
 
@@ -397,7 +397,7 @@ void random_timeA()
 
 void asc_timeB()
 {
-    printf("\nShell sort for ascending array:\n");
+    printf("\nShell sort for ascending ordered array:\n");
     printshellTitles();
     printf("\n");
 
@@ -441,7 +441,7 @@ void asc_timeB()
 
 void desc_timeB()
 {
-    printf("\nShell sort for descending array:\n");
+    printf("\nShell sort for descending ordered array:\n");
     printshellTitles();
     printf("\n");
 
@@ -546,7 +546,7 @@ int main()
     desc_timeB();
     random_timeB();
     
-
+    //For test
     /*for (int i=0; i < 1; i++){
 
         test();
