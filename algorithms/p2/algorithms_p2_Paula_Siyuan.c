@@ -219,24 +219,6 @@ void PrintLinealValues(int i,double v)
     printf("\n");
 }
 
-void printLinealTitle(){
-
-   printf("   n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n^1\t\tt(n)/n^1.2");
-
-}
-
-void printCuadraticTitle(){
-
-    printf(" n\t  t(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
-
-}
-
-void printshellTitles(){
-
-    printf(" n\t  t(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
-
-}
-
 void PrintShellValues(int i,double v)
 {
     double t,t08,t1,t12;
@@ -255,6 +237,26 @@ void PrintShellValues(int i,double v)
     printf("%lf\t\t",t12);
     printf("\n");
 }
+
+
+void printCuadraticTitle(){
+
+    printf(" n\t  t(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2");
+
+}
+
+void printLinealTitle(){
+
+   printf("   n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n^1\t\tt(n)/n^1.2");
+
+}
+
+void printshellTitles(){
+
+    printf(" n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n^1.12\t\tt(n)/n^1.4");
+
+}
+
 
 //                  Calculating time for insertion sort
 
@@ -392,10 +394,11 @@ void random_timeA()
 
 
 //          Calculating time for shell sort
+
 void asc_timeB()
 {
     printf("\nShell sort for ascending array:\n");
-    printCuadraticTitle();
+    printshellTitles();
     printf("\n");
 
     double timev=0;
@@ -439,7 +442,7 @@ void asc_timeB()
 void desc_timeB()
 {
     printf("\nShell sort for descending array:\n");
-    printCuadraticTitle();
+    printshellTitles();
     printf("\n");
 
     double timev=0;
@@ -483,7 +486,7 @@ void desc_timeB()
 void random_timeB()
 {
     printf("\nShell sort for random array:\n");
-    printCuadraticTitle(); 
+    printshellTitles(); 
     printf("\n");
 
     double timev=0;
@@ -529,7 +532,7 @@ void random_timeB()
 int main()
 
 {
-    /*
+
     init_seed();
     test();
 
@@ -542,9 +545,9 @@ int main()
     asc_timeB();
     desc_timeB();
     random_timeB();
-    */
+    
 
-    for (int i=0; i < 1; i++){
+    /*for (int i=0; i < 1; i++){
 
         test();
 
@@ -557,7 +560,7 @@ int main()
         asc_timeB();
         desc_timeB();
         random_timeB();
-    }
+    }*/
 
 
     return 0;
