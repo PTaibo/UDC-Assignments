@@ -223,18 +223,8 @@ from the average value. For example here in the ascending ordered array:
 
 Insertion sort for ascending ordered array:
    n      t(n)          t(n)/n^0.8      t(n)/n^1                t(n)/n^1.2
-*  500  10.266000       0.071158      ->0.020532<-                0.005924
-* 1000  11.342000       0.045153      ->0.011342<-                0.002849
-* 2000  10.453000       0.023901        0.005226                0.001143
-* 4000  20.262000       0.026609        0.005065                0.000964
-* 8000  38.558000       0.029083        0.004820                0.000799
-*16000  80.718000       0.034968        0.005045                0.000728
-*32000  153.226000      0.038125        0.004788                0.000601
-
-Insertion sort for ascending ordered array:
-   n      t(n)          t(n)/n^0.8      t(n)/n^1                t(n)/n^1.2
-*  500  10.266000       0.071158        0.020532                0.005924
-* 1000  11.342000       0.045153        0.011342                0.002849
+*  500  10.266000       0.071158      ->0.020532<-              0.005924
+* 1000  11.342000       0.045153      ->0.011342<-              0.002849
 * 2000  10.453000       0.023901        0.005226                0.001143
 * 4000  20.262000       0.026609        0.005065                0.000964
 * 8000  38.558000       0.029083        0.004820                0.000799
@@ -243,6 +233,7 @@ Insertion sort for ascending ordered array:
 
 To ensure the accuracy of the results the tests were non-manually repeated enough times to garantee
 those unusual measurements were anomalies.
+
 
 CONCLUSION:
 
