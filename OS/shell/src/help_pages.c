@@ -31,6 +31,11 @@ struct help help_page[] = {
   {"quit", help_quit},
   {"exit", help_quit},
   {"bye", help_quit},
+  {"create", help_create},
+  {"stat", help_stat},
+  {"list", help_list},
+  {"delete", help_delete},
+  {"deltree", help_deltree},
   {NULL, NULL}
 }; 
 
