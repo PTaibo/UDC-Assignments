@@ -12,6 +12,7 @@
 #include "error_msgs.h"
 #include "file_commands.h"
 #include "history_commands.h"
+#include "help_pages.h"
 
 struct cmd command_list[] = {
     {"authors", cmd_authors},
@@ -30,7 +31,10 @@ int check_basic_commands (int paramN, char* command[])
 {
     for (int i = 0; command_list[i].name != NULL; i++){
         if (!strcmp(command[0], command_list[i].name)){
-            (*command_list[i].funct)(paramN, command+1);
+            if (paramN > 0 && !strcmp(command[1], "-?"))
+                cmd_help(paramN, command + 1);
+            else
+                (*command_list[i].funct)(paramN, command+1);
             return 1;
         }
     }

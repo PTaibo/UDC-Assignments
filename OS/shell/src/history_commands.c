@@ -8,6 +8,7 @@
 #include "list.h"
 #include "error_msgs.h"
 #include "command_processor.h"
+#include "help_pages.h"
 
 basic_list history;
 
@@ -31,7 +32,10 @@ int check_history_commands (int paramN, char* command[])
 {
     for (int i = 0; history_commands[i].name != NULL; i++){
         if (!strcmp(command[0], history_commands[i].name)){
-            (*history_commands[i].funct)(paramN, command+1);
+            if (paramN > 0 && !strcmp(command[1], "-?"))
+                cmd_help(paramN, command + 1);
+            else 
+                (*history_commands[i].funct)(paramN, command+1);
             return 1;
         }
     }
