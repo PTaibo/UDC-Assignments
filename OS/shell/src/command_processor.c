@@ -22,9 +22,6 @@ int divideLine (char* line, char* command_chunks[])
 
 void executeCommand (int paramN, char* command_chunks[])
 {
-    if (command_chunks[0] == NULL)
-        return;
-
     if (!strcmp(command_chunks[0], "help")){
         cmd_help(paramN, command_chunks+1);
         return;
@@ -45,6 +42,8 @@ void executeCommand (int paramN, char* command_chunks[])
 void processCommand (char* line){
     char* command_chunks[MAX_COMMAND_SIZE/2];
     int paramN = divideLine (line, command_chunks);
+    if (command_chunks[0] == NULL)
+        return;
     if (strcmp(command_chunks[0], "command")){
         add_history_entry(line);
     }
