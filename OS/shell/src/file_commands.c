@@ -180,8 +180,12 @@ void cmd_listopen(int paramN, UNUSED char* params[])
 void cmd_create (int paramN, char* params[])
 {
     if (paramN == 2 && !strcmp(params[0], "-f")){
-        if (open(params[1], O_CREAT, 0644) < 0){
+        int fd = open(params[1], O_CREAT | O_EXCL, 0644); 
+        if (fd < 0){
             perror("Couldn't create file");
+        }
+        else {
+            close(fd);
         }
         return;
     }
