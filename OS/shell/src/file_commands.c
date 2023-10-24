@@ -31,6 +31,7 @@ struct cmd file_commands[] = {
   {"close", cmd_close},
   {"dup", cmd_dup},
   {"listopen", cmd_listopen},
+  {"create", cmd_create},
   {NULL, NULL}
 };
 
@@ -174,5 +175,22 @@ void cmd_listopen(int paramN, UNUSED char* params[])
 
         printf("%5d%5s   %s\n", fd, flags[mode].name, file);
     }
+}
+
+void cmd_create (int paramN, char* params[])
+{
+    if (paramN == 2 && !strcmp(params[0], "-f")){
+        if (open(params[1], O_CREAT, 0644) < 0){
+            perror("Couldn't create file");
+        }
+        return;
+    }
+    else if (paramN == 1){
+        if (mkdir(params[0], 0755) < 0){
+            perror("Couldn't create directory");
+        }
+        return;
+    }
+    invalid_param();
 }
 

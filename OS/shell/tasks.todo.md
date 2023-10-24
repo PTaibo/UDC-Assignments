@@ -1,18 +1,12 @@
 - [ ] Comentar/renombrar código P0
-- [ ] Help
-    - [ ] Add -? parameter to commands to call help page
-    - [ ] Create help pages for new commands
-        - [ ] create
-        - [ ] stat
-        - [ ] list
-        - [ ] delete
-        - [ ] deltree
 - [ ] Implement commands (use given shell to check syntax of commands)
-    - [ ] create
     - [ ] stat
+        - [ ] st_atim/st_mtim/st_ctim
+        - [ ] stat or **lstat**
     - [ ] list
     - [ ] delete
     - [ ] deltree
+    - [X] create
 - [ ] Debugging
     - [ ] TAKE INTO ACCOUNT THE "IMPORTANT" SECTION IN THE PDF
     - [ ] Check for runtime errors (make tests)
@@ -23,3 +17,11 @@
     - [ ] Compiled program is called p1 (Makefile)
     - [ ] Main file is called p1.c
     - [ ] Names and logins appear in the source code of the main programs (at the top)
+- [X] Help
+    - [X] Add -? parameter to commands to call help page
+    - [X] Create help pages for new commands
+        - [X] create
+        - [X] stat
+        - [X] list
+        - [X] delete
+        - [X] deltree
