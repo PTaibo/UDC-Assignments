@@ -101,9 +101,9 @@ int basicList_print (int n, basic_list* list)
 
     int cnt = 0;
     for (int i = list->start; i != end; i = (i+1)%MAX_ELEMENTS, cnt++){
-        printf("%5d  %s", cnt, list->elements[i]);
+        printf("%5d  %s\n", cnt, list->elements[i]);
     }
-    printf("%5d  %s", cnt, list->elements[end]);
+    printf("%5d  %s\n", cnt, list->elements[end]);
 
     return 0;
 }
