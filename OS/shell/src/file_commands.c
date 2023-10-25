@@ -7,6 +7,11 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <errno.h>
+#include <time.h>
+#include <pwd.h>
+#include <grp.h>
+/* #include <sys/modes.h> // TODO  ?????? */
 
 #include "types.h"
 #include "colors.h"
@@ -32,6 +37,7 @@ struct cmd file_commands[] = {
   {"dup", cmd_dup},
   {"listopen", cmd_listopen},
   {"create", cmd_create},
+  {"stat", cmd_stat},
   {NULL, NULL}
 };
 
@@ -196,5 +202,156 @@ void cmd_create (int paramN, char* params[])
         return;
     }
     invalid_param();
+}
+
+int get_param (char* param, int curr_options)
+{
+    if (!strcmp(param, "-long") && curr_options % 2 != 0)
+        return 2;
+    if (!strcmp(param, "-acc") && curr_options % 3 != 0)
+        return 3;
+    if (!strcmp(param, "-link") && curr_options % 5 != 0)
+        return 5;
+
+    return -1;
+}
+
+void print_stat_legend (int options)
+{
+    if (options % 3 == 0){
+        printf("    last access    ");
+    }
+    else if (options % 2 == 0){
+        printf("    last change    ");
+    }
+    if (options % 2 == 0){
+        printf(" links  inode     own     grp      mode   ");
+    }
+    printf("      size  name");
+    /* if (options % 5 == 0){ */
+    /*     printf("->link"); */
+    /* } */
+    printf("\n");
+}
+
+void print_time (time_t time)
+{
+    char str_time[100];
+    strftime(str_time, 36, "%d-%m-%Y %H:%M:%S", localtime(&time));
+    printf("%s", str_time);
+}
+
+void print_type (mode_t type)
+{
+    if (S_ISREG(type))
+        printf("-");
+    else if (S_ISDIR(type))
+        printf("d");
+    else if (S_ISCHR(type))
+        printf("c");
+    else if (S_ISBLK(type))
+        printf("b");
+    else if (S_ISFIFO(type))
+        printf("p");
+    else if (S_ISLNK(type))
+        printf("l");
+    else if (S_ISSOCK(type)) //TODO: see why error
+        printf("s");
+    else
+        printf("?");
+}
+
+void print_mode (mode_t mode)
+{
+    mode & S_IRUSR ? printf("r") : printf("-");
+    mode & S_IWUSR ? printf("w") : printf("-");
+    mode & S_IXUSR ? printf("x") : printf("-");
+
+    mode & S_IRGRP ? printf("r") : printf("-");
+    mode & S_IWGRP ? printf("w") : printf("-");
+    mode & S_IXGRP ? printf("x") : printf("-");
+
+    mode & S_IROTH ? printf("r") : printf("-");
+    mode & S_IWOTH ? printf("w") : printf("-");
+    mode & S_IXOTH ? printf("x") : printf("-");
+}
+
+void print_link (char* file)
+{
+    const int max_size = 500;
+    char symlink[max_size];
+    int link_size = readlink(file, symlink, max_size);
+    if (link_size < 0){
+        perror("\nCould not get symbolic link"); 
+        return;
+    }
+
+    symlink[link_size] = '\0';
+    printf(" -> %s", symlink);
+}
+
+void print_owner (uid_t usr)
+{
+    struct passwd *usr_name = getpwuid(usr);
+    printf("%7s ", usr_name->pw_name);
+}
+
+void print_group (gid_t grp)
+{
+    struct group *grp_name = getgrgid(grp);
+    printf("%7s   ", grp_name->gr_name);
+}
+
+void print_stats (char* file, int options)
+{
+    struct stat info;
+    if (lstat(file, &info) < 0){
+        printf("Couldn't get file stats for %s: %s\n", file,
+                                                     strerror(errno));
+        return;
+    }
+
+    if (options % 3 == 0){
+        print_time(info.st_atime);
+    } else if (options % 2 == 0){
+        print_time(info.st_mtime);
+    }
+    if (options % 2 == 0){
+        printf("%4lu %8lu ", info.st_nlink,
+                                    info.st_ino);
+        print_owner(info.st_uid);
+        print_group(info.st_gid);
+        print_type(info.st_mode);
+        print_mode(info.st_mode);
+    }
+    printf("%10ld  %s", info.st_size, file);
+
+    if (options % 5 == 0 && S_ISLNK(info.st_mode)){
+        print_link(file);
+    }
+    printf("\n");
+}
+
+void cmd_stat (int paramN, char* params[])
+{
+    int options = 1;
+    int idx = 0;
+    
+    for (; idx < 3 && idx < paramN; idx++){
+        int new_option = get_param(params[idx], options);
+        if (new_option < 0)
+            break;
+        options *= new_option;
+    }
+    if (idx == paramN){
+        missing_param();
+        return;
+    }
+
+    print_stat_legend(options);
+
+    while (idx < paramN){
+        print_stats(params[idx++], options);
+    }
 }
 
