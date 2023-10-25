@@ -188,7 +188,7 @@ void cmd_create (int paramN, char* params[])
     if (paramN == 2 && !strcmp(params[0], "-f")){
         int fd = open(params[1], O_CREAT | O_EXCL, 0644); 
         if (fd < 0){
-            perror("Couldn't create file");
+            perror("Could not create file");
         }
         else {
             close(fd);
@@ -197,7 +197,7 @@ void cmd_create (int paramN, char* params[])
     }
     else if (paramN == 1){
         if (mkdir(params[0], 0755) < 0){
-            perror("Couldn't create directory");
+            perror("Could not create directory");
         }
         return;
     }
