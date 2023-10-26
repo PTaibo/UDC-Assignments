@@ -9,4 +9,5 @@ void cmd_close (int paramN, char* params[]);
 void cmd_dup (int paramN, char* params[]);
 void cmd_listopen (int paramN, char* params[]);
 void cmd_create(int paramN, char* params[]);
+void cmd_stat(int paramN, char* params[]);
 void cmd_delete(int paramN, char* params[]);
