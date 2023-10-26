@@ -181,11 +181,11 @@ void help_close()
 {
     printf(CMD_NAME_CLR "\nCLOSE:\n" RESET_CLR
             "\tCloses a specified file\n"
-            "\tUsage: cloase [fd]\n"
+            "\tUsage: close [fd]\n"
             "\tOptions:\n"
             "\t\tfd: file descriptor of the opened file\n"
             "\tRelated commands: listopen (gives you the list of opened\n"
-            "\t\t\t  files with their file descriptors\n");
+            "\t\t\t  files with their file descriptors)\n");
 }
 
 void help_dup()
@@ -243,7 +243,7 @@ void help_list()
 void help_delete()
 {
     printf(CMD_NAME_CLR "\nDELETE:\n" RESET_CLR
-            "\tDeltes files and/or emtpy directories\n"
+            "\tDeletes files and/or emtpy directories\n"
             "\tUsage: delete [NAMES]\n");
 }
 
