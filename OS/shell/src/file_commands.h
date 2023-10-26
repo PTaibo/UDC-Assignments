@@ -11,3 +11,4 @@ void cmd_listopen (int paramN, char* params[]);
 void cmd_create(int paramN, char* params[]);
 void cmd_stat(int paramN, char* params[]);
 void cmd_delete(int paramN, char* params[]);
+void cmd_deltree(int paramN, char* params[]);

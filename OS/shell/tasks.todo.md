@@ -1,12 +1,12 @@
 - [ ] Comentar/renombrar código P0
 - [ ] Implement commands (use given shell to check syntax of commands)
     - [ ] list
-    - [ ] deltree
     - [X] create
     - [X] stat
         - [X] st_atim/st_mtim/st_ctim
         - [X] stat or **lstat**
     - [X] delete
+    - [X] deltree
 - [ ] Debugging
     - [ ] Actualiar help de list una vez creado el comando
     - [ ] Open ex mode doesn't give error if file already exists

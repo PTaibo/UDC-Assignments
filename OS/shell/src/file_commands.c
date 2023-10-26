@@ -1,3 +1,5 @@
+#define _GNU_SOURCE
+#define _XOPEN_SOURCE 500
 #include "file_commands.h"
 
 #include <stdio.h>
@@ -11,6 +13,7 @@
 #include <time.h>
 #include <pwd.h>
 #include <grp.h>
+#include <ftw.h>
 /* #include <sys/modes.h> // TODO  ?????? */
 
 #include "types.h"
@@ -39,6 +42,7 @@ struct cmd file_commands[] = {
   {"create", cmd_create},
   {"stat", cmd_stat},
   {"delete", cmd_delete},
+  {"deltree", cmd_deltree},
   {NULL, NULL}
 };
 
@@ -393,3 +397,18 @@ void cmd_delete (int paramN, char* params[])
     }
 }
 
+int recursive_delete (const char *fpath,
+                       UNUSED const struct stat *sb,
+                       UNUSED int typeflag,
+                       UNUSED struct FTW *ftwbuf)
+{
+    delete_file(fpath);
+    return 0;
+}
+
+void cmd_deltree (int paramN, char* params[])
+{
+    for (int i = 0; i < paramN; i++){
+        nftw (params[i], recursive_delete, 10, FTW_DEPTH | FTW_PHYS);
+    }
+}
