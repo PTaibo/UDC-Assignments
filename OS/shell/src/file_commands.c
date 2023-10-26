@@ -38,6 +38,7 @@ struct cmd file_commands[] = {
   {"listopen", cmd_listopen},
   {"create", cmd_create},
   {"stat", cmd_stat},
+  {"delete", cmd_delete},
   {NULL, NULL}
 };
 
@@ -352,6 +353,43 @@ void cmd_stat (int paramN, char* params[])
 
     while (idx < paramN){
         print_stats(params[idx++], options);
+    }
+}
+
+int get_permissions (const char* file)
+{
+    if (!access(file, W_OK))
+        return 1;
+    if (!access(file, R_OK))
+        return 2;
+    if (!access(file, X_OK))
+        return 2;
+    /* if (!access(file, F_OK)) */
+    /*     printf("Cannot access file: not enought permissions\n"); */
+
+    perror("Cannot access file");
+    return -1;
+}    
+
+void delete_file (const char* file)
+{
+    int can_delete = get_permissions(file);
+    if (can_delete < 0) return;
+    /* if (can_delete == 2){ */
+    /*     printf("Delete write protected file?: (y/N): "); */
+    /* } */
+        
+    if (remove(file) < 0){
+        printf("Could not remove %s: %s\n",
+                            file,
+                            strerror(errno));
+    }
+}
+
+void cmd_delete (int paramN, char* params[])
+{
+    for (int i = 0; i < paramN; i++){
+        delete_file(params[i]);
     }
 }
 

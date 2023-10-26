@@ -1,13 +1,16 @@
 - [ ] Comentar/renombrar código P0
 - [ ] Implement commands (use given shell to check syntax of commands)
-    - [ ] stat
-        - [ ] st_atim/st_mtim/st_ctim
-        - [ ] stat or **lstat**
     - [ ] list
-    - [ ] delete
     - [ ] deltree
     - [X] create
+    - [X] stat
+        - [X] st_atim/st_mtim/st_ctim
+        - [X] stat or **lstat**
+    - [X] delete
 - [ ] Debugging
+    - [ ] Actualiar help de list una vez creado el comando
+    - [ ] Open ex mode doesn't give error if file already exists
+    - [ ] Check todos (in code)
     - [ ] TAKE INTO ACCOUNT THE "IMPORTANT" SECTION IN THE PDF
     - [ ] Check for runtime errors (make tests)
     - [ ] Check for memory leaks with Valgrind
