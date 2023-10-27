@@ -75,7 +75,7 @@ void cmd_repeat (int paramN, char* params[])
         && (!strcmp(params[0], "0") || atoi(params[0]) > 0)){
         char command[MAX_COMMAND_SIZE];
         if (basicList_getter(atoi(params[0]), command, &history) != NULL){
-            printf(GREEN "%s" RESET_CLR, command); // Print command to be executed
+            printf(GREEN "%s\n" RESET_CLR, command); // Print command to be executed
             processCommand(command);
             return;
         }

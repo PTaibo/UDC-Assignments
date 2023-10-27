@@ -20,20 +20,6 @@ entonces lo añade a la lista de listopen dos veces
 Couldn't get file stats for hola.txg: No such file or directory
 
 
-when repeating a not correct command there is no separation
-
-> hist
-    0  list
-    1  list
-    2  list
-    3  list
-    4  llist
-    5  lit
-    6  list
-    7  list
-    8  hist
-> command 2
-listError: not a valid command
 
 
 
