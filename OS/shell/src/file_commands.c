@@ -410,6 +410,11 @@ int recursive_delete (const char *fpath,
 void cmd_deltree (int paramN, char* params[])
 {
     for (int i = 0; i < paramN; i++){
+        if (access(params[i], F_OK)){
+            printf("Cannot delete %s: %s\n",
+                            params[i],
+                            strerror(errno));
+        }
         nftw (params[i], recursive_delete, 10, FTW_DEPTH | FTW_PHYS);
     }
 }
