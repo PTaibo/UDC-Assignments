@@ -19,7 +19,7 @@ entonces lo añade a la lista de listopen dos veces
     last access     links  inode     own     grp      mode         size  name
 Couldn't get file stats for hola.txg: No such file or directory
 
-
+- [ ] command -? doesnt work 
 
 
 
