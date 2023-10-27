@@ -3,11 +3,11 @@
     - [ ] Mirar de quitar la restricción de dup sobre stdin/stdout/stderr
     - [ ] Open ex mode doesn't give error if file already exists
     - [ ] Check todos (in code)
-    - [ ] TAKE INTO ACCOUNT THE "IMPORTANT" SECTION IN THE PDF
     - [ ] Check for runtime errors (make tests)
     - [ ] Check all possible errors give accurate error messages
     - [X] Actualiar help de list una vez creado el comando
     - [X] Check for memory leaks with Valgrind
+    - [X] TAKE INTO ACCOUNT THE "IMPORTANT" SECTION IN THE PDF
 - [ ] Submission
     - [ ] Submit zip file containing P1 directory
     - [ ] Compiled program is called p1 (Makefile)
