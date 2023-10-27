@@ -284,15 +284,18 @@ void print_mode (mode_t mode)
 {
     mode & S_IRUSR ? printf("r") : printf("-");
     mode & S_IWUSR ? printf("w") : printf("-");
-    mode & S_IXUSR ? printf("x") : printf("-");
+    mode & S_IXUSR ? printf("x") :
+        mode & S_ISUID ? printf("s") : printf("-");
 
     mode & S_IRGRP ? printf("r") : printf("-");
     mode & S_IWGRP ? printf("w") : printf("-");
-    mode & S_IXGRP ? printf("x") : printf("-");
+    mode & S_IXGRP ? printf("x") :
+        mode & S_ISGID ? printf("s") : printf("-");
 
     mode & S_IROTH ? printf("r") : printf("-");
     mode & S_IWOTH ? printf("w") : printf("-");
-    mode & S_IXOTH ? printf("x") : printf("-");
+    mode & S_IXOTH ? printf("x") :
+        mode & S_ISVTX ? printf("t") : printf("-");
 }
 
 void print_link (const char* file)
