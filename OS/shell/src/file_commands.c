@@ -14,13 +14,19 @@
 #include <pwd.h>
 #include <grp.h>
 #include <ftw.h>
-/* #include <sys/modes.h> // TODO  ?????? */
 
 #include "types.h"
 #include "colors.h"
 #include "list.h"
 #include "error_msgs.h"
 #include "help_pages.h"
+
+#define P_LONG 1
+#define P_ACC 2
+#define P_LINK 4
+#define P_RECA 8
+#define P_RECB 16
+#define P_HID 32
 
 file_list opened_files;
 
@@ -211,31 +217,28 @@ void cmd_create (int paramN, char* params[])
 
 int get_param (char* param, int curr_options)
 {
-    if (!strcmp(param, "-long") && curr_options % 2 != 0)
-        return 2;
-    if (!strcmp(param, "-acc") && curr_options % 3 != 0)
-        return 3;
-    if (!strcmp(param, "-link") && curr_options % 5 != 0)
-        return 5;
+    if (!strcmp(param, "-long") && curr_options & P_LONG)
+        return P_LONG;
+    if (!strcmp(param, "-acc") && curr_options & P_ACC)
+        return P_ACC;
+    if (!strcmp(param, "-link") && curr_options & P_LINK)
+        return 4;
 
     return -1;
 }
 
 void print_stat_legend (int options)
 {
-    if (options % 3 == 0){
+    if (options & P_ACC){
         printf("    last access    ");
     }
-    else if (options % 2 == 0){
+    else if (options & P_LONG){
         printf("    last change    ");
     }
-    if (options % 2 == 0){
+    if (options & P_LONG){
         printf(" links  inode     own     grp      mode   ");
     }
     printf("      size  name");
-    /* if (options % 5 == 0){ */
-    /*     printf("->link"); */
-    /* } */
     printf("\n");
 }
 
@@ -260,7 +263,7 @@ void print_type (mode_t type)
         printf("p");
     else if (S_ISLNK(type))
         printf("l");
-    else if (S_ISSOCK(type)) //TODO: see why error
+    else if (S_ISSOCK(type))
         printf("s");
     else
         printf("?");
@@ -312,16 +315,16 @@ void print_stats (char* file, int options)
     struct stat info;
     if (lstat(file, &info) < 0){
         printf("Couldn't get file stats for %s: %s\n", file,
-                                                     strerror(errno));
+                strerror(errno));
         return;
     }
 
-    if (options % 3 == 0){
+    if (options & P_ACC){
         print_time(info.st_atime);
-    } else if (options % 2 == 0){
+    } else if (options & P_LONG){
         print_time(info.st_mtime);
     }
-    if (options % 2 == 0){
+    if (options & P_LONG){
         printf("%4lu %8lu ", info.st_nlink,
                                     info.st_ino);
         print_owner(info.st_uid);
@@ -331,7 +334,7 @@ void print_stats (char* file, int options)
     }
     printf("%10ld  %s", info.st_size, file);
 
-    if (options % 5 == 0 && S_ISLNK(info.st_mode)){
+    if (options & P_LINK && S_ISLNK(info.st_mode)){
         print_link(file);
     }
     printf("\n");
@@ -339,14 +342,12 @@ void print_stats (char* file, int options)
 
 void cmd_stat (int paramN, char* params[])
 {
-    int options = 1;
-    int idx = 0;
-    
-    for (; idx < 3 && idx < paramN; idx++){
-        int new_option = get_param(params[idx], options);
+    int options = 0;
+    for (; *idx < max_params && *idx < paramN; (*idx)++){
+        int new_option = get_param(params[*idx], options);
         if (new_option < 0)
             break;
-        options *= new_option;
+        options |= new_option;
     }
     if (idx == paramN){
         missing_param();
