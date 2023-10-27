@@ -230,7 +230,7 @@ void help_list()
 {
     printf(CMD_NAME_CLR "\nLIST:\n" RESET_CLR
             "\tLists directory contents\n"
-            "\tUsage: list [-reca][-recb][-hid][-long][-link][-acc] [FILES]\n"
+            "\tUsage: list [-reca][-recb][-hid][-long][-link][-acc] [DIRS]\n"
             "\tParameters:\n"
             "\t\t-reca: recursive (after)\n"
             "\t\t-recb: recursive (before)\n"

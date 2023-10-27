@@ -1,20 +1,13 @@
 - [ ] Comentar/renombrar código P0
-- [ ] Implement commands (use given shell to check syntax of commands)
-    - [ ] list
-    - [X] create
-    - [X] stat
-        - [X] st_atim/st_mtim/st_ctim
-        - [X] stat or **lstat**
-    - [X] delete
-    - [X] deltree
 - [ ] Debugging
-    - [ ] Actualiar help de list una vez creado el comando
+    - [ ] Mirar de quitar la restricción de dup sobre stdin/stdout/stderr
     - [ ] Open ex mode doesn't give error if file already exists
     - [ ] Check todos (in code)
     - [ ] TAKE INTO ACCOUNT THE "IMPORTANT" SECTION IN THE PDF
     - [ ] Check for runtime errors (make tests)
-    - [ ] Check for memory leaks with Valgrind
     - [ ] Check all possible errors give accurate error messages
+    - [X] Actualiar help de list una vez creado el comando
+    - [X] Check for memory leaks with Valgrind
 - [ ] Submission
     - [ ] Submit zip file containing P1 directory
     - [ ] Compiled program is called p1 (Makefile)
@@ -28,3 +21,11 @@
         - [X] list
         - [X] delete
         - [X] deltree
+- [X] Implement commands (use given shell to check syntax of commands)
+    - [X] create
+    - [X] stat
+        - [X] st_atim/st_mtim/st_ctim
+        - [X] stat or **lstat**
+    - [X] delete
+    - [X] deltree
+    - [X] list

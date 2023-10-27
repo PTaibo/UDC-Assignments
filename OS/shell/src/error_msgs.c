@@ -19,3 +19,13 @@ void mem_fail()
     printf(RED "Error: " RESET_CLR "Could not allocate memory\n");
 }
 
+void cannot_open_dir()
+{
+    perror(RED "Error: " RESET_CLR "Could not open directory");
+}
+
+void cannot_open_file()
+{
+    perror(RED "Error: " RESET_CLR "Coudl not open file");
+}
+

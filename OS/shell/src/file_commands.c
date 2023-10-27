@@ -14,6 +14,7 @@
 #include <pwd.h>
 #include <grp.h>
 #include <ftw.h>
+#include <dirent.h>
 
 #include "types.h"
 #include "colors.h"
@@ -47,6 +48,7 @@ struct cmd file_commands[] = {
   {"listopen", cmd_listopen},
   {"create", cmd_create},
   {"stat", cmd_stat},
+  {"list", cmd_list},
   {"delete", cmd_delete},
   {"deltree", cmd_deltree},
   {NULL, NULL}
@@ -83,7 +85,7 @@ void open_file (char* file, int mode)
     int fd = open(file, mode);
 
     if (fd < 0){
-        perror("Coudn't open file");
+        cannot_open_file();
         return;
     }
 
@@ -174,7 +176,6 @@ int get_opening_mode (int fd){
     return -1;
 }
 
-
 void cmd_listopen(int paramN, UNUSED char* params[])
 {
     if (paramN) {
@@ -217,12 +218,20 @@ void cmd_create (int paramN, char* params[])
 
 int get_param (char* param, int curr_options)
 {
-    if (!strcmp(param, "-long") && curr_options & P_LONG)
+    if (!strcmp(param, "-long") && !(curr_options & P_LONG))
         return P_LONG;
-    if (!strcmp(param, "-acc") && curr_options & P_ACC)
+    if (!strcmp(param, "-acc") && !(curr_options & P_ACC))
         return P_ACC;
-    if (!strcmp(param, "-link") && curr_options & P_LINK)
-        return 4;
+    if (!strcmp(param, "-link") && !(curr_options & P_LINK))
+        return P_LINK;
+    if (!strcmp(param, "-hid") && !(curr_options & P_HID))
+        return P_HID;
+    if (!strcmp(param, "-reca") && !(curr_options & P_RECA)
+            && !(curr_options & P_RECB))
+        return P_RECA;
+    if (!strcmp(param, "-recb") && !(curr_options & P_RECB)
+            && !(curr_options & P_RECA))
+        return P_RECB;
 
     return -1;
 }
@@ -286,7 +295,7 @@ void print_mode (mode_t mode)
     mode & S_IXOTH ? printf("x") : printf("-");
 }
 
-void print_link (char* file)
+void print_link (const char* file)
 {
     const int max_size = 500;
     char symlink[max_size];
@@ -312,7 +321,7 @@ void print_group (gid_t grp)
     printf("%7s   ", grp_name->gr_name);
 }
 
-void print_stats (char* file, int options)
+void print_stats (const char* file, int options)
 {
     struct stat info;
     if (lstat(file, &info) < 0){
@@ -342,7 +351,7 @@ void print_stats (char* file, int options)
     printf("\n");
 }
 
-void cmd_stat (int paramN, char* params[])
+int get_options (int max_params, int paramN, int *idx, char* params[])
 {
     int options = 0;
     for (; *idx < max_params && *idx < paramN; (*idx)++){
@@ -351,6 +360,14 @@ void cmd_stat (int paramN, char* params[])
             break;
         options |= new_option;
     }
+    return options;
+}
+
+void cmd_stat (int paramN, char* params[])
+{
+    int idx = 0;
+    int options = get_options(3, paramN, &idx, params);
+
     if (idx == paramN){
         missing_param();
         return;
@@ -363,6 +380,162 @@ void cmd_stat (int paramN, char* params[])
     }
 }
 
+int print_single_file (int options, basic_list* dir_list,
+                       struct dirent *file)
+{
+    int is_dir = 0;
+
+    if ((options & P_HID) || file->d_name[0] != '.'){
+        if (file->d_type == DT_DIR){
+            printf(CYAN);
+            if (dir_list != NULL){
+                basicList_append(file->d_name, dir_list);
+                is_dir++;
+            }
+        }
+        print_stats(file->d_name, options);
+        printf(RESET_CLR);
+    }
+    return is_dir;
+}
+
+int print_dir_stats (struct dirent *file, int options,
+                     DIR* root, basic_list* dir_list)
+{
+    char cwd[MAX_COMMAND_SIZE];
+    getcwd(cwd, MAX_COMMAND_SIZE);
+    printf(GREEN "%s\n" RESET_CLR, cwd);
+    print_stat_legend(options);
+
+    int dirN = 0;
+
+    while (file != NULL){
+        dirN += print_single_file(options, dir_list, file);
+        file = readdir(root);
+    }
+    return dirN;
+}
+
+void open_dir (char* dir, int options);
+
+void recurs_subdirs (int dirN, basic_list* dir_list,
+                     int options)
+{
+    for (int i = 0; i < dirN; i++){
+        char dir[MAX_COMMAND_SIZE];
+        basicList_getter(i, dir, dir_list);
+        if (!strcmp(dir, ".") || !strcmp(dir, ".."))
+            continue;
+        open_dir(dir, options);
+    }
+}
+
+void recurs_after (struct dirent *file,
+                   int options, DIR* root)
+{
+    basic_list dir_list;
+    basicList_initialize(&dir_list);
+
+    int dirN = print_dir_stats(file, options, root, &dir_list);
+
+    recurs_subdirs(dirN, &dir_list, options);
+    basicList_clear(&dir_list);
+}
+
+void print_file_list (int options, int fileN, basic_list *flist)
+{
+    char cwd[MAX_COMMAND_SIZE];
+    getcwd(cwd, MAX_COMMAND_SIZE);
+    printf(GREEN "%s\n" RESET_CLR, cwd);
+    print_stat_legend(options);
+
+    for (int i = 0; i < fileN; i++){
+        char file[MAX_COMMAND_SIZE];
+        basicList_getter(i, file, flist);
+
+        if ((options & P_HID) || file[0] != '.'){
+            print_stats(file, options);
+        }
+    }
+}
+
+void recurs_before(struct dirent *file,
+                   int options, DIR* root)
+{
+    basic_list file_list;
+    basicList_initialize(&file_list);
+
+    int fileN = 0;
+
+    while (file != NULL){
+        if (file->d_type == DT_DIR &&
+        strcmp(file->d_name, ".") &&
+        strcmp(file->d_name, ".."))
+            open_dir(file->d_name, options);
+
+        basicList_append(file->d_name, &file_list);
+        fileN++;
+
+        file = readdir(root);
+    }
+    print_file_list(options, fileN, &file_list);
+    basicList_clear(&file_list);
+}
+
+void read_dir (char* dir, int options, DIR* root)
+{
+    struct dirent *base_dir = readdir(root);
+
+    if (base_dir == NULL){
+        if (errno == 0) return;
+        cannot_open_dir();
+    }
+    chdir(dir);
+
+    if (options & P_RECA){
+        recurs_after(base_dir, options, root);
+    } else if (options & P_RECB){
+        recurs_before(base_dir, options, root);
+    } else {
+        print_dir_stats(base_dir, options, root, NULL);
+    }
+}
+
+
+void open_dir (char* dir, int options)
+{
+    DIR *root = opendir(dir);
+    if (root == NULL){
+        cannot_open_dir();
+        return;
+    }
+    errno = 0;
+
+    read_dir(dir, options, root);
+
+    closedir (root);
+    chdir("..");
+}
+
+void cmd_list (int paramN, char* params[])
+{
+    int idx = 0;
+    int options = get_options(5, paramN, &idx, params);
+    
+    if (idx == paramN){
+        missing_param();
+        return;
+    }
+
+    for (; idx < paramN; idx++){
+        if (access(params[idx], F_OK)){
+            cannot_open_file();
+            continue;
+        }
+        open_dir(params[idx], options);
+    }
+}
+
 int get_permissions (const char* file)
 {
     if (!access(file, W_OK))
@@ -371,8 +544,6 @@ int get_permissions (const char* file)
         return 2;
     if (!access(file, X_OK))
         return 2;
-    /* if (!access(file, F_OK)) */
-    /*     printf("Cannot access file: not enought permissions\n"); */
 
     perror("Cannot access file");
     return -1;
@@ -382,9 +553,6 @@ void delete_file (const char* file)
 {
     int can_delete = get_permissions(file);
     if (can_delete < 0) return;
-    /* if (can_delete == 2){ */
-    /*     printf("Delete write protected file?: (y/N): "); */
-    /* } */
         
     if (remove(file) < 0){
         printf("Could not remove %s: %s\n",
