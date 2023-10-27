@@ -69,8 +69,10 @@ int check_file_commands (int paramN, char* command[])
 {
   for (int i = 0; file_commands[i].name != NULL; i++){
       if (!strcmp(command[0], file_commands[i].name)){
-          if (paramN > 0 && !strcmp(command[1], "-?"))
-              cmd_help(paramN, command + 1);
+          if (paramN > 0 && !strcmp(command[1], "-?")){
+              command[1] = NULL;
+              cmd_help(paramN, command);
+          }
           else
               (*file_commands[i].funct)(paramN, command+1);
           return 1;
@@ -284,15 +286,18 @@ void print_mode (mode_t mode)
 {
     mode & S_IRUSR ? printf("r") : printf("-");
     mode & S_IWUSR ? printf("w") : printf("-");
-    mode & S_IXUSR ? printf("x") : printf("-");
+    mode & S_IXUSR ? printf("x") :
+        mode & S_ISUID ? printf("s") : printf("-");
 
     mode & S_IRGRP ? printf("r") : printf("-");
     mode & S_IWGRP ? printf("w") : printf("-");
-    mode & S_IXGRP ? printf("x") : printf("-");
+    mode & S_IXGRP ? printf("x") :
+        mode & S_ISGID ? printf("s") : printf("-");
 
     mode & S_IROTH ? printf("r") : printf("-");
     mode & S_IWOTH ? printf("w") : printf("-");
-    mode & S_IXOTH ? printf("x") : printf("-");
+    mode & S_IXOTH ? printf("x") :
+        mode & S_ISVTX ? printf("t") : printf("-");
 }
 
 void print_link (const char* file)
@@ -381,19 +386,21 @@ void cmd_stat (int paramN, char* params[])
 }
 
 int print_single_file (int options, basic_list* dir_list,
-                       struct dirent *file)
+                       char* file)
 {
     int is_dir = 0;
 
-    if ((options & P_HID) || file->d_name[0] != '.'){
-        if (file->d_type == DT_DIR){
+    if ((options & P_HID) || file[0] != '.'){
+        struct stat file_info;
+        lstat(file, &file_info);
+        if (S_ISDIR(file_info.st_mode)){
             printf(CYAN);
             if (dir_list != NULL){
-                basicList_append(file->d_name, dir_list);
+                basicList_append(file, dir_list);
                 is_dir++;
             }
         }
-        print_stats(file->d_name, options);
+        print_stats(file, options);
         printf(RESET_CLR);
     }
     return is_dir;
@@ -410,7 +417,7 @@ int print_dir_stats (struct dirent *file, int options,
     int dirN = 0;
 
     while (file != NULL){
-        dirN += print_single_file(options, dir_list, file);
+        dirN += print_single_file(options, dir_list, file->d_name);
         file = readdir(root);
     }
     return dirN;
@@ -453,9 +460,7 @@ void print_file_list (int options, int fileN, basic_list *flist)
         char file[MAX_COMMAND_SIZE];
         basicList_getter(i, file, flist);
 
-        if ((options & P_HID) || file[0] != '.'){
-            print_stats(file, options);
-        }
+        print_single_file(options, NULL, file);
     }
 }
 
@@ -468,7 +473,9 @@ void recurs_before(struct dirent *file,
     int fileN = 0;
 
     while (file != NULL){
-        if (file->d_type == DT_DIR &&
+        struct stat file_info;
+        lstat(file->d_name, &file_info);
+        if (S_ISDIR(file_info.st_mode) &&
         strcmp(file->d_name, ".") &&
         strcmp(file->d_name, ".."))
             open_dir(file->d_name, options);
@@ -478,6 +485,7 @@ void recurs_before(struct dirent *file,
 
         file = readdir(root);
     }
+    
     print_file_list(options, fileN, &file_list);
     basicList_clear(&file_list);
 }

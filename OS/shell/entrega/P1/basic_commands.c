@@ -31,8 +31,10 @@ int check_basic_commands (int paramN, char* command[])
 {
     for (int i = 0; command_list[i].name != NULL; i++){
         if (!strcmp(command[0], command_list[i].name)){
-            if (paramN > 0 && !strcmp(command[1], "-?"))
-                cmd_help(paramN, command + 1);
+            if (paramN > 0 && !strcmp(command[1], "-?")){
+                command[1] = NULL;
+                cmd_help(paramN, command);
+            }
             else
                 (*command_list[i].funct)(paramN, command+1);
             return 1;

@@ -68,7 +68,8 @@ void help_help()
                   "\tUsage: help [cmd|-l]\n"
                   "\tOptions:\n"
                   "\t\tcmd: prints the help page of the command\n"
-                  "\t\t-l: lists all the avaliable commands\n\n");
+                  "\t\t-l: lists all the avaliable commands\n\n"
+                  "\tIt is also possible to use \"<command> -?\"\n");
 }
 
 void list_commands()
