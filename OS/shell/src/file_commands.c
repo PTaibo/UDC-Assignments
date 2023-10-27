@@ -229,6 +229,7 @@ int get_param (char* param, int curr_options)
 
 void print_stat_legend (int options)
 {
+    printf(YELLOW);
     if (options & P_ACC){
         printf("    last access    ");
     }
@@ -240,6 +241,7 @@ void print_stat_legend (int options)
     }
     printf("      size  name");
     printf("\n");
+    printf(RESET_CLR);
 }
 
 void print_time (time_t time)
