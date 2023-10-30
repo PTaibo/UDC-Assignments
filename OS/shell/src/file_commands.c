@@ -423,7 +423,7 @@ int print_dir_stats (struct dirent *file, int options,
     return dirN;
 }
 
-void open_dir (char* dir, int options);
+void open_dir (char* dir, int options, int start);
 
 void recurs_subdirs (int dirN, basic_list* dir_list,
                      int options)
@@ -433,7 +433,7 @@ void recurs_subdirs (int dirN, basic_list* dir_list,
         basicList_getter(i, dir, dir_list);
         if (!strcmp(dir, ".") || !strcmp(dir, ".."))
             continue;
-        open_dir(dir, options);
+        open_dir(dir, options, 0);
     }
 }
 
@@ -478,7 +478,7 @@ void recurs_before(struct dirent *file,
         if (S_ISDIR(file_info.st_mode) &&
         strcmp(file->d_name, ".") &&
         strcmp(file->d_name, ".."))
-            open_dir(file->d_name, options);
+            open_dir(file->d_name, options, 0);
 
         basicList_append(file->d_name, &file_list);
         fileN++;
@@ -510,7 +510,7 @@ void read_dir (char* dir, int options, DIR* root)
 }
 
 
-void open_dir (char* dir, int options)
+void open_dir (char* dir, int options, int start)
 {
     DIR *root = opendir(dir);
     if (root == NULL){
@@ -522,7 +522,9 @@ void open_dir (char* dir, int options)
     read_dir(dir, options, root);
 
     closedir (root);
-    chdir("..");
+
+    if (!start)
+        chdir("..");
 }
 
 void cmd_list (int paramN, char* params[])
@@ -540,7 +542,7 @@ void cmd_list (int paramN, char* params[])
             cannot_open_file();
             continue;
         }
-        open_dir(params[idx], options);
+        open_dir(params[idx], options, 1);
     }
 }
 
