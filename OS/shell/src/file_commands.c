@@ -100,19 +100,22 @@ void cmd_open (int paramN, char* params[])
         missing_param();
         return;
     }
-    if (paramN > 2){
-        invalid_param();
-        return;
-    }
 
-    for (int i = 0; flags[i].name != NULL; i++){
-        if (!strcmp(flags[i].name, params[1])){
-            open_file(params[0], flags[i].flag);
+    int used_flags = 0;
+    for (int j = 1; j < paramN; j++){
+        int valid_param = 0;
+        for (int i = 0; flags[i].name != NULL; i++){
+            if (!strcmp(flags[i].name, params[1])){
+                used_flags |= flags[i].flag;
+                valid_param = 1;
+            }
+        }
+        if (!valid_param){
+            invalid_param();
             return;
         }
     }
-
-    invalid_param();
+    open_file(params[0], used_flags);
 }
 
 void cmd_close (int paramN, char* params[])

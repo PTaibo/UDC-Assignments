@@ -1,13 +1,13 @@
 - [ ] Comentar/renombrar código P0
 - [ ] Debugging
     - [ ] Mirar de quitar la restricción de dup sobre stdin/stdout/stderr
-    - [ ] Open ex mode doesn't give error if file already exists
     - [ ] Check for runtime errors (make tests)
     - [ ] Check all possible errors give accurate error messages
     - [X] Actualiar help de list una vez creado el comando
     - [X] Check for memory leaks with Valgrind
     - [X] TAKE INTO ACCOUNT THE "IMPORTANT" SECTION IN THE PDF
     - [X] Check todos (in code)
+    - [X] Open ex mode doesn't give error if file already exists
 - [ ] Submission
     - [ ] Submit zip file containing P1 directory
     - [ ] Compiled program is called p1 (Makefile)
