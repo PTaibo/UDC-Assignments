@@ -86,3 +86,13 @@ int remove_min(pheap h)
 
     return min;
 }
+
+void heap_sort (int a[], n)
+{
+    pheap h;
+    create_heap (a, n, h);
+    for (int i = 0; i < n; i++){
+        a[i] = remove_min(h);
+    }
+    
+}
