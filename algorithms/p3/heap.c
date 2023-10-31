@@ -73,7 +73,7 @@ int remove_min(pheap h)
     for (int i = 1; i <= h->last; i++){
 
         if (h->vector[i] < min){//we check
-            min = h->vectorj;
+            min = h->vector;
             pos = i;//we keep the position
         }
     }
@@ -87,7 +87,7 @@ int remove_min(pheap h)
     return min;
 }
 
-void heap_sort (int a[], n)
+void heap_sort (int a[], int n)
 {
     pheap h;
     create_heap (a, n, h);
