@@ -26,6 +26,6 @@ void cannot_open_dir()
 
 void cannot_open_file()
 {
-    perror(RED "Error: " RESET_CLR "Coudl not open file");
+    perror(RED "Error: " RESET_CLR "Could not open file");
 }
 
