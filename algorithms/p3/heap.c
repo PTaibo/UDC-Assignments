@@ -58,3 +58,31 @@ void create_heap(int a[], int n, pheap h)
         h->vector[i]=a[i];
     }
 }
+
+int remove_min(pheap h)
+{   
+    //If the heap is empty
+    if (h->last < 0){ 
+        return -1;
+    }
+
+    int min = h->vector[0];//we start in the first
+    int pos = 0;
+
+    //iterate through the list
+    for (int i = 1; i <= h->last; i++){
+
+        if (h->vector[i] < min){//we check
+            min = h->vectorj;
+            pos = i;//we keep the position
+        }
+    }
+
+    //we delete it from the list
+    for (int i = pos; i < h->last; i++){
+        h->vector[i] = h-> vector [i+1];
+    }
+    h->last--;
+
+    return min;
+}
