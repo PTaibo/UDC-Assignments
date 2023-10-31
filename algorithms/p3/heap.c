@@ -58,8 +58,3 @@ void create_heap(int a[], int n, pheap h)
         h->vector[i]=a[i];
     }
 }
-
-int remove_min(pheap h)
-{
-    h->last=0;
-}
