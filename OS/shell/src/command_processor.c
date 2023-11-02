@@ -4,6 +4,7 @@
 #include "basic_commands.h"
 #include "history_commands.h"
 #include "file_commands.h"
+#include "stat_commands.h"
 #include "help_pages.h"
 #include "colors.h"
 #include "types.h"
@@ -26,15 +27,14 @@ void executeCommand (int paramN, char* command_chunks[])
         cmd_help(paramN, command_chunks+1);
         return;
     }
-    else if (check_basic_commands(paramN, command_chunks)){
+    else if (check_basic_commands(paramN, command_chunks))
         return;
-    }
-    else if (check_history_commands(paramN, command_chunks)){
+    else if (check_history_commands(paramN, command_chunks))
         return;
-    }
-    else if (check_file_commands(paramN, command_chunks)){
+    else if (check_file_commands(paramN, command_chunks))
         return;
-    }
+    else if (check_stat_commands(paramN, command_chunks))
+        return;
     else
         printf(RED "Error: " RESET_CLR "not a valid command\n");
 }
