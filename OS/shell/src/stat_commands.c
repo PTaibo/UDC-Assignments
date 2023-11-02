@@ -146,12 +146,18 @@ void print_link (const char* file)
 void print_owner (uid_t usr)
 {
     struct passwd *usr_name = getpwuid(usr);
+    if (usr_name == NULL){
+        printf(RED "%7s " RESET_CLR, "ERROR");
+        return;
+    }
     printf("%7s ", usr_name->pw_name);
 }
 
 void print_group (gid_t grp)
 {
     struct group *grp_name = getgrgid(grp);
+    if (grp_name == NULL){
+        printf(RED "%7s   " RESET_CLR, "ERROR");
     printf("%7s   ", grp_name->gr_name);
 }
 
