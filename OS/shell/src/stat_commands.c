@@ -158,6 +158,8 @@ void print_group (gid_t grp)
     struct group *grp_name = getgrgid(grp);
     if (grp_name == NULL){
         printf(RED "%7s   " RESET_CLR, "ERROR");
+        return;
+    }
     printf("%7s   ", grp_name->gr_name);
 }
 

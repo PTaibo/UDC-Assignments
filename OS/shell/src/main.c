@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "types.h"
 #include "command_processor.h"
@@ -9,16 +10,17 @@
 int main()
 {
     char line [MAX_COMMAND_SIZE];
-
     init_file_list();
-
     init_history();
 
-    printf("> ");
+    char cwd[MAX_COMMAND_SIZE];
+    getcwd(cwd, MAX_COMMAND_SIZE);
+    printf("%s$ ", cwd);
 
     while (fgets(line, MAX_COMMAND_SIZE, stdin) != NULL){
         processCommand(line);
-        printf("> ");
+        getcwd(cwd, MAX_COMMAND_SIZE);
+        printf("%s$ ", cwd);
     }
 
     return 0;
