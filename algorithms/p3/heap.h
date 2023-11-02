@@ -6,6 +6,10 @@ GROUP:6.1                     DATE:23/10/2023
 */
 
 #pragma once
+
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 #define SZ 256000
 
 struct heap{
@@ -17,5 +21,7 @@ typedef struct heap *pheap;
 
 
 
+void initialize_heap(pheap h);
 void create_heap(int a[], int n, pheap h);
 int remove_min(pheap h);
+void heap_sort(int a[], int n);
