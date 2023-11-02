@@ -21,7 +21,6 @@ typedef struct heap *pheap;
 
 
 
-void initialize_heap(pheap h);
 void create_heap(int a[], int n, pheap h);
 int remove_min(pheap h);
 void heap_sort(int a[], int n);
