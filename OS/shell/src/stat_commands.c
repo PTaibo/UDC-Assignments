@@ -39,13 +39,8 @@ int check_stat_commands (int paramN, char* command[])
 {
     for (int i = 0; stat_commands[i].name != NULL; i++){
         if (!strcmp(command[0], stat_commands[i].name)){
-            if (paramN > 0 && (!strcmp(command[1], "-?") ||
-                        !strcmp(command[1], "-help"))){
-                command[1] = NULL;
-                cmd_help(paramN, command);
-            }
-            else
-                (*file_commands[i].funct(paramN, command+1);
+            if (!is_help_param(paramN, command))
+                (*stat_commands[i].funct)(paramN, command+1);
             return 1;
         }
     }

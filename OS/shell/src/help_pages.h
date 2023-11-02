@@ -1,6 +1,7 @@
 #pragma once
 
 void cmd_help (int paramN, char* params[]);
+int is_help_param (int paramN, char* command[]);
 
 void list_commands();
 void help_help ();

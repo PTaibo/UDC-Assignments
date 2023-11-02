@@ -32,11 +32,7 @@ int check_history_commands (int paramN, char* command[])
 {
     for (int i = 0; history_commands[i].name != NULL; i++){
         if (!strcmp(command[0], history_commands[i].name)){
-            if (paramN > 0 && !strcmp(command[1], "-?")){
-                command[1] = NULL;
-                cmd_help(paramN, command);
-            }
-            else 
+            if (!is_help_param(paramN, command))
                 (*history_commands[i].funct)(paramN, command+1);
             return 1;
         }

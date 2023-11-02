@@ -59,11 +59,7 @@ int check_file_commands (int paramN, char* command[])
 {
   for (int i = 0; file_commands[i].name != NULL; i++){
       if (!strcmp(command[0], file_commands[i].name)){
-          if (paramN > 0 && !strcmp(command[1], "-?")){
-              command[1] = NULL;
-              cmd_help(paramN, command);
-          }
-          else
+          if (!is_help_param(paramN, command))
               (*file_commands[i].funct)(paramN, command+1);
           return 1;
       }
