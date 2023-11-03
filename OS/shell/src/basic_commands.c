@@ -122,7 +122,7 @@ void cmd_date (int paramN, UNUSED char* params[])
 
 void cmd_chdir (int paramN, char* param[])
 {
-    const int MAX_CWD = 1000;
+    /* const int MAX_CWD = 1000; */
 
     if (paramN > 1){
         invalid_param();
@@ -133,9 +133,9 @@ void cmd_chdir (int paramN, char* param[])
         perror(RED "Error: " RESET_CLR "Couldn't change directory");
     }
 
-    char cwd[MAX_CWD];
-    getcwd(cwd, MAX_CWD);
-    printf("%s\n", cwd);
+    /* char cwd[MAX_CWD]; */
+    /* getcwd(cwd, MAX_CWD); */
+    /* printf("%s\n", cwd); */
 }
 
 void cmd_infosys (int paramN, UNUSED char* param[])
