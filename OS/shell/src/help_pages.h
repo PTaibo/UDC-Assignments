@@ -1,6 +1,8 @@
 #pragma once
 
 void cmd_help (int paramN, char* params[]);
+// Checks if parameter is one of the global help parameters
+// -? or -help
 int is_help_param (int paramN, char* command[]);
 
 void list_commands();

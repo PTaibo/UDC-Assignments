@@ -7,6 +7,7 @@
 
 // Generic functions
 
+// strdup
 char* make_cpy (char* src, char* dest)
 {
     if (dest == NULL){
@@ -22,6 +23,18 @@ char* make_cpy (char* src, char* dest)
 }
 
 // Basic list implementation
+
+/*
+ * Basic list is based on the idea that you cannot 
+ * remove independent elements from the history.
+ * It fills like a normal list and, when full, starts
+ * to cycle, removing one element from the start to
+ * insert the element from the end. Once its cleared,
+ * it returns to behaving like a normal list, where
+ * only the tail moves.
+ * Since you don't remove elements, the head is always
+ * going to be in position 0 eccept when full.
+ */
 
 void basicList_initialize (basic_list* newList)
 {

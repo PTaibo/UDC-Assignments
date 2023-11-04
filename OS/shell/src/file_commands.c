@@ -11,7 +11,6 @@
 #include <unistd.h>
 #include <errno.h>
 #include <time.h>
-/* #include <pwd.h> */
 #include <ftw.h>
 #include <dirent.h>
 
@@ -113,16 +112,15 @@ void cmd_close (int paramN, char* params[])
 
     int fd = atoi(params[0]);
 
+    // Closing one of the first 3 fds gives segmentation error
     if (paramN > 1 || fd < 3 || fd > MAX_ELEMENTS - 1){
         invalid_param();
         return;
     }
-
     if (fileList_delete(fd, &opened_files) < 0){
         invalid_param();
         return;
     }
-
     close(fd);
 }
 
@@ -139,12 +137,10 @@ void cmd_dup (int paramN, char* params[])
         invalid_param();
         return;
     }
-
     if (fileList_dup(fd, &opened_files) < 0){
-        printf("Could not duplicate file descriptor");
+        perror("Could not duplicate file descriptor");
         return;
     }
-
     dup(fd);
 }
 
@@ -156,7 +152,6 @@ int get_opening_mode (int fd){
             return i;
         }
     }
-
     mode = mode & O_ACCMODE;
     for (int i = 0; flags[i].name != NULL; i++){
         if (mode == flags[i].flag){
@@ -188,6 +183,7 @@ void cmd_listopen(int paramN, UNUSED char* params[])
 
 void cmd_create (int paramN, char* params[])
 {
+    // Create new file
     if (paramN == 2 && !strcmp(params[0], "-f")){
         int fd = open(params[1], O_CREAT | O_EXCL, 0644); 
         if (fd < 0){
@@ -196,21 +192,21 @@ void cmd_create (int paramN, char* params[])
         else {
             close(fd);
         }
-        return;
     }
+    // Create new directory
     else if (paramN == 1){
         if (mkdir(params[0], 0755) < 0){
             perror("Could not create directory");
         }
-        return;
     }
-    invalid_param();
+    else invalid_param();
 }
 
 int get_permissions (const char* file)
 {
     if (!access(file, W_OK))
         return 1;
+    // Write protected files
     if (!access(file, R_OK))
         return 2;
     if (!access(file, X_OK))

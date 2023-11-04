@@ -53,6 +53,8 @@ void cmd_hist (int paramN, char* command[])
         return;
     }
 
+    // Print the first n commands from history
+    // Checks length to avoid numbers > MAX_INT to be given to atoi
     if (paramN == 1 && strlen(command[0]) < 5 && atoi(command[0]) < 0){
         basicList_print((-1)*atoi(command[0]), &history);
         return;
@@ -68,9 +70,9 @@ void cmd_hist (int paramN, char* command[])
 
 void cmd_repeat (int paramN, char* params[])
 {
-    // Atoi gives 0 as error and hist starts at 0
-    if (paramN == 1  && strlen(params[0]) < 5
-        && (!strcmp(params[0], "0") || atoi(params[0]) > 0)){
+    if (paramN == 1  && strlen(params[0]) < 5 &&
+        // Atoi gives 0 as error and hist starts at 0
+       (!strcmp(params[0], "0") || atoi(params[0]) > 0)){
         char command[MAX_COMMAND_SIZE];
         if (basicList_getter(atoi(params[0]), command, &history) != NULL){
             printf(GREEN "%s\n" RESET_CLR, command); // Print command to be executed

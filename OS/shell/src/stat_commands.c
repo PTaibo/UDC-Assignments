@@ -22,6 +22,7 @@
 #include "error_msgs.h"
 #include "help_pages.h"
 
+// Define command parameter bitmasks
 #define P_LONG 1
 #define P_ACC 2
 #define P_LINK 4

@@ -42,6 +42,7 @@ int check_basic_commands (int paramN, char* command[])
 
 void cmd_quit(UNUSED int paramN, UNUSED char* params[])
 {
+    // Free all remaining memory
     rm_file_list();
     rm_history();
     
@@ -59,15 +60,12 @@ void print_logins ()
 }
 
 void cmd_authors (int paramN, char* params[]){
-    // -n parameter
     if (paramN == 1 && !strcmp(params[0], "-n")){
         print_names();
     }
-    // -l parameter
     else if (paramN == 1 && !strcmp(params[0], "-l")){
         print_logins();
     }
-    // None or both parameters
     else if (!paramN){
         print_names();
         print_logins();
@@ -77,7 +75,6 @@ void cmd_authors (int paramN, char* params[]){
         print_names();
         print_logins();
     }
-    // Invalid parameters (rest of cases)
     else
         invalid_param();
 }
@@ -150,16 +147,12 @@ void cmd_infosys (int paramN, UNUSED char* param[])
         perror("Could not read system info");
         return;
     }
-
     printf("\n");
     printf(CYAN "Machine: " RESET_CLR "%s (%s)\n", info.nodename,
                                                    info.machine);
     printf(CYAN "OS: " RESET_CLR "%s\n", info.version);
     printf(CYAN "Kernel: " RESET_CLR "%s %s\n", info.sysname,
-                                                  info.release);
-#ifdef _GNU_SOURCE
-    printf(CYAN "Domain name:" RESET_CLR "%s\n", info.__domainname);
-#endif
+                                                info.release);
     printf("\n");
 }
 
