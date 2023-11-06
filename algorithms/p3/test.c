@@ -1,4 +1,5 @@
 #include "test.h"
+#define size 20
 
 void init_seed()
 {
@@ -14,10 +15,10 @@ void random_init(int v [], int n)
     /* generate pseudo-random numbers between -n and +n */
 }
 
-void copy_array(int a[], int b[],int size)
+void copy_array(int a[], int b[],int sz)
 {
 
-    for (int i = 0 ; i < size; i++){
+    for (int i = 0 ; i < sz; i++){
         b[i] = a[i];
     }
 
@@ -70,12 +71,12 @@ void print_heap (pheap h)
     printf("]\n");
 }
 
-void check_array(int a[], int size)
+void check_array(int a[], int sz)
 {
     pheap h;
     h = (struct heap *)malloc(sizeof(struct heap));
 
-    create_heap(a, size, h);
+    create_heap(a, sz, h);
     printf("This is the heap vector:\n");
     print_heap(h);
     printf("sorted? %d\n",check_heapVector(h));
@@ -90,7 +91,6 @@ void test_create ()
 
     printf("Random array\n");
 
-    const int size = 20;
     int array[size];
     
     for (int i = 0; i < 5; i++){
@@ -104,4 +104,30 @@ void test_create ()
         check_array(array, size);
         printf("\n---------------------------\n");
     }
+}
+
+int check_minarray(int a[], int n)
+{
+    if (n < 1){
+        return 1;
+    }
+
+    for (int i = 1; i < n; i++){
+        if (a[i-1] > a[i]){
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+void check_heapsort()
+{
+    const int sizes = 20;
+    int a[sizes];
+    random_init(a, sizes);
+    heap_sort(a, sizes);
+    print_array(a, sizes);
+    printf("ordered? %d",check_minarray(a, sizes));
+
 }

@@ -83,14 +83,20 @@ int remove_min(pheap h)
 {   
     int min;
     //If the heap is empty
-    if (h->last < 0){ 
-        return -1;
+
+    if (h->last < 1){
+        if (h->last < 0){
+            return -1;
+        } 
+        else{
+            return h->vector[0];
+        }
     }
 
     min = h->vector[0];
     h->vector[0] = h->vector[h->last];
     h->last -= 1;
-    if (h->last >= 0){
+    if (h->last > 0){
         PercolateDown(h,0);
     }
 
@@ -100,13 +106,13 @@ int remove_min(pheap h)
 void heap_sort (int a[], int n)
 {
     pheap h;
-    if ((h = (struct heap *)malloc(sizeof(struct heap))) == NULL) {        
+    /*if ((h = (struct heap *)malloc(sizeof(struct heap))) == NULL) {        
         return;
-    }
+    }*/
+    h = (struct heap *)malloc(sizeof(struct heap));
 
     create_heap (a, n, h);
     for (int i = 0; i < n; i++){
         a[i] = remove_min(h);
     }
-    
 }

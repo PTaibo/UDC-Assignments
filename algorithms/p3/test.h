@@ -11,7 +11,9 @@ GROUP:6.1                     DATE:23/10/2023
 #include <math.h>
 #include "heap.h"
 
+
 void init_seed();
 void random_init(int v [], int n);
 void print_array(int v[], int n);
 void test_create();
+void check_heapsort();

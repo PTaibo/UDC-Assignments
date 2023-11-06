@@ -100,10 +100,11 @@ void time_createHeap()
 
 
 
-int main(){
-
+int main()
+{
     init_seed();
     test_create();    
     time_createHeap();
+    check_heapsort();
     return 0;
 }
