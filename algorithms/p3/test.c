@@ -74,7 +74,7 @@ void print_heap (pheap h)
 void check_array(int a[], int sz)
 {
     pheap h;
-    h = (struct heap *)malloc(sizeof(struct heap));
+    h = malloc(sizeof(struct heap));
 
     create_heap(a, sz, h);
     printf("This is the heap vector:\n");
@@ -126,8 +126,8 @@ void check_heapsort()
     const int sizes = 20;
     int a[sizes];
     random_init(a, sizes);
+    print_array(a ,sizes);
     heap_sort(a, sizes);
     print_array(a, sizes);
     printf("ordered? %d",check_minarray(a, sizes));
-
 }

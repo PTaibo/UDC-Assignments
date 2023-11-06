@@ -59,8 +59,8 @@ void time_createHeap()
 
     for (int i=500; i <= N; i = i*2){
         int v[i];
-        pheap h;//no entiendo porque no puedo usar una funcion 
-        h = (struct heap *)malloc(sizeof(struct heap));//why not check
+        pheap h;
+        h = malloc(sizeof(struct heap));
         /*if ((h = (struct heap *)malloc(sizeof(struct heap))) == NULL) {        
             return; 
         }*/

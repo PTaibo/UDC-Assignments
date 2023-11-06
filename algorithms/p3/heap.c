@@ -8,14 +8,14 @@ GROUP:6.1                     DATE:23/10/2023
 #include "heap.h"
 
 
-bool initialize_heap(pheap h){
+/*bool initialize_heap(pheap h){
 
     if ((h = (struct heap *)malloc(sizeof(struct heap))) == NULL) {        
         return 0;
     }
 
     return 1;
-}
+}*/
 
 void swap (pheap h, int j, int i)
 {
@@ -69,7 +69,8 @@ void create_heap(int a[], int n, pheap h)
 
     h->last=n-1;
     for (int i = 0; i < n; i++){
-        h->vector[i]=a[i];
+        printf("Is %d ",a[1]);
+        h->vector[i] = a[i];
     }
    
     for (int i = (h->last)/2 + 1; i >= 0; i--){
@@ -83,19 +84,19 @@ int remove_min(pheap h)
 {   
     int min;
     //If the heap is empty
-
+    min = h->vector[0];
     if (h->last < 1){
         if (h->last < 0){
             return -1;
         } 
         else{
-            return h->vector[0];
+            h->last--;
+            return min;
         }
     }
 
-    min = h->vector[0];
     h->vector[0] = h->vector[h->last];
-    h->last -= 1;
+    h->last--;
     if (h->last > 0){
         PercolateDown(h,0);
     }
@@ -106,13 +107,12 @@ int remove_min(pheap h)
 void heap_sort (int a[], int n)
 {
     pheap h;
-    /*if ((h = (struct heap *)malloc(sizeof(struct heap))) == NULL) {        
-        return;
-    }*/
-    h = (struct heap *)malloc(sizeof(struct heap));
+    h= malloc(sizeof(struct heap));
 
     create_heap (a, n, h);
+
     for (int i = 0; i < n; i++){
         a[i] = remove_min(h);
     }
+    free(h);
 }
