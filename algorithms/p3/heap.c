@@ -26,32 +26,32 @@ void swap (pheap h, int j, int i)
 
 }
 
-/*
+
 void PercolateUp (pheap h, int i)
 {
 
-    while ((i > 1) && (h->vector[i/2] < h->vector[i])){
-        swap(h, i/2, i);
-        i =) i / 2;
+    while ((i > 1) && (h->vector[i/2-1] > h->vector[i])){
+        swap(h, i/2-1, i);
+        i = i / 2 -1;
     }
 
 }
-*/
+
 
 void PercolateDown(pheap h, int i)
 {
     int leftChild, rightChild, j;
 
     do{
-        leftChild = 2 * i;
-        rightChild = 2 * i + 1;
+        leftChild = 2 * i + 1;
+        rightChild = 2 * i + 2;
         j = i;
 
-        if ((rightChild <= h->last) && (h->vector[rightChild] > h->vector[i])){
-            i = rightChild;
-        }
-        if ((leftChild < h->last) && h->vector[leftChild] > h->vector[i]){
+        if ((leftChild <= h->last+1) && (h->vector[leftChild] < h->vector[i])){
             i = leftChild;
+        }
+        if ((rightChild <= h->last+1) && h->vector[rightChild] < h->vector[i]){
+            i = rightChild;
         }
         
         swap (h, j, i);
@@ -62,21 +62,21 @@ void PercolateDown(pheap h, int i)
 
 void create_heap(int a[], int n, pheap h)
 {
-
-    if (!initialize_heap(h)){
+    /*if (!initialize_heap(h)){
         printf("The array was not correctly created");
         return;
-    }
+    }*/
 
     h->last=n-1;
     for (int i = 0; i < n; i++){
         h->vector[i]=a[i];
     }
-
-    for (int i = h->last / 2; i >= 0; i--){
+   
+    for (int i = (h->last)/2 + 1; i >= 0; i--){
         PercolateDown(h,i);
     }
 
+    //free(h);
 }
 
 int remove_min(pheap h)
@@ -91,7 +91,7 @@ int remove_min(pheap h)
     h->vector[0] = h->vector[h->last];
     h->last -= 1;
     if (h->last >= 0){
-        PercolateDown(h,1);
+        PercolateDown(h,0);
     }
 
     return min;

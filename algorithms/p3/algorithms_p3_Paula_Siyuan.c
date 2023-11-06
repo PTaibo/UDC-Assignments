@@ -6,20 +6,12 @@ GROUP:6.1                     DATE:23/10/2023
 */
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <time.h>
-#include <sys/time.h>
-#include <math.h>
 #include "heap.h"
+#include "test.h"
 #define K 1000
 #define N 32000
 
-void init_seed()
-{
-    srand(time(NULL));
-    /* set the seed of a new sequence of pseudo-random integers */
-}
+
 
 double microseconds() { /* obtains the system time in microseconds */
     struct timeval t;
@@ -27,14 +19,6 @@ double microseconds() { /* obtains the system time in microseconds */
         return 0.0;
 
     return (t.tv_usec + t.tv_sec * 1000000.0);
-}
-
-void random_init(int v [], int n)
-{
-    int i, m=2*n+1;
-    for (i=0; i < n; i++)
-        v[i] = (rand() % m) - n;
-    /* generate pseudo-random numbers between -n and +n */
 }
 
 void PrintLinealValues(int i,double v)
@@ -63,9 +47,6 @@ void printLinealTitle(){
 
 }
 
-
-
-
 void time_createHeap()
 {
     printf("\nCreate heap:\n");
@@ -76,12 +57,13 @@ void time_createHeap()
     double ta, tb, tCreateA, tCreateB;
 
 
-       for (int i=500; i <= N; i = i*2){
+    for (int i=500; i <= N; i = i*2){
         int v[i];
         pheap h;//no entiendo porque no puedo usar una funcion 
-        if ((h = (struct heap *)malloc(sizeof(struct heap))) == NULL) {        
-        return;
-    }
+        h = (struct heap *)malloc(sizeof(struct heap));//why not check
+        /*if ((h = (struct heap *)malloc(sizeof(struct heap))) == NULL) {        
+            return; 
+        }*/
         
         random_init(v,i);
         ta=microseconds();
@@ -93,7 +75,7 @@ void time_createHeap()
             printf("*");
             ta=microseconds();
 
-            for (int count=0;count<K;count++){
+            for (int count = 0; count < K; count++){
                 random_init(v,i);
                 create_heap(v,i,h);
             }
@@ -101,7 +83,7 @@ void time_createHeap()
 
             tCreateA = microseconds();
 
-            for (int count=0;count<K;count++){
+            for (int count = 0; count < K; count++){
                 random_init(v,i);
             }
 
@@ -111,24 +93,17 @@ void time_createHeap()
         }
 
         PrintLinealValues(i,timev);
+        free(h);
     }
 
 }
 
 
+
 int main(){
 
     init_seed();
+    test_create();    
     time_createHeap();
-
-    
-
-
-
-
-
-
-
-
     return 0;
 }
