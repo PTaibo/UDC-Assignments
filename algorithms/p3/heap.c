@@ -47,10 +47,10 @@ void PercolateDown(pheap h, int i)
         rightChild = 2 * i + 2;
         j = i;
 
-        if ((leftChild <= h->last+1) && (h->vector[leftChild] < h->vector[i])){
+        if ((leftChild < h->last+1) && (h->vector[leftChild] < h->vector[i])){
             i = leftChild;
         }
-        if ((rightChild <= h->last+1) && h->vector[rightChild] < h->vector[i]){
+        if ((rightChild < h->last+1) && (h->vector[rightChild] < h->vector[i])){
             i = rightChild;
         }
         
@@ -69,7 +69,7 @@ void create_heap(int a[], int n, pheap h)
 
     h->last=n-1;
     for (int i = 0; i < n; i++){
-        printf("Is %d ",a[1]);
+        //printf("Is %d ",a[1]);
         h->vector[i] = a[i];
     }
    
@@ -107,7 +107,7 @@ int remove_min(pheap h)
 void heap_sort (int a[], int n)
 {
     pheap h;
-    h= malloc(sizeof(struct heap));
+    h = malloc(sizeof(struct heap));
 
     create_heap (a, n, h);
 

@@ -53,7 +53,7 @@ int check_heapVector (pheap h)
             return 0;
         }
 
-        if (h->vector[i] > h->vector[rightchild]){
+        else if (h->vector[i] > h->vector[rightchild]){
             return 0;        
         }
 
@@ -82,7 +82,7 @@ void check_array(int a[], int sz)
     printf("sorted? %d\n",check_heapVector(h));
     remove_min(h);
     print_heap(h);
-    printf("sorted? %d",check_heapVector(h));
+    printf("sorted? %d\n",check_heapVector(h));
     free(h);
 }
 
@@ -102,7 +102,7 @@ void test_create ()
 
         //now we check it
         check_array(array, size);
-        printf("\n---------------------------\n");
+        printf("---------------------------\n");
     }
 }
 
@@ -126,8 +126,9 @@ void check_heapsort()
     const int sizes = 20;
     int a[sizes];
     random_init(a, sizes);
+    printf("\n");
     print_array(a ,sizes);
     heap_sort(a, sizes);
     print_array(a, sizes);
-    printf("ordered? %d",check_minarray(a, sizes));
+    printf("ordered? %d\n",check_minarray(a, sizes));
 }
