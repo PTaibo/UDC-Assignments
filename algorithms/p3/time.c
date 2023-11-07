@@ -17,11 +17,12 @@ void printLinealTitle(){
 
 }
 
-void printCuadraticTitle(){
+void printlogTitles(){
 
-    printf(" n\t  t(n)\t\tt(n)/n^1.8\tt(n)/n^2\t\tt(n)/n^2.2\n");
+    printf(" n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n^1.1\t\tt(n)/n^1.4\n");
 
 }
+
 
 void PrintLinealValues(int i,double v)
 {
@@ -42,22 +43,22 @@ void PrintLinealValues(int i,double v)
     printf("\n");
 }
 
-void PrintCuadraticValues(int i,double timev)
+void PrintlogValues(int i,double v)
 {
-    double t,t18,t2,t22;
+    double t,t08,t1,t12;
 
-    t=timev;
-    double j = (double) i; //pow needs type doubles
-    t18=t/pow(j,1.8);
-    t2=t/pow(j,2);
-    t22=t/pow(j,2.2);
-    
+    t=v;
+    double j= (double) i; //pow needs doubles
+    t08=t/pow(j,0.8);
+    t1=t/(j*log(j));
+    t12=t/pow(j,1.4);
+
     //printing results
     printf("%5d\t",i);
     printf("%7lf\t",t);
-    printf("%lf\t",t18);
-    printf("%lf\t\t",t2);
-    printf("%lf\t\t",t22);
+    printf("%lf\t",t08);
+    printf("%lf\t\t",t1);
+    printf("%lf\t\t",t12);
     printf("\n");
 }
 
@@ -114,7 +115,7 @@ void time_createHeap()
 
 void time_ascendOrder(){
     printf("\nSort for ascending ordered array:\n");
-    printLinealTitle();
+    printlogTitles();
 
     double timev = 0;
     double ta, tb, tCreateA, tCreateB;
@@ -153,13 +154,13 @@ void time_ascendOrder(){
             timev=((tb-ta)-(tCreateA-tCreateB))/K;
         }
         
-        PrintLinealValues(i,timev);
+        PrintlogValues(i, timev);
     }
 }
 
 void time_descendOrder(){
-     printf("\nSort for descendig ordered array:\n");
-    printCuadraticTitle();
+    printf("\nSort for descendig ordered array:\n");
+    printlogTitles();
 
     double timev = 0;
     double ta, tb, tCreateA, tCreateB;
@@ -198,13 +199,13 @@ void time_descendOrder(){
             timev=((tb-ta)-(tCreateA-tCreateB))/K;
         }
         
-        PrintCuadraticValues(i,timev);
+        PrintlogValues(i,timev);
     }
 }
 
 void time_randomOrder(){
     printf("\nSort for random array:\n");
-    printCuadraticTitle();
+    printlogTitles();
 
     double timev = 0;
     double ta, tb, tCreateA, tCreateB;
@@ -243,6 +244,6 @@ void time_randomOrder(){
             timev=((tb-ta)-(tCreateA-tCreateB))/K;
         }
         
-        PrintCuadraticValues(i,timev);
+        PrintlogValues(i,timev);
     }
 }
