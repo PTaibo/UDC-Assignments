@@ -113,7 +113,7 @@ void cmd_close (int paramN, char* params[])
     int fd = atoi(params[0]);
 
     // Closing one of the first 3 fds gives segmentation error
-    if (paramN > 1 || fd < 3 || fd > MAX_ELEMENTS - 1){
+    if (paramN > 1 || fd > MAX_ELEMENTS - 1){
         invalid_param();
         return;
     }
@@ -133,7 +133,7 @@ void cmd_dup (int paramN, char* params[])
     
     int fd = atoi(params[0]);
 
-    if (paramN > 1 || fd < 3 || fd > MAX_ELEMENTS - 1){
+    if (paramN > 1 || fd > MAX_ELEMENTS - 1){
         invalid_param();
         return;
     }

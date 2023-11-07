@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "error_msgs.h"
 
@@ -136,9 +137,9 @@ char* basicList_getter (int pos, char* dest, basic_list* list)
 
 void fileList_initialize (file_list* newList)
 {
-    newList->elements[0] = "stdin";
-    newList->elements[1] = "stdout";
-    newList->elements[2] = "stderr";
+    newList->elements[0] = strdup("stdin");
+    newList->elements[1] = strdup("stdout");
+    newList->elements[2] = strdup("stderr");
     for (int i = 3; i < MAX_ELEMENTS; i++){
         newList->elements[i] = NULL;
     }
@@ -146,7 +147,7 @@ void fileList_initialize (file_list* newList)
 
 void fileList_clear (file_list* list)
 {
-    for (int i = 3; i < MAX_ELEMENTS; i++){
+    for (int i = 0; i < MAX_ELEMENTS; i++){
         if (list->elements[i] != NULL){
             free(list->elements[i]);
             list->elements[i] = NULL;
@@ -180,7 +181,7 @@ int fileList_add (int pos, char* element, file_list* list)
 
 int fileList_delete (int pos, file_list* list)
 {
-    if (pos < 3 || pos >= MAX_ELEMENTS){
+    if (pos >= MAX_ELEMENTS){
         return -1;
     }
 
