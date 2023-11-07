@@ -21,5 +21,6 @@ int main()
     check_heapsort();
     time_ascendOrder();
     time_descendOrder();
+    time_randomOrder();
     return 0;
 }

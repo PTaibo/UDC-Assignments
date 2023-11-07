@@ -201,3 +201,48 @@ void time_descendOrder(){
         PrintCuadraticValues(i,timev);
     }
 }
+
+void time_randomOrder(){
+    printf("\nSort for random array:\n");
+    printCuadraticTitle();
+
+    double timev = 0;
+    double ta, tb, tCreateA, tCreateB;
+
+
+    for (int i=500; i <= N; i = i*2){
+        int v[i];
+        /*if ((h = (struct heap *)malloc(sizeof(struct heap))) == NULL) {        
+            return; 
+        }*/
+        
+        random_init(v,i);
+        ta=microseconds();
+        heap_sort(v,i);
+        tb=microseconds();
+        timev=tb-ta;
+
+        if (timev < 500){ //confidence threshold
+            printf("*");
+            ta=microseconds();
+
+            for (int count = 0; count < K; count++){
+                random_init(v,i);
+                heap_sort(v,i);
+            }
+            tb=microseconds();
+
+            tCreateA = microseconds();
+
+            for (int count = 0; count < K; count++){
+                random_init(v,i);
+            }
+
+            tCreateB = microseconds();
+
+            timev=((tb-ta)-(tCreateA-tCreateB))/K;
+        }
+        
+        PrintCuadraticValues(i,timev);
+    }
+}

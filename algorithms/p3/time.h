@@ -7,3 +7,4 @@
 void time_createHeap();
 void time_ascendOrder();
 void time_descendOrder();
+void time_randomOrder();
