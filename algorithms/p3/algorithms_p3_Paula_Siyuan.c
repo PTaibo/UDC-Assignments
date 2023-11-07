@@ -19,5 +19,7 @@ int main()
     test_create();    
     time_createHeap();
     check_heapsort();
+    time_ascendOrder();
+    time_descendOrder();
     return 0;
 }

@@ -14,6 +14,8 @@ GROUP:6.1                     DATE:23/10/2023
 
 void init_seed();
 void random_init(int v [], int n);
+void ascending_order_init(int v [], int n);
+void descending_order_init (int v [], int n);
 void print_array(int v[], int n);
 void test_create();
 void check_heapsort();

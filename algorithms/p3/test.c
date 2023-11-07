@@ -7,6 +7,21 @@ void init_seed()
     /* set the seed of a new sequence of pseudo-random integers */
 }
 
+void ascending_order_init(int v [], int n)
+{
+    for (int i = 0; i < n; i++){
+        v[i] = i+1;
+    }
+}
+
+void descending_order_init (int v [], int n)
+{
+    for (int i = n; i > 0; i--){
+        v[n - i] = i;
+    }
+}
+
+
 void random_init(int v [], int n)
 {
     int i, m=2*n+1;
@@ -125,10 +140,13 @@ void check_heapsort()
 {
     const int sizes = 20;
     int a[sizes];
-    random_init(a, sizes);
-    printf("\n");
-    print_array(a ,sizes);
-    heap_sort(a, sizes);
-    print_array(a, sizes);
-    printf("ordered? %d\n",check_minarray(a, sizes));
+    
+    for (int i = 0; i < 5; i++){
+        random_init(a, sizes);
+        printf("\n");
+        print_array(a ,sizes);
+        heap_sort(a, sizes);
+        print_array(a, sizes);
+        printf("ordered? %d\n",check_minarray(a, sizes));
+    }
 }

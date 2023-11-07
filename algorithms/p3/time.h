@@ -1,8 +1,9 @@
 #pragma once
 
-#include "heap.h"
 #include "test.h"
 
 
 
 void time_createHeap();
+void time_ascendOrder();
+void time_descendOrder();
