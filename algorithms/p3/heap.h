@@ -11,6 +11,8 @@ GROUP:6.1                     DATE:23/10/2023
 #include <stdio.h>
 #include <stdlib.h>
 #define SZ 256000
+#define K 1000
+#define N 32000
 
 struct heap{
     int last;

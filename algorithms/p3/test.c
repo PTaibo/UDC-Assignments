@@ -1,10 +1,26 @@
 #include "test.h"
+#define size 20
 
 void init_seed()
 {
     srand(time(NULL));
     /* set the seed of a new sequence of pseudo-random integers */
 }
+
+void ascending_order_init(int v [], int n)
+{
+    for (int i = 0; i < n; i++){
+        v[i] = i+1;
+    }
+}
+
+void descending_order_init (int v [], int n)
+{
+    for (int i = n; i > 0; i--){
+        v[n - i] = i;
+    }
+}
+
 
 void random_init(int v [], int n)
 {
@@ -14,10 +30,10 @@ void random_init(int v [], int n)
     /* generate pseudo-random numbers between -n and +n */
 }
 
-void copy_array(int a[], int b[],int size)
+void copy_array(int a[], int b[],int sz)
 {
 
-    for (int i = 0 ; i < size; i++){
+    for (int i = 0 ; i < sz; i++){
         b[i] = a[i];
     }
 
@@ -52,7 +68,7 @@ int check_heapVector (pheap h)
             return 0;
         }
 
-        if (h->vector[i] > h->vector[rightchild]){
+        else if (h->vector[i] > h->vector[rightchild]){
             return 0;        
         }
 
@@ -70,18 +86,18 @@ void print_heap (pheap h)
     printf("]\n");
 }
 
-void check_array(int a[], int size)
+void check_array(int a[], int sz)
 {
     pheap h;
-    h = (struct heap *)malloc(sizeof(struct heap));
+    h = malloc(sizeof(struct heap));
 
-    create_heap(a, size, h);
+    create_heap(a, sz, h);
     printf("This is the heap vector:\n");
     print_heap(h);
     printf("sorted? %d\n",check_heapVector(h));
     remove_min(h);
     print_heap(h);
-    printf("sorted? %d",check_heapVector(h));
+    printf("sorted? %d\n",check_heapVector(h));
     free(h);
 }
 
@@ -90,7 +106,6 @@ void test_create ()
 
     printf("Random array\n");
 
-    const int size = 20;
     int array[size];
     
     for (int i = 0; i < 5; i++){
@@ -102,6 +117,36 @@ void test_create ()
 
         //now we check it
         check_array(array, size);
-        printf("\n---------------------------\n");
+        printf("---------------------------\n");
+    }
+}
+
+int check_minarray(int a[], int n)
+{
+    if (n < 1){
+        return 1;
+    }
+
+    for (int i = 1; i < n; i++){
+        if (a[i-1] > a[i]){
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+void check_heapsort()
+{
+    const int sizes = 20;
+    int a[sizes];
+    
+    for (int i = 0; i < 5; i++){
+        random_init(a, sizes);
+        printf("\n");
+        print_array(a ,sizes);
+        heap_sort(a, sizes);
+        print_array(a, sizes);
+        printf("ordered? %d\n",check_minarray(a, sizes));
     }
 }
