@@ -113,7 +113,7 @@ void cmd_close (int paramN, char* params[])
     int fd = atoi(params[0]);
 
     // Closing one of the first 3 fds gives segmentation error
-    if (paramN > 1 || fd < 3 || fd > MAX_ELEMENTS - 1){
+    if (paramN > 1 || fd > MAX_ELEMENTS - 1){
         invalid_param();
         return;
     }
@@ -133,7 +133,7 @@ void cmd_dup (int paramN, char* params[])
     
     int fd = atoi(params[0]);
 
-    if (paramN > 1 || fd < 3 || fd > MAX_ELEMENTS - 1){
+    if (paramN > 1 || fd > MAX_ELEMENTS - 1){
         invalid_param();
         return;
     }
@@ -202,36 +202,14 @@ void cmd_create (int paramN, char* params[])
     else invalid_param();
 }
 
-int get_permissions (const char* file)
-{
-    if (!access(file, W_OK))
-        return 1;
-    // Write protected files
-    if (!access(file, R_OK))
-        return 2;
-    if (!access(file, X_OK))
-        return 2;
-
-    perror("Cannot access file");
-    return -1;
-}    
-
-void delete_file (const char* file)
-{
-    int can_delete = get_permissions(file);
-    if (can_delete < 0) return;
-        
-    if (remove(file) < 0){
-        printf("Could not remove %s: %s\n",
-                            file,
-                            strerror(errno));
-    }
-}
-
 void cmd_delete (int paramN, char* params[])
 {
     for (int i = 0; i < paramN; i++){
-        delete_file(params[i]);
+        if (remove(params[i]) < 0){
+            printf("Could not remove %s: %s\n",
+                            params[i],
+                            strerror(errno));
+        }
     }
 }
 
@@ -240,7 +218,11 @@ int recursive_delete (const char *fpath,
                        UNUSED int typeflag,
                        UNUSED struct FTW *ftwbuf)
 {
-    delete_file(fpath);
+    if (remove(fpath) < 0){
+        printf("Could not remove %s: %s\n",
+                fpath,
+                strerror(errno));
+    }
     return 0;
 }
 
