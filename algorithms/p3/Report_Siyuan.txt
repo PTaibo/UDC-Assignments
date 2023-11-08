@@ -1,0 +1,41 @@
+/*
+TITLE: ALGORITHMS             SUBTITLE:P2
+AUTHOR 1:PAULA TAIBO SUAREZ   LOGIN:P.TAIBO
+AUTHOR 2:SIYUAN HE            LOGIN:SIYUAN.HE
+GROUP:6.1                     DATE:09/10/2023
+*/
+
+This practical was executed in a laptop with the next specifications:
+
+OS: Linux Mint 21.2 x86_64 
+Kernel: 5.15.0-87-generic 
+Window System: X11
+Windows Manager: kWin
+CPU: 11th Gen Intel i7-1195G7 (8) @ 4.800GHz 
+RAM: 16GB 
+Battery: 100% and plugged
+
+
+And and was compiled with the next specifications:
+
+Compiler: gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+Flags: -Wall -Wextra -lm
+
+
+
+
+
+
+
+
+
+
+Create heap:
+   n	  t(n)		t(n)/n^0.8	t(n)/n		t(n)/n^1.2
+*  500	29.206000	0.202440	0.058412		0.016854		
+* 1000	46.414000	0.184777	0.046414		0.011659		
+* 2000	87.342000	0.199710	0.043671		0.009550		
+* 4000	171.090000	0.224686	0.042772		0.008142		
+* 8000	346.089000	0.261045	0.043261		0.007169		
+*16000	682.671000	0.295744	0.042667		0.006156		
+32000	565.000000	0.140582	0.017656		0.002218

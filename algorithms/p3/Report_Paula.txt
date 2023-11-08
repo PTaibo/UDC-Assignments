@@ -1,0 +1,22 @@
+/*
+TITLE: ALGORITHMS             SUBTITLE:P2
+AUTHOR 1:PAULA TAIBO SUAREZ   LOGIN:P.TAIBO
+AUTHOR 2:SIYUAN HE            LOGIN:SIYUAN.HE
+GROUP:6.1                     DATE:09/10/2023
+*/
+
+This practical was executed in a laptop with the next specifications:
+
+OS: Linux Mint 21.2 x86_64 
+Kernel: 5.15.0-87-generic 
+Window System: X11
+Windows Manager: kWin
+CPU: 11th Gen Intel i7-1195G7 (8) @ 4.800GHz 
+RAM: 16GB 
+Battery: 100% and plugged
+
+
+And and was compiled with the next specifications:
+
+Compiler: gcc (Debian 10.2.1-6) 10.2.1 20210110
+Flags: -Wall -Wextra -lm
