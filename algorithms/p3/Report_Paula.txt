@@ -7,16 +7,77 @@ GROUP:6.1                     DATE:09/10/2023
 
 This practical was executed in a laptop with the next specifications:
 
-OS: Linux Mint 21.2 x86_64 
-Kernel: 5.15.0-87-generic 
+OS: Linuxmint 6 faye
+Kernel: x86_64 Linux 6.1.0-13-amd64
 Window System: X11
-Windows Manager: kWin
-CPU: 11th Gen Intel i7-1195G7 (8) @ 4.800GHz 
+Windows Manager: i3
+CPU: 13th Gen Intel Core i7-1355U @ 12x 5GHz
 RAM: 16GB 
 Battery: 100% and plugged
 
 
 And and was compiled with the next specifications:
 
-Compiler: gcc (Debian 10.2.1-6) 10.2.1 20210110
-Flags: -Wall -Wextra -lm
+Compiler: gcc (Debian 12.2.0-14) 12.2.0
+Flags: -Wall -Wextra -O2
+
+The purpose of this practical is to implement a heap and
+the heap sort algorithm.
+
+For the first test we run the heap creation algorithm
+and the minimum element removal algorithm with a random
+initialized array to check if they work correctly.
+
+Random array
+This is the array:
+[ 16  3 18 -11 -18 15  4 -8 11 20 -3 -5  3 18  6 10  1 -17 -2 -3]
+
+This is the heap vector:
+[ -18 -17 -5 -11 -3  3  4 -8 -2  3 -3 15 18 18  6 10  1 11 16 20]
+sorted? 1
+[ -17 -11 -5 -8 -3  3  4  1 -2  3 -3 15 18 18  6 10 20 11 16]
+sorted? 1
+---------------------------
+This is the array:
+[  6 -1  1  6 11 -11  2  8 -12 -18 -18 -15  5 -18 -6  7 17 20 -19  9]
+
+This is the heap vector:
+[ -19 -18 -18 -12 -18 -15 -6  7 -1  9  6 -11  5  2  1  8 17 20  6 11]
+sorted? 1
+[ -18 -18 -18 -12  6 -15 -6  7 -1  9 11 -11  5  2  1  8 17 20  6]
+sorted? 1
+---------------------------
+This is the array:
+[ 19 -2 -15  4 -3 13 -7 18 17 14 -4  4 -8 20 -8 -16 -10 14 13  0]
+
+This is the heap vector:
+[ -16 -10 -15 -2 -4 -8 -8  4 13  0 -3  4 13 20 -7 18 19 14 17 14]
+sorted? 1
+[ -15 -10 -8 -2 -4  4 -8  4 13  0 -3 14 13 20 -7 18 19 14 17]
+sorted? 1
+---------------------------
+This is the array:
+[ 16 15  5  0 17 -20 -11 15 20 -10  5 20 10 11  3 -14  5 19 -15  3]
+
+This is the heap vector:
+[ -20 -15 -11 -14 -10  5  3  5  0  3  5 20 10 11 16 15 15 19 20 17]
+sorted? 1
+[ -15 -14 -11  0 -10  5  3  5 17  3  5 20 10 11 16 15 15 19 20]
+sorted? 1
+---------------------------
+This is the array:
+[ 14  3 -11 -15  2  1 -11 14 -6 -19 -7 -9 17 20 11 15 20 -19 12 -20]
+
+This is the heap vector:
+[ -20 -19 -11 -15 -19 -9 -11 14 -6  2 -7  1 17 20 11 15 20 14 12  3]
+sorted? 1
+[ -19 -19 -11 -15 -7 -9 -11 14 -6  2  3  1 17 20 11 15 20 14 12]
+sorted? 1
+---------------------------
+
+The test confirms that both algorithms work correctly. It is repeated
+several times to reduce the possibility of it having an anomalous
+result. We now procede to determine their execution times using arrays
+of size 500, 1000, 2000, 4000, 3000, 16000 and 32000 to demonstrate
+empirically that for any given array the time complexity will be O(n),
+as deduced in theory classes.
