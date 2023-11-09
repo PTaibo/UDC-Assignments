@@ -22,13 +22,13 @@ double microseconds() { /* obtains the system time in microseconds */
 
 void printLinealTitle(){
 
-   printf("   n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n\t\tt(n)/n^1.2\n");
+   printf("   n\t   t(n)\t\tt(n)/n^0.8\tt(n)/n\t\t       t(n)/n^1.2\n");
 
 }
 
 void printlogTitles(){
 
-    printf(" n\t  t(n)\t\tt(n)/n^0.8\tt(n)/n^1.1\t\tt(n)/n^1.4\n");
+    printf(" n\t   t(n)\t\tt(n)/n^1\tt(n)/n*logn\t        t(n)/n^1.5\n");
 
 }
 
@@ -58,9 +58,10 @@ void PrintlogValues(int i,double v)
 
     t=v;
     double j= (double) i; //pow needs doubles
-    t08=t/pow(j,0.8);
+    t08=t/pow(j,1);
     t1=t/(j*log(j));
-    t12=t/pow(j,1.4);
+    //t1=t/pow(j,1.3);
+    t12=t/pow(j,1.5);
 
     //printing results
     printf("%5d\t",i);
