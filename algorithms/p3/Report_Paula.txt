@@ -134,7 +134,7 @@ ordered? 1
 
 Since the algorithm works correctly we can now calculate its complexity.
 Based on the theory, we can assume it is nlogn so we will choose n
-and n^1.4 as the bounds.
+and n^1.4 as the upper and lower bounds.
 
 NOTES:
     - All the execution times are measured in microseconds
@@ -145,40 +145,56 @@ NOTES:
       measurement to be correct so we chose 1000.
 
 Sort for ascending ordered array:
- n	   t(n)		t(n)/n^1	t(n)/n*logn	        t(n)/n^1.4
-*  500	19.629000	0.039258	0.006317		0.003268		
-* 1000	62.044000	0.062044	0.008982		0.003915		
-* 2000	158.473000	0.079237	0.010425		0.003789		
-* 4000	354.558000	0.088639	0.010687		0.003212		
- 8000	717.000000	0.089625	0.009973		0.002461		
-16000	1905.000000	0.119063	0.012299		0.002478		
-32000	3049.000000	0.095281	0.009185		0.001503		
+   n	   t(n)		t(n)/n^1	t(n)/n*logn	   t(n)/n^1.4
+*  500	20.277000	0.040554	0.006526		0.003376		
+* 1000	59.467000	0.059467	0.008609		0.003752		
+* 2000	150.991000	0.075496	0.009932		0.003610		
+* 4000	366.252000	0.091563	0.011040		0.003318		
+  8000	708.000000	0.088500	0.009847		0.002431		
+ 16000	1485.000000	0.092813	0.009588		0.001932		
+ 32000	3027.000000	0.094594	0.009119		0.001492
 
 Sort for descendig ordered array:
- n	   t(n)		t(n)/n^1	t(n)/n*logn	        t(n)/n^1.4
-*  500	26.305000	0.052610	0.008466		0.004380		
-* 1000	76.470000	0.076470	0.011070		0.004825		
-* 2000	173.925000	0.086963	0.011441		0.004158		
-* 4000	353.947000	0.088487	0.010669		0.003207		
- 8000	727.000000	0.090875	0.010112		0.002496		
-16000	1446.000000	0.090375	0.009336		0.001881		
-32000	2973.000000	0.092906	0.008956		0.001465		
+   n	   t(n)		t(n)/n^1   t(n)/n*logn	   t(n)/n^1.4
+*  500	27.774000	0.055548	0.008938		0.004625		
+* 1000	73.020000	0.073020	0.010571		0.004607		
+* 2000	178.844000	0.089422	0.011765		0.004276		
+* 4000	384.450000	0.096113	0.011588		0.003483		
+  8000	811.000000	0.101375	0.011280		0.002784		
+ 16000	1724.000000	0.107750	0.011131		0.002243		
+ 32000	3615.000000	0.112969	0.010890		0.001782
 
 Sort for random array:
- n	   t(n)		t(n)/n^1	t(n)/n*logn	        t(n)/n^1.4
-*  500	55.628000	0.111256	0.017902		0.009263		
-* 1000	122.113000	0.122113	0.017678		0.007705		
-* 2000	259.463000	0.129731	0.017068		0.006203		
-* 4000	554.412000	0.138603	0.016711		0.005023		
- 8000	1001.000000	0.125125	0.013923		0.003436		
-16000	2066.000000	0.129125	0.013339		0.002688		
-32000	4265.000000	0.133281	0.012848		0.002102
+   n	   t(n)		t(n)/n^1  t(n)/n*logn	   t(n)/n^1.4
+*  500	55.857000	0.111714	0.017976		0.009301		
+* 1000	119.815000	0.119815	0.017345		0.007560		
+* 2000	258.384000	0.129192	0.016997		0.006178		
+* 4000	555.415000	0.138854	0.016741		0.005032		
+  8000	923.000000	0.115375	0.012838		0.003169		
+ 16000	1976.000000	0.123500	0.012758		0.002571		
+ 32000	4471.000000	0.139719	0.013469		0.002204		
+
+Sort for random array with updated hypothesis:
+   n	   t(n)	   t(n)/n^0.8	 t(n)/n		   t(n)/n^1.2
+*  500	55.277000	0.383150	0.110554		0.031899		
+* 1000	123.556000	0.491885	0.123556		0.031036		
+* 2000	263.316000	0.602079	0.131658		0.028790		
+* 4000	551.897000	0.724786	0.137974		0.026266		
+  8000	923.000000	0.696193	0.115375		0.019120		
+ 16000	2184.000000	0.946143	0.136500		0.019693		
+ 32000	4244.000000	1.055979	0.132625		0.016657
 
 The first measurement (for the asceding ordered array) is a bit anomalous
-but the rest of the data is stable inn the expected bound, tending to
-the constants 0.009 for the first two and 0.01 for the random arrays.
-Thus, it is demonstrated that for any type of array the complexity
-of the heap sort is nlogn, as expected.
+but the rest of the data is stable in the expected bound for the ascending
+and descending starting orders, tending to the constant 0.009. However,
+for the randomly sorted array the data is more stable for the linear complexity,
+tending to 0.1. Even though the theoretical and empirical truths diverge, it
+can be noted that nlogn can be rounded to n^1.2, thus, the difference between
+linear and nlogn is sufficiently small for the computer to render the given
+data in practice without refuting the theory. Because of this, we can say
+that it is demonstrated that for any type of array the complexity of the
+heap is nlogn as expected except for the random initialization which is still
+very close.
 
 Observations:
 
@@ -193,7 +209,12 @@ Heap sort. The constant is supposed to be close to 0.04
 *  500  23.856000   0.165357    ->0.047712<-        0.013767
 
 Conclusions:
+
 After running all the tests and empirically analysing the time complexity
 of the algorithms it is demonstrated that it coincides with the mathematical
-theory, since the heap creation is linear and the heap sort has complexity
-nlogn for any type of array given. 
+theory, since the heap creation is linear and the heap sort has always
+a complexity sufficiently close to nlogn for any type of array given,
+regardless of its size or initial order, since we can say that an empirical
+complexity of n^1 coexist with a theoretical complexity of n^1.2 without
+disproving it.
+
