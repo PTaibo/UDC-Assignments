@@ -76,8 +76,124 @@ sorted? 1
 ---------------------------
 
 The test confirms that both algorithms work correctly. It is repeated
-several times to reduce the possibility of it having an anomalous
-result. We now procede to determine their execution times using arrays
+several times to reduce the possibility of it having an anomalous result.
+We now procede to determine their execution times using arrays
 of size 500, 1000, 2000, 4000, 3000, 16000 and 32000 to demonstrate
 empirically that for any given array the time complexity will be O(n),
-as deduced in theory classes.
+as deduced in theory classes. We will do this by doing the calculations
+with the estimated bound and a higher and lower bounds.
+
+NOTES:
+    - All the execution times are measured in microseconds
+    - If the execution time is below 500 microseconds it is indicated
+      with an asterisk (*). To get an accurate measurement, the operation
+      will be repeated K times and the result will be the mean of those
+      calculations. The constant K has to be a power of 10 for the
+      measurement to be correct so we chose 1000.
+
+Create heap:
+   n	   t(n)	   t(n)/n^0.8	 t(n)/n		   t(n)/n^1.2
+*  500	23.856000	0.165357	0.047712		0.013767		
+* 1000	39.784000	0.158383	0.039784		0.009993		
+* 2000	80.621000	0.184342	0.040310		0.008815		
+* 4000	161.397000	0.211957	0.040349		0.007681		
+* 8000	321.894000	0.242796	0.040237		0.006668		
+*16000	669.939000	0.290228	0.041871		0.006041		
+*32000	1295.899000	0.322442	0.040497		0.005086
+
+Slightly underestimated bound: n^0.8
+Tight bound: n
+Slightly overestimated bound: n^1.2
+
+Analysing the results we observe the hypothesized tight bound tends to the
+constant 0.04 while the other two tend to zero and infinity.
+This proves the complexity of the algorithm is indeed lineal.
+
+We now procede to prove the correctness of the heap sort algorithm.
+For this we will repeat the process of testing it with a random
+array several times to make sure the results are accurate.
+
+[ 13 -17 20 -20 -20  8 13 20 20 -1 -2 19 15 -20  9 -2 -17 20 -20  2]
+[ -20 -20 -20 -20 -17 -17 -2 -2 -1  2  8  9 13 13 15 19 20 20 20 20]
+ordered? 1
+
+[ -18  6 19 -12 -14 -5  9 -18 -17 -7 -8 16 -2 -9 16 -2 19  9  0 20]
+[ -18 -18 -17 -14 -12 -9 -8 -7 -5 -2 -2  0  6  9  9 16 16 19 19 20]
+ordered? 1
+
+[ -11 20 18 -14 -20  9  4 -15  8  6  9 12 -7  8 -20 -1 -16 11  3 -13]
+[ -20 -20 -16 -15 -14 -13 -11 -7 -1  3  4  6  8  8  9  9 11 12 18 20]
+ordered? 1
+
+[ -15 15 -17  4 -13 -20 -17 -13 11  5 -13 -20  5 -14 -14  7 15 12 12  5]
+[ -20 -20 -17 -17 -15 -14 -14 -13 -13 -13  4  5  5  5  7 11 12 12 15 15]
+ordered? 1
+
+[ -3  1 -4 10 -10 -2 -10 -6 -12 13  4 -4  9  9 20 16  9 -16 -18  0]
+[ -18 -16 -12 -10 -10 -6 -4 -4 -3 -2  0  1  4  9  9  9 10 13 16 20]
+ordered? 1
+
+Since the algorithm works correctly we can now calculate its complexity.
+Based on the theory, we can assume it is nlogn so we will choose n
+and n^1.4 as the bounds.
+
+Sort for ascending ordered array:
+ n	   t(n)		t(n)/n^1	t(n)/n*logn	        t(n)/n^1.4
+*  500	19.629000	0.039258	0.006317		0.003268		
+* 1000	62.044000	0.062044	0.008982		0.003915		
+* 2000	158.473000	0.079237	0.010425		0.003789		
+* 4000	354.558000	0.088639	0.010687		0.003212		
+ 8000	717.000000	0.089625	0.009973		0.002461		
+16000	1905.000000	0.119063	0.012299		0.002478		
+32000	3049.000000	0.095281	0.009185		0.001503		
+
+Sort for descendig ordered array:
+ n	   t(n)		t(n)/n^1	t(n)/n*logn	        t(n)/n^1.4
+*  500	26.305000	0.052610	0.008466		0.004380		
+* 1000	76.470000	0.076470	0.011070		0.004825		
+* 2000	173.925000	0.086963	0.011441		0.004158		
+* 4000	353.947000	0.088487	0.010669		0.003207		
+ 8000	727.000000	0.090875	0.010112		0.002496		
+16000	1446.000000	0.090375	0.009336		0.001881		
+32000	2973.000000	0.092906	0.008956		0.001465		
+
+Sort for random array:
+ n	   t(n)		t(n)/n^1	t(n)/n*logn	        t(n)/n^1.4
+*  500	55.628000	0.111256	0.017902		0.009263		
+* 1000	122.113000	0.122113	0.017678		0.007705		
+* 2000	259.463000	0.129731	0.017068		0.006203		
+* 4000	554.412000	0.138603	0.016711		0.005023		
+ 8000	1001.000000	0.125125	0.013923		0.003436		
+16000	2066.000000	0.129125	0.013339		0.002688		
+32000	4265.000000	0.133281	0.012848		0.002102
+
+The first measurement (for the asceding ordered array) is a bit anomalous
+but the rest of the data is stable inn the expected bound, tending to
+the constants 0.009 for the first two and 0.01 for the random arrays.
+Thus, it is demonstrated that for any type of array the complexity
+of the heap sort is nlogn, as expected.
+
+Observations:
+
+As always, the first measurement of each time test (when checking the heap
+algorithms and the heap sort) is a bit anomalous, but since the repetitions
+are not made manually, the rest of the measurements remain constant and
+accurate.
+
+Heap algorithms. The constant is supposed to be close to 0.09
+*  500  19.629000   0.039258    ->0.006317<-        0.003268
+Heap sort. The constant is supposed to be close to 0.04
+*  500  23.856000   0.165357    ->0.047712<-        0.013767
+
+Conclusions:
+After running all the tests and empirically analysing the time complexity
+of the algorithms it is demonstrated that it coincides with the mathematical
+theory, since the creation of the heap and extraction of the minimum
+element is linear and the heap sort has complexity nlogn for any type of array
+given. 
+INTENTABA PONER ALGO ASÍ PERO NO SE ME OCURRE CÓMO PONERLO BIEN. QUÉ TE PARECE
+Y CÓMO LO PONDRÍAS TÚ?
+When compared to other sorting algorithms, it is an acceptable solution
+since its not cuadratic, like others, but it's not the best because there are
+logarithmic algorithms that are much quicker.
+
