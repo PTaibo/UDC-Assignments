@@ -82,6 +82,16 @@ of size 500, 1000, 2000, 4000, 3000, 16000 and 32000 to demonstrate
 empirically that for any given array the time complexity will be O(n),
 as deduced in theory classes.
 
+NOTES:
+    - All the execution times are measured in microseconds
+    - If the execution time is below 500 microseconds it is indicated
+      with an asterisk (*). To get an accurate measurement, the operation
+      will be repeated K times and the result will be the mean of those
+      calculations. The constant K has to be a power of 10 for the
+      measurement to be correct so we chose 1000.
+
+
+
 Create heap:
    n            t(n)          t(n)/n^0.8        t(n)/n                t(n)/n^1.2
 *  500        15.172000        0.105164        0.030344                0.008755                
@@ -91,6 +101,19 @@ Create heap:
 * 8000        239.750000       0.180837        0.029969                0.004967                
 *16000        487.199000       0.211062        0.030450                0.004393                
 *32000        973.643000       0.242259        0.030426                0.003821     
+
+Slightly underestimated bound: n^0.8
+Tight bound: n
+Slightly overestimated bound: n^1.2
+
+Analysing the results we observe the hypothesized tight bound tends to the
+constant 0.029877 while the other two tend to zero and infinity.
+This proves the complexity of the algorithm is indeed lineal.
+
+We now procede to prove the correctness of the heap sort algorithm.
+For this we will repeat the process of testing it with a random
+array several times to make sure the results are accurate.
+
 
 [ 14 -18  1 -16 -8 14 -8  7  8  9 -4 10 -5 13  5 -15 -5 19  8 -8]
 [ -18 -16 -15 -8 -8 -8 -5 -5 -4  1  5  7  8  8  9 10 13 14 14 19]
@@ -112,64 +135,94 @@ ordered? 1
 [ -19 -19 -18 -17 -14 -8 -7 -6 -6 -6 -5 -1 -1  1  1  5 14 15 18 18]
 ordered? 1
 
+Since the algorithm works correctly we can now calculate its complexity.
+Based on the theory, we can assume it is nlogn so we will choose n
+and n^1.4 as the upper and lower bounds.
+
+NOTES:
+    - All the execution times are measured in microseconds
+    - If the execution time is below 500 microseconds it is indicated
+      with an asterisk (*). To get an accurate measurement, the operation
+      will be repeated K times and the result will be the mean of those
+      calculations. The constant K has to be a power of 10 for the
+      measurement to be correct so we chose 1000.
 
 Sort for ascending ordered array:
- n             t(n)          t(n)/n^0.8      t(n)/n^1.1              t(n)/n^1.4
-*  500       5.155000         0.035732        0.001659                0.000858                
-* 1000       16.607000        0.066114        0.002404                0.001048                
-* 2000       53.926000        0.123303        0.003547                0.001289                
-* 4000       129.904000       0.170598        0.003916                0.001177                
-* 8000       288.628000       0.217704        0.004014                0.000991                
-16000        616.000000       0.266861        0.003977                0.000801                
-32000        1279.000000      0.318237        0.003853                0.000630                
+ n         t(n)         t(n)/n^1        t(n)/n*logn            t(n)/n^1.4
+*  500  24.603000       0.049206        0.007918                0.004097
+* 1000  62.132000       0.062132        0.008995                0.003920
+* 2000  156.601000      0.078300        0.010301                0.003744
+* 4000  357.932000      0.089483        0.010789                0.003243
+ 8000   736.000000      0.092000        0.010237                0.002527
+16000   1548.000000     0.096750        0.009994                0.002014
+32000   3165.000000     0.098906        0.009535                0.001560
+
 
 Sort for descendig ordered array:
- n              t(n)          t(n)/n^0.8      t(n)/n^1.1            t(n)/n^1.4
-*  500        5.478000         0.037970        0.001763              0.000912                
-* 1000        21.773000        0.086680        0.003152              0.001374                
-* 2000        54.117000        0.123740        0.003560              0.001294                
-* 4000        125.716000       0.165098        0.003789              0.001139                
-* 8000        273.751000       0.206483        0.003808              0.000940                
-16000         575.000000       0.249099        0.003712              0.000748                
-32000         1240.000000      0.308533        0.003735              0.000611                
+ n         t(n)         t(n)/n^1       t(n)/n*logn            t(n)/n^1.4
+*  500  29.015000       0.058030        0.009338                0.004831
+* 1000  74.330000       0.074330        0.010760                0.004690
+* 2000  173.069000      0.086535        0.011385                0.004138
+* 4000  369.820000      0.092455        0.011147                0.003350
+ 8000   832.000000      0.104000        0.011572                0.002856
+16000   1692.000000     0.105750        0.010924                0.002201
+32000   3393.000000     0.106031        0.010221                0.001673
 
 Sort for random array:
- n             t(n)           t(n)/n^0.8      t(n)/n^1.1             t(n)/n^1.4
-*  500       31.147000         0.215894        0.010024               0.005186                
-* 1000       66.406000         0.264367        0.009613               0.004190                
-* 2000       140.691000        0.321694        0.009255               0.003364                
-* 4000       297.838000        0.391140        0.008977               0.002698                
-* 8000       626.166000        0.472300        0.008709               0.002150                
-16000        933.000000        0.404190        0.006024               0.001214                
-32000        2007.000000       0.499376        0.006046               0.000989     
+ n         t(n)         t(n)/n^1       t(n)/n*logn             t(n)/n^1.4
+*  500  52.603000       0.105206        0.016929                0.008759
+* 1000  113.497000      0.113497        0.016430                0.007161
+* 2000  245.017000      0.122508        0.016118                0.005858
+* 4000  528.579000      0.132145        0.015932                0.004789
+ 8000   921.000000      0.115125        0.012810                0.003162
+16000   2007.000000     0.125438        0.012958                0.002611
+32000   4300.000000     0.134375        0.012954                0.002120
 
+Sort for random array with updated hypothesis:
+   n       t(n)        t(n)/n^0.8        t(n)/n                t(n)/n^1.2
+*  500  52.938000       0.366937        0.105876                0.030549
+* 1000  114.312000      0.455084        0.114312                0.028714
+* 2000  246.514000      0.563660        0.123257                0.026953
+* 4000  527.391000      0.692604        0.131848                0.025099
+ 8000   930.000000      0.701473        0.116250                0.019265
+16000   1973.000000     0.854734        0.123313                0.017790
+32000   4289.000000     1.067176        0.134031                0.016834
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+The first measurement (for the asceding ordered array) is a bit anomalous
+but the rest of the data is stable in the expected bound for the ascending
+and descending starting orders, tending to the constant 0.010237 and 0.011147, respectivly.
+However,for the randomly sorted array the data is more stable for the linear complexity,
+tending to 0.123257. Even though the theoretical and empirical truths diverge, it
+can be noted that nlogn can be rounded to n^1.2, thus, the difference between
+linear and nlogn is sufficiently small for the computer to render the given
+data in practice without refuting the theory. Because of this, we can say
+that it is demonstrated that for any type of array the complexity of the
+heap is nlogn as expected except for the random initialization which is still
+very close.
 
 Observations:
 
-During the test we observe that sometimes when n equals to 32000 it doesn't enter
-the loop of k and it gives a value that is no close to the constant.
+During the test we observe that some individual cases when n equals to 32000 
+doesn't enter the k loop it gives some anomalous values.
 
 Create heap:
    n	      t(n)		  t(n)/n^0.8	 t(n)/n	  t(n)/n^1.2
-*  500	29.206000	   0.202440	   0.058412		0.016854		
-* 1000	46.414000	   0.184777	   0.046414		0.011659		
-* 2000	87.342000	   0.199710	   0.043671		0.009550		
-* 4000	171.090000	   0.224686	   0.042772		0.008142		
-* 8000	346.089000	   0.261045	   0.043261		0.007169		
-*16000	682.671000	   0.295744	   0.042667		0.006156		
 32000	   565.000000	   0.140582	 ->0.017656<-  0.002218
 
+Also the first measurement of the heap sort is a bit anomalous, 
+but since the repetitions are not made manually, the rest of the 
+measurements remain constant and accurate.
+Sort for ascending ordered array:
+ n         t(n)         t(n)/n^1        t(n)/n*logn            t(n)/n^1.4
+*  500  24.603000       0.049206        0.007918                0.004097
+
+
+Conclusions:
+
+After running all the tests and empirically analysing the time complexity
+of the algorithms it is demonstrated that it coincides with the mathematical
+theory, since the heap creation is linear and the heap sort has always
+a complexity sufficiently close to nlogn for any type of array given,
+regardless of its size or initial order, since we can say that an empirical
+complexity of n^1 coexist with a theoretical complexity of n^1.2 without
+disproving it.
