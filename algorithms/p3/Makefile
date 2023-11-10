@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -O2
+CFLAGS = -Wall -Wextra
 #CFLAGS = -Wall -Wextra -g
 all:build/p3
 
