@@ -23,18 +23,6 @@ void swap (pheap h, int j, int i)
     int tmp = h->vector[j];
     h->vector[j] = h->vector[i];
     h->vector[i] = tmp;
-
-}
-
-
-void PercolateUp (pheap h, int i)
-{
-
-    while ((i > 1) && (h->vector[i/2-1] > h->vector[i])){
-        swap(h, i/2-1, i);
-        i = i / 2 -1;
-    }
-
 }
 
 

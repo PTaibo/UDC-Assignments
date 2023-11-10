@@ -28,7 +28,7 @@ void printLinealTitle(){
 
 void printlogTitles(){
 
-    printf(" n\t   t(n)\t\tt(n)/n^1\tt(n)/n*logn\t        t(n)/n^1.5\n");
+    printf(" n\t   t(n)\t\tt(n)/n^1\tt(n)/n*logn\t        t(n)/n^1.4\n");
 
 }
 
@@ -61,7 +61,7 @@ void PrintlogValues(int i,double v)
     t08=t/pow(j,1);
     t1=t/(j*log(j));
     //t1=t/pow(j,1.3);
-    t12=t/pow(j,1.5);
+    t12=t/pow(j,1.4);
 
     //printing results
     printf("%5d\t",i);
