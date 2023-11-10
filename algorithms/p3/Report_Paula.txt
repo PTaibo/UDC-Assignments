@@ -19,14 +19,13 @@ Battery: 100% and plugged
 And and was compiled with the next specifications:
 
 Compiler: gcc (Debian 12.2.0-14) 12.2.0
-Flags: -Wall -Wextra -O2
+Flags: -Wall -Wextra
 
-The purpose of this practical is to implement a heap and
-the heap sort algorithm.
+The purpose of this practical is to implement the heap
+creation and heap sort algorithms.
 
-For the first test we run the heap creation algorithm
-and the minimum element removal algorithm with a random
-initialized array to check if they work correctly.
+For the first test we run the heap creation algorithm with
+a randomly initialized array to check if they work correctly.
 
 Random array
 This is the array:
@@ -75,10 +74,10 @@ sorted? 1
 sorted? 1
 ---------------------------
 
-The test confirms that both algorithms work correctly. It is repeated
-several times to reduce the possibility of it having an anomalous result.
-We now procede to determine their execution times using arrays
-of size 500, 1000, 2000, 4000, 3000, 16000 and 32000 to demonstrate
+The test confirms that the algorithm work correctly. It is repeated
+several times to reduce the probability of it having an anomalous result.
+We now procede to determine its execution time using arrays of
+size 500, 1000, 2000, 4000, 3000, 16000 and 32000 to demonstrate
 empirically that for any given array the time complexity will be O(n),
 as deduced in theory classes. We will do this by doing the calculations
 with the estimated bound and a higher and lower bounds.
@@ -137,6 +136,14 @@ Since the algorithm works correctly we can now calculate its complexity.
 Based on the theory, we can assume it is nlogn so we will choose n
 and n^1.4 as the bounds.
 
+NOTES:
+    - All the execution times are measured in microseconds
+    - If the execution time is below 500 microseconds it is indicated
+      with an asterisk (*). To get an accurate measurement, the operation
+      will be repeated K times and the result will be the mean of those
+      calculations. The constant K has to be a power of 10 for the
+      measurement to be correct so we chose 1000.
+
 Sort for ascending ordered array:
  n	   t(n)		t(n)/n^1	t(n)/n*logn	        t(n)/n^1.4
 *  500	19.629000	0.039258	0.006317		0.003268		
@@ -176,7 +183,7 @@ of the heap sort is nlogn, as expected.
 Observations:
 
 As always, the first measurement of each time test (when checking the heap
-algorithms and the heap sort) is a bit anomalous, but since the repetitions
+creation and heap sort) is a bit anomalous, but since the repetitions
 are not made manually, the rest of the measurements remain constant and
 accurate.
 
@@ -188,12 +195,5 @@ Heap sort. The constant is supposed to be close to 0.04
 Conclusions:
 After running all the tests and empirically analysing the time complexity
 of the algorithms it is demonstrated that it coincides with the mathematical
-theory, since the creation of the heap and extraction of the minimum
-element is linear and the heap sort has complexity nlogn for any type of array
-given. 
-INTENTABA PONER ALGO ASÍ PERO NO SE ME OCURRE CÓMO PONERLO BIEN. QUÉ TE PARECE
-Y CÓMO LO PONDRÍAS TÚ?
-When compared to other sorting algorithms, it is an acceptable solution
-since its not cuadratic, like others, but it's not the best because there are
-logarithmic algorithms that are much quicker.
-
+theory, since the heap creation is linear and the heap sort has complexity
+nlogn for any type of array given. 
