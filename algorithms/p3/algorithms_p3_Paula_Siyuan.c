@@ -22,5 +22,6 @@ int main()
     time_ascendOrder();
     time_descendOrder();
     time_randomOrder();
+    time_randomOrderUp();
     return 0;
 }
