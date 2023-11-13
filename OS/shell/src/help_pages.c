@@ -84,7 +84,7 @@ void help_help()
                   "\tOptions:\n"
                   "\t\tcmd: prints the help page of the command\n"
                   "\t\t-l: lists all the avaliable commands\n\n"
-                  "\tIt is also possible to use \"<command> -?\"\n");
+                  "\tIt is also possible to use \"<command> -?/-help\"\n");
 }
 
 void list_commands()
