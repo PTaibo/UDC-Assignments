@@ -202,8 +202,9 @@ very close.
 
 Observations:
 
-During the test we observe that some individual cases when n equals to 32000 
-doesn't enter the k loop it gives some anomalous values.
+During the test we observe that some individual cases. For example when n equals to 32000 
+doesn't enter the k loop due it excution time is bigger than 500.It gives a anomalous value 
+far from the constant.
 
 Create heap:
    n	      t(n)		  t(n)/n^0.8	 t(n)/n	  t(n)/n^1.2
@@ -212,6 +213,7 @@ Create heap:
 Also the first measurement of the heap sort is a bit anomalous, 
 but since the repetitions are not made manually, the rest of the 
 measurements remain constant and accurate.
+
 Sort for ascending ordered array:
  n         t(n)         t(n)/n^1        t(n)/n*logn            t(n)/n^1.4
 *  500  24.603000       0.049206        0.007918                0.004097
