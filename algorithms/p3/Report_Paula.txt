@@ -105,7 +105,7 @@ Tight bound: n
 Slightly overestimated bound: n^1.2
 
 Analysing the results we observe the hypothesized tight bound tends to the
-constant 0.04 while the other two tend to zero and infinity.
+constant 0.040 while the other two tend to zero and infinity.
 This proves the complexity of the algorithm is indeed lineal.
 
 We now procede to prove the correctness of the heap sort algorithm.
@@ -186,11 +186,11 @@ Sort for random array with updated hypothesis:
 
 The first measurement (for the asceding ordered array) is a bit anomalous
 but the rest of the data is stable in the expected bound for the ascending
-and descending starting orders, tending to the constant 0.009. However,
+and descending starting orders, tending to the constants 0.009 and 0.011. However,
 for the randomly sorted array the data is more stable for the linear complexity,
-tending to 0.1. Even though the theoretical and empirical truths diverge, it
+tending to 0.12. Even though the theoretical and empirical truths diverge, it
 can be noted that nlogn can be rounded to n^1.2, thus, the difference between
-linear and nlogn is sufficiently small for the computer to render the given
+linear and nlogn is sufficiently small for the computer to calculate the given
 data in practice without refuting the theory. Because of this, we can say
 that it is demonstrated that for any type of array the complexity of the
 heap is nlogn as expected except for the random initialization which is still
@@ -203,10 +203,10 @@ creation and heap sort) is a bit anomalous, but since the repetitions
 are not made manually, the rest of the measurements remain constant and
 accurate.
 
-Heap algorithms. The constant is supposed to be close to 0.09
+Heap algorithms. The constant is supposed to be close to 0.090
 *  500  19.629000   0.039258    ->0.006317<-        0.003268
-Heap sort. The constant is supposed to be close to 0.04
-*  500  23.856000   0.165357    ->0.047712<-        0.013767
+Heap sort. The constant is supposed to be close to 0.009
+*  500  20.277000   0.040554    ->0.006526<-        0.003376
 
 Conclusions:
 
