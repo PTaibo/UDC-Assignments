@@ -25,4 +25,13 @@ void help_stat();
 void help_list();
 void help_delete();
 void help_deltree();
+void help_malloc();
+void help_shared();
+void help_mmap();
+void help_read();
+void help_write();
+void help_memdump();
+void help_memfill();
+void help_mem();
+void help_recurse();
 

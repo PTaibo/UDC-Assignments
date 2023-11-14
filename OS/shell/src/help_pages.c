@@ -36,6 +36,15 @@ struct help help_page[] = {
   {"list", help_list},
   {"delete", help_delete},
   {"deltree", help_deltree},
+  {"malloc", help_malloc},
+  {"shared", help_shared},
+  {"mmap", help_mmap},
+  {"read", help_read},
+  {"write", help_write},
+  {"memdump", help_memdump},
+  {"memfill", help_memfill},
+  {"mem", help_mem},
+  {"recurse", help_recurse},
   {NULL, NULL}
 }; 
 
@@ -268,5 +277,88 @@ void help_deltree()
     printf(CMD_NAME_CLR "\nDELTREE:\n" RESET_CLR
             "\tDeletes files and/or empty directories recursively\n"
             "\tUsage: deltree [NAMES]\n");
+}
+
+void help_malloc()
+{
+    printf(CMD_NAME_CLR "\nMALLOC:\n" RESET_CLR
+            "\tLists the allocated blocks for the shell\n"
+            "\tUsage: malloc [-free] [size]\n"
+            "\tParameteers:\n"
+            "\t\tsize: allocates a block of the specified size\n"
+            "\t\t-free: frees a block of the specified size\n");
+}
+
+void help_shared()
+{
+    printf(CMD_NAME_CLR "\nSHARED:\n" RESET_CLR
+            "\tLists the assigned shared blocks for the shell\n"
+            "\tUsage: shared [-free|-create|-delkey key [size]]\n"
+            "\tParameters:\n"
+            "\t\t-free key: unmaps the specified shared memory block\n"
+            "\t\t-create key size: creates a shared memory block of the\n"
+            "\t\t                  specified size and assignes the specified key\n"
+            "\t\t-delkey key: eliminates the specified key (no the memory block)\n");
+}
+
+void help_mmap()
+{
+    printf(CMD_NAME_CLR "\nMMAP:\n" RESET_CLR
+            "\tLists the mmap assigned blocks for the shell\n"
+            "\tUsage: mmap [-free] file [mode]\n"
+            "\tParameters:\n"
+            "\t\ŧmode: maps the file with the specified permissions\n"
+            "\t\ŧ-free: unmaps the file\n");
+}
+
+void help_read()
+{
+    printf(CMD_NAME_CLR "\nREAD:\n" RESET_CLR
+            "\tReads a number of bytes from a file to an address\n"
+            "\tUsage: read file addr bytes\n");
+}
+
+void help_write()
+{
+    printf(CMD_NAME_CLR "\nWRITE:\n" RESET_CLR
+            "\tWrites a number of bytes from an address to a file\n"
+            "\tUsage: [-o] file addr bytes\n"
+            "\tParameters:\n"
+            "\t\t-o: overwrite the file\n");
+}
+
+void help_memdump()
+{
+    printf(CMD_NAME_CLR "\nMEMDUMP:\n" RESET_CLR
+            "\tDumps to screen the contents of a memory address\n"
+            "\tUsage: memdump addr [bytes]\n"
+            "\tIf stated, it dumps a specified number of bytes\n");
+}
+
+void help_memfill()
+{
+    printf(CMD_NAME_CLR "\nMEMFILL:\n" RESET_CLR
+            "\tFills n bytes of a block of memory with a specified character\n"
+            "\tUsage: memfill addr n char\n");
+}
+
+void help_mem()
+{
+    printnf(CMD_NAME_CLR "\nMEM:\n" RESET_CLR
+            "\tPrints the details of the process' memory\n"
+            "\tUsage: mem [-blocks | -funcs | -vars | -all | -pmap]\n"
+            "\tParameters:\n"
+            "\t\t-blocks: assigned memory blocks\n"
+            "\t\ŧ-funcs: function addresses\n"
+            "\t\ŧ-vars: variable addresses\n"
+            "\t\t-all: all of the above. Same as no params\n"
+            "\t\t-pmap: shows the output of the pmap command (or similar)\n");
+}
+
+void help_recurse()
+{
+    printf(CMD_NAME_CLR "\nRECURSE\n" RESET_CLR
+            "\tExecutes a recursive function n times\n"
+            "\tUsage: recurse n\n");
 }
 
