@@ -284,7 +284,7 @@ void help_malloc()
     printf(CMD_NAME_CLR "\nMALLOC:\n" RESET_CLR
             "\tLists the allocated blocks for the shell\n"
             "\tUsage: malloc [-free] [size]\n"
-            "\tParameteers:\n"
+            "\tParameters:\n"
             "\t\tsize: allocates a block of the specified size\n"
             "\t\t-free: frees a block of the specified size\n");
 }
@@ -307,8 +307,8 @@ void help_mmap()
             "\tLists the mmap assigned blocks for the shell\n"
             "\tUsage: mmap [-free] file [mode]\n"
             "\tParameters:\n"
-            "\t\ŧmode: maps the file with the specified permissions\n"
-            "\t\ŧ-free: unmaps the file\n");
+            "\t\tmode: maps the file with the specified permissions\n"
+            "\t\t-free: unmaps the file\n");
 }
 
 void help_read()
@@ -344,13 +344,13 @@ void help_memfill()
 
 void help_mem()
 {
-    printnf(CMD_NAME_CLR "\nMEM:\n" RESET_CLR
+    printf(CMD_NAME_CLR "\nMEM:\n" RESET_CLR
             "\tPrints the details of the process' memory\n"
             "\tUsage: mem [-blocks | -funcs | -vars | -all | -pmap]\n"
             "\tParameters:\n"
             "\t\t-blocks: assigned memory blocks\n"
-            "\t\ŧ-funcs: function addresses\n"
-            "\t\ŧ-vars: variable addresses\n"
+            "\t\t-funcs: function addresses\n"
+            "\t\t-vars: variable addresses\n"
             "\t\t-all: all of the above. Same as no params\n"
             "\t\t-pmap: shows the output of the pmap command (or similar)\n");
 }
