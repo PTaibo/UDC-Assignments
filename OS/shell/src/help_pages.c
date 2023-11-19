@@ -48,15 +48,16 @@ struct help help_page[] = {
   {NULL, NULL}
 }; 
 
-void find_help_page (char* command)
+int find_help_page (char* command)
 {
     for (int i = 0; help_page[i].command != NULL; i++){
         if (!strcmp(command, help_page[i].command)){
             (*help_page[i].funct)();
             printf("\n");
-            return;
+            return 1;
         }
     }
+    return 0;
 }
 
 void cmd_help (int paramN, char* params[])
@@ -70,9 +71,8 @@ void cmd_help (int paramN, char* params[])
         return;
     }
 
-    find_help_page(params[0]);
-
-    printf(RED "Error: " RESET_CLR "help page not found\n");
+    if (!find_help_page(params[0]))
+        printf(RED "Error: " RESET_CLR "help page not found\n");
 }
 
 int is_help_param (int paramN, char* command[])
