@@ -15,3 +15,13 @@ struct open_flags {
     int flag;
 };
 
+struct mem_block {
+    void* addrs;
+    int size;
+    // time of alloc
+    // type (malloc, shared, mampped)
+    int key;
+    int fd;
+    char* file_name;
+};
+
