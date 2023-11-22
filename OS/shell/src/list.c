@@ -224,17 +224,17 @@ int fileList_nextFD (int pos, file_list* list)
 
 typedef struct node node;
 
-void dynamicList_initialize (node* newList)
+void dynList_init (node* newList)
 {
     newList = NULL;
 }
 
-int dynamicList_isEmpty (node* list)
+int dynList_isEmpty (node* list)
 {
     return list == NULL;
 }
 
-void dynamicList_clear (node* list)
+void dynList_clear (node* list)
 {
     while (list != NULL){
         node* next = list->next;
@@ -244,13 +244,13 @@ void dynamicList_clear (node* list)
     }
 }
 
-int dynamicList_add (void* element, node* list)
+int dynList_add (void* element, node* list)
 {
     node* newNode = malloc(sizeof(node));
     if (newNode == NULL) return 0;
     newNode->info = element;
 
-    if (dynamicList_isEmpty(list))
+    if (dynList_isEmpty(list))
         newNode->next = NULL;
     else 
         newNode->next = list;
@@ -259,7 +259,7 @@ int dynamicList_add (void* element, node* list)
     return 1;
 }
 
-void dynamicList_delete (node* pos)
+void dynList_delete (node* pos)
 {
     node* next = pos->next;
     pos->info = next->info;
@@ -267,17 +267,17 @@ void dynamicList_delete (node* pos)
     free(next);
 }
 
-node* dynamicList_getFirst (node* list)
+node* dynList_first (node* list)
 {
     return list;
 }
 
-node* dynamicList_getNext (node* pos)
+node* dynList_next (node* pos)
 {
     return pos->next;
 }
 
-void* dynamicList_getElement (node* pos)
+void* dynList_getter (node* pos)
 {
     return pos->info;
 }
