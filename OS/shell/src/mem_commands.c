@@ -166,6 +166,18 @@ void cmd_mem(int paramN, char* command[])
     }
 }
 
+void makeRecurse (int n)
+{
+  char automatico[TAMANO];
+  static char estatico[TAMANO];
+
+  printf ("parametro:%3d(%p) array %p, arr estatico %p\n",n,&n,automatico, estatico);
+
+  if (n>0)
+    makeRecurse(n-1);
+}
+
+
 void cmd_recurse(int paramN, char* command[])
 {
     if (paramN != 1) {
@@ -173,5 +185,8 @@ void cmd_recurse(int paramN, char* command[])
         return;
     }
 
+    int n = atoi(command[0]);
+    if (n >= 0) makeRecurse(n);
+    else makeRecurse(0);
     // repeat the recursive function [0] times
 }
