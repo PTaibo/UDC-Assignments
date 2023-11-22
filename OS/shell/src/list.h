@@ -1,5 +1,7 @@
 #pragma once
 
+#include "types.h"
+
 #include <string.h>
 #define MAX_ELEMENTS 4096
 
@@ -11,6 +13,13 @@ typedef struct {
 typedef struct {
     char* elements[MAX_ELEMENTS];
 } file_list;
+
+struct node {
+    struct node* next;
+    void* info;
+};
+typedef struct node* Pos;
+typedef struct node* DynamicList;
 
 // History-specific methods
 void basicList_initialize (basic_list* newList);
@@ -27,4 +36,16 @@ int fileList_add (int pos, char* element, file_list* list);
 int fileList_delete (int pos, file_list* list);
 int fileList_dup (int pos, file_list* list);
 int fileList_nextFD (int pos, file_list* list);
+
+// Memory specific methods
+void dynamicList_initialize (DynamicList newList);
+int dynamicList_isEmpty (DynamicList list);
+void dynamicList_clear (DynamicList list);
+
+int dynamicList_add (void* element, DynamicList list);
+void dynamicList_delete (Pos list);
+
+Pos dynamicList_getFirst (Pos pos);
+Pos dynamicList_getNext (Pos pos);
+void* dynamicList_getElement (Pos pos);
 

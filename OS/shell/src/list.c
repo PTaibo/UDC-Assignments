@@ -216,3 +216,69 @@ int fileList_nextFD (int pos, file_list* list)
     return -1;
 }
 
+// Dynamic list implementation
+
+/*
+ * Positions start at 0
+ */
+
+typedef struct node node;
+
+void dynamicList_initialize (node* newList)
+{
+    newList = NULL;
+}
+
+int dynamicList_isEmpty (node* list)
+{
+    return list == NULL;
+}
+
+void dynamicList_clear (node* list)
+{
+    while (list != NULL){
+        node* next = list->next;
+        free(list->info);
+        free(list);
+        list = next;
+    }
+}
+
+int dynamicList_add (void* element, node* list)
+{
+    node* newNode = malloc(sizeof(node));
+    if (newNode == NULL) return 0;
+    newNode->info = element;
+
+    if (dynamicList_isEmpty(list))
+        newNode->next = NULL;
+    else 
+        newNode->next = list;
+
+    list = newNode;
+    return 1;
+}
+
+void dynamicList_delete (node* pos)
+{
+    node* next = pos->next;
+    pos->info = next->info;
+    pos->next = next->next;
+    free(next);
+}
+
+node* dynamicList_getFirst (node* list)
+{
+    return list;
+}
+
+node* dynamicList_getNext (node* pos)
+{
+    return pos->next;
+}
+
+void* dynamicList_getElement (node* pos)
+{
+    return pos->info;
+}
+
