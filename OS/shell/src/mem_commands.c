@@ -2,9 +2,15 @@
 
 #include <stdlib.h>
 #include <strings.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <errno.h>
 
 #include "types.h"
 #include "error_msgs.h"
+
+#define TAM 2048
 
 struct cmd command_list[] = {
     {"malloc", cmd_malloc},
@@ -111,12 +117,50 @@ void cmd_mmap(int paramN, char* command[])
     }
 }
 
+ssize_t readFile (char *f, void *p, size_t amount)
+{
+    struct stat stats;
+    ssize_t n;
+    int df, aux;
+
+    if (stat (f, &stats) == -1 || (df = open(f, O_RDONLY)) == -1)
+        return -1;
+
+    if (amount == -1)
+        amount= stats.st_size;
+
+    if ((n = read(df, p, amount)) == -1){
+        aux = errno;
+    }
+    close (df);
+    return n;
+}
+
+void* stringtopointer (char* direction){
+    void* h; 
+    sscanf(direction, "%p", &h);
+    return h;
+}
+
 void cmd_read(int paramN, char* command[])
 {
     if (paramN != 3){
         invalid_param();
         return;
     }
+
+    void *p;
+    size_t amount = -1;
+    ssize_t n;
+
+    p = stringtopointer(command[1]);
+
+    if (command[2] != NULL)
+    amount = (size_t) atoll(command[2]);
+
+    if ((n = readFile(command[0], p, amount)) == -1)
+    perror ("Can not read file");
+    else printf("Read %lld bytes of %s in %p \n", (long long) n, command[0], p);
 
     // Read [2] bytes of file [0] from address [1]
 }
@@ -168,8 +212,8 @@ void cmd_mem(int paramN, char* command[])
 
 void makeRecurse (int n)
 {
-  char automatico[TAMANO];
-  static char estatico[TAMANO];
+  char automatico[TAM];
+  static char estatico[TAM];
 
   printf ("parametro:%3d(%p) array %p, arr estatico %p\n",n,&n,automatico, estatico);
 
