@@ -159,19 +159,71 @@ void cmd_read(int paramN, char* command[])
     amount = (size_t) atoll(command[2]);
 
     if ((n = readFile(command[0], p, amount)) == -1)
-    perror ("Can not read file");
+        perror ("Could not read file");
     else printf("Read %lld bytes of %s in %p \n", (long long) n, command[0], p);
 
     // Read [2] bytes of file [0] from address [1]
 }
 
+ssize_t writeFile (char *f, void *p, size_t amount, int overwrite)
+{
+    ssize_t n;
+    int df, aux, flags = O_CREAT | O_EXCL | O_WRONLY;
+
+    if (overwrite)
+        flags = O_CREAT | O_WRONLY | O_TRUNC;
+
+    if ((df = open (f, flags, 0777)) == -1 )
+        return -1;
+
+    if ((n = write(df, p, amount)) == -1){
+        aux = errno;
+        close (df);
+        return -1;
+    }
+
+    close (df);
+    return n;
+}
+
 void cmd_write(int paramN, char* command[])
 {
+    ssize_t n;
+    void* p;
+    size_t amount = -1;
+    int over = 0;
+    
     if (paramN == 3) {
         // Read write bytes to address/file
+        if (strcmp (command[0],"-o"))
+            invalid_param();
+    
+        p = stringtopointer(command[1]);
+        if (amount != NULL)
+            amount = (size_t) atoll(command[2]);
+        
+        if((n = writeFile(command[0], p, amount)) == -1)
+            perror("Could not write file");
+
+        else 
+            printf("Write %lld bytes of %s in %p \n", (long long) n, command[0], p);
     }
+
     else if (paramN == 4 && !strcmp(command[0], "-o")) {
         // Same but overwriting the file
+        if (strcmp (command[0], "-o"))
+            over = 1;
+
+        p = stringtopointer(command [2]);
+        if(amount != NULL)
+            amount = (size_t) atoll (command[3]);
+
+        if((n = writeFile(command[1], p, amount)) == -1)
+            perror("Could not write file");
+        
+        else 
+            printf("Write %lld bytes of %s in %p \n", (long long) n, command[0], p);
+
     }
     else {
         invalid_param();
