@@ -487,7 +487,6 @@ ssize_t writeFile (char *f, void *p, size_t amount, int overwrite)
         errno = aux;
         return -1;
     }
-
     close (df);
     return n;
 }
@@ -520,9 +519,7 @@ void cmd_write(int paramN, char* command[])
         ssize_t n;
         void* p;
         size_t amount = -1;
-        int over = 0;
-        if (strcmp (command[0], "-o"))
-            over = 1;
+        int over = 1;
 
         p = (void *) strtoul(command[2] ,NULL ,16);
         //p = stringtopointer(command [2]);
@@ -545,7 +542,7 @@ void dumpmem (long p, int amount)
 {
     long aux = p;
     
-    for (int i = 0; i < amount; i++){
+    for (int i = 0; i < amount ; i++){
         char curretcar = *(char *) p;
         if (curretcar == '\0') {
             continue;
