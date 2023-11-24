@@ -34,7 +34,7 @@ char* make_cpy (char* src, char* dest)
  * it returns to behaving like a normal list, where
  * only the tail moves.
  * Since you don't remove elements, the head is always
- * going to be in position 0 eccept when full.
+ * going to be in position 0 except when full.
  */
 
 void basicList_initialize (basic_list* newList)
