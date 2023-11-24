@@ -234,10 +234,11 @@ int dynList_isEmpty (node* list)
     return list == NULL;
 }
 
-void dynList_clear (node **list)
+void dynList_clear (void (*d)(void* info), node **list)
 {
     while (*list != NULL){
         node* next = (*list)->next;
+        d((*list)->info);
         free((*list)->info);
         free(*list);
         *list = next;
@@ -262,23 +263,23 @@ int dynList_add (void* element, node **list)
     return 1;
 }
 
-void dynList_delete (node *pos, node** list)
+void dynList_delete (void (*d)(void* info), node *pos, node** list)
 {
-    printf("Gets here :)\n");
-    fflush(stdout);
-    printf("Prev: %p Next: %p\n", pos->prev, pos->next);
+    if (pos == NULL) return;
+
     if (pos->prev != NULL)
         pos->prev->next = pos->next;
+    else
+        *list = pos->next;
+
     if (pos->next != NULL)
         pos->next->prev = pos->prev;
-    else if (*list == pos)
-        *list = NULL;
-    printf("Links things correctly\n");
-    fflush(stdout);
-    free(pos->info);
+
+    if (pos->info != NULL){
+        d(pos->info);
+        free(pos->info);
+    }
     free(pos);
-    printf("Finished delete\n");
-    fflush(stdout);
 }
 
 node* dynList_first (node* list)
