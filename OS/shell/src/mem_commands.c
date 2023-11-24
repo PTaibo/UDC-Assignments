@@ -28,7 +28,8 @@ void init_mem()
 void delete_memblock (void* info)
 {
     mem_block* memb = (mem_block*) info;
-    free(memb->addr);
+    if (!strcmp(memb->type, "malloc"))
+        free(memb->addr);
     free(memb->alloc_time);
     free(memb->type);
     if (memb->file_name != NULL)
@@ -92,7 +93,7 @@ int check_mem_commands (int paramN, char* command[])
 
 void print_mem_info (mem_block* mem)
 {
-    printf("%p %10d %s %s", mem->addr,
+    printf("%p %10lu %s %s", mem->addr,
                                mem->size,
                                mem->alloc_time,
                                mem->type);
@@ -150,12 +151,12 @@ char* parse_time ()
     return str;
 }
 
-int allocate_mem (int size)
+int allocate_mem (unsigned long size)
 {
     mem_block* info = malloc(sizeof(mem_block));
     if (info == NULL) return 0;
     info->addr = malloc(size);
-    printf("%d bytes allocated at %p\n", size,
+    printf("%lu bytes allocated at %p\n", size,
                                     info->addr);
     info->size = size;
     info->alloc_time = parse_time();
@@ -168,7 +169,7 @@ int allocate_mem (int size)
     return 1;
 }
 
-void free_mem (int size)
+void free_mem (size_t size)
 {
     Pos pos = dynList_first(memList);
     for (; pos != NULL; pos = dynList_next(&pos)){
@@ -187,32 +188,127 @@ void cmd_malloc(int paramN, char* command[])
         print_memory("Allocated", "malloc");
     }
     else if (paramN == 1 && atoi(command[0])) {
-        if (!allocate_mem(atoi(command[0])))
+        if (!allocate_mem(strtoul(command[0], NULL, 10)))
               printf(RED "Error: " RESET_CLR "could not allocate memory\n");
     }
     else if (paramN == 2 && !strcmp(command[0], "-free")){
-        free_mem(atoi(command[1]));
+        free_mem(strtoul(command[1], NULL, 10));
     }
     else {
         invalid_param();
     }
 }
 
+int fill_shared_mem_info (key_t key, unsigned long size, void* address)
+{
+    mem_block* info = malloc(sizeof(mem_block));
+    if (info == NULL) return -1;
+    info->addr = address;
+    info->size = size;
+    info->alloc_time = parse_time();
+    info->type = malloc(MAX_COMMAND_SIZE);
+    strcpy(info->type, "shared");
+    info->key = key;
+    info->fd = -1;
+    info->file_name = NULL;
+    dynList_add(info, &memList);
+    return 0;
+}
+
+void* get_shared_address (int id, key_t key, size_t size)
+{
+    void* addrs = shmat(id, NULL, 0);
+    if (addrs == (void*) -1){
+        int aux = errno;
+        if (size)
+            shmctl(id, IPC_RMID, NULL);
+        errno = aux;
+        return NULL;
+    }
+
+    if (size)
+        printf("Assigned %d bytes at %p\n",
+                key, addrs);
+    else
+        printf("Shared memory with key %d at %p\n",
+                key, addrs);
+    return addrs;
+}
+
+int get_shared_memory (key_t key, size_t size)
+{
+    int flags = 0777;
+    if (size)
+        flags = flags | IPC_CREAT | IPC_EXCL;
+    if (key == IPC_PRIVATE){
+        errno = EINVAL;
+        return -1;
+    }
+
+    int id;
+    if ((id = shmget(key, size, flags)) < 0)
+        return -1;
+
+    void* p = get_shared_address(id, key, size);
+
+    struct shmid_ds s;
+    shmctl(id, IPC_STAT, &s);
+    fill_shared_mem_info(key, s.shm_segsz, p);
+    return 0;
+}
+
+int free_shared_memory (key_t key)
+{
+    Pos pos = dynList_first(memList);
+    for (; pos != NULL; pos = dynList_next(&pos)){
+        mem_block* info = dynList_getter(pos);
+        if (info->key == key){
+            if (shmdt(info->addr) < 0) return -1;
+            dynList_delete(delete_memblock, pos, &memList);
+            return 0;
+        }
+    }
+    printf("The process has no blocks mapped with that key");
+    return 0;
+}
+
+void delete_key (key_t key)
+{
+    if (key == IPC_PRIVATE)
+        printf(RED "Error: " RESET_CLR "not a valid key\n");
+    int id = shmget (key, 0, 0666);
+    if (id < 0){
+        perror ("Impossible to get shared memory");
+        return;
+    }
+    if (shmctl (id, IPC_RMID, NULL) < 0)
+        perror("Impossible to eliminate id of shared memory\n");
+}
+
 void cmd_shared(int paramN, char* command[])
 {
     if (!paramN) {
-        // print list of shared blocks (shmget)
+        print_memory("Shared", "shared");
+    }
+    else if (paramN == 1) {
+        key_t key = (key_t) strtoul(command[0], NULL, 10);
+        if (get_shared_memory(key, 0) < 0)
+            perror("Couldn't get shared memory");
     }
     else if (paramN == 2 && !strcmp(command[0], "-free")){
-        // unmap de specified memory block (command[1] = key) (shmdt / ipcs)
-        // ayudaP2.c
+        key_t key = (key_t) strtoul(command[1], NULL, 10);
+        if (free_shared_memory(key) < 0)
+            perror("Couldn't free shared memory");
     }
     else if (paramN == 2 && !strcmp(command[0], "-delkey")){
-        // deletes specified key (command[1])
+        key_t key = (key_t) strtoul(command[1], NULL, 10);
+        delete_key(key);
     }
     else if (paramN == 3 && !strcmp(command[0], "-create")){
-        // creates shared mem block of size [2] and key [|] (shmget / shmat)
-        // flags=IPC_CREAT | IPC_EXCL| permisions
+        key_t key = (key_t) strtoul(command[1], NULL, 10);
+        size_t size = strtoul(command[2], NULL, 10);
+        if (get_shared_memory(key, size) < 0)
+            perror("Couldn't create shared memory block");
     }
     else {
         invalid_param();

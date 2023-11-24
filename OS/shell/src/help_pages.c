@@ -295,6 +295,7 @@ void help_shared()
             "\tLists the assigned shared blocks for the shell\n"
             "\tUsage: shared [-free|-create|-delkey key [size]]\n"
             "\tParameters:\n"
+            "\t\tkey: assign shared memory to process\n"
             "\t\t-free key: unmaps the specified shared memory block\n"
             "\t\t-create key size: creates a shared memory block of the\n"
             "\t\t                  specified size and assignes the specified key\n"
