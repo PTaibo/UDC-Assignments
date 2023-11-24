@@ -5,6 +5,7 @@
 #define UNUSED __attribute__((unused)) 
 
 #include <time.h>
+#include <sys/shm.h>
 
 struct cmd {
     char *name;
@@ -19,10 +20,10 @@ struct open_flags {
 
 typedef struct {
     void* addr;
-    int size;
+    unsigned long size;
     char* alloc_time;
     char* type; // malloc, shared, mapped
-    int key;
+    key_t key;
     int fd;
     char* file_name;
 } mem_block;
