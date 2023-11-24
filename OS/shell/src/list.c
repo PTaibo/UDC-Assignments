@@ -34,7 +34,7 @@ char* make_cpy (char* src, char* dest)
  * it returns to behaving like a normal list, where
  * only the tail moves.
  * Since you don't remove elements, the head is always
- * going to be in position 0 eccept when full.
+ * going to be in position 0 except when full.
  */
 
 void basicList_initialize (basic_list* newList)
@@ -224,9 +224,9 @@ int fileList_nextFD (int pos, file_list* list)
 
 typedef struct node node;
 
-void dynList_init (node* newList)
+void dynList_init (node** newList)
 {
-    newList = NULL;
+    *newList = NULL;
 }
 
 int dynList_isEmpty (node* list)
@@ -234,37 +234,52 @@ int dynList_isEmpty (node* list)
     return list == NULL;
 }
 
-void dynList_clear (node* list)
+void dynList_clear (void (*d)(void* info), node **list)
 {
-    while (list != NULL){
-        node* next = list->next;
-        free(list->info);
-        free(list);
-        list = next;
+    while (*list != NULL){
+        node* next = (*list)->next;
+        d((*list)->info);
+        free((*list)->info);
+        free(*list);
+        *list = next;
     }
 }
 
-int dynList_add (void* element, node* list)
+int dynList_add (void* element, node **list)
 {
     node* newNode = malloc(sizeof(node));
     if (newNode == NULL) return 0;
     newNode->info = element;
+    newNode->prev = NULL;
 
-    if (dynList_isEmpty(list))
+    if (dynList_isEmpty(*list))
         newNode->next = NULL;
-    else 
-        newNode->next = list;
+    else {
+        newNode->next = *list;
+        (*list)->prev = newNode;
+    }
 
-    list = newNode;
+    *list = newNode;
     return 1;
 }
 
-void dynList_delete (node* pos)
+void dynList_delete (void (*d)(void* info), node *pos, node** list)
 {
-    node* next = pos->next;
-    pos->info = next->info;
-    pos->next = next->next;
-    free(next);
+    if (pos == NULL) return;
+
+    if (pos->prev != NULL)
+        pos->prev->next = pos->next;
+    else
+        *list = pos->next;
+
+    if (pos->next != NULL)
+        pos->next->prev = pos->prev;
+
+    if (pos->info != NULL){
+        d(pos->info);
+        free(pos->info);
+    }
+    free(pos);
 }
 
 node* dynList_first (node* list)
@@ -272,9 +287,14 @@ node* dynList_first (node* list)
     return list;
 }
 
-node* dynList_next (node* pos)
+node* dynList_next (node** pos)
 {
-    return pos->next;
+    return (*pos)->next;
+}
+
+void dynList_fwd(node** pos)
+{
+    *pos = (*pos)->next;
 }
 
 void* dynList_getter (node* pos)

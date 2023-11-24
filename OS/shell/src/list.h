@@ -16,6 +16,7 @@ typedef struct {
 
 struct node {
     struct node* next;
+    struct node* prev;
     void* info;
 };
 typedef struct node* Pos;
@@ -38,14 +39,15 @@ int fileList_dup (int pos, file_list* list);
 int fileList_nextFD (int pos, file_list* list);
 
 // Memory specific methods
-void dynList_init (DynamicList newList);
+void dynList_init (DynamicList *newList);
 int dynList_isEmpty (DynamicList list);
-void dynList_clear (DynamicList list);
+void dynList_clear (void (*deleteInfo)(void* info), DynamicList *list);
 
-int dynList_add (void* element, DynamicList list);
-void dynList_delete (Pos list);
+int dynList_add (void* element, DynamicList *list);
+void dynList_delete (void (*deleteInfo)(void* info), Pos pos, DynamicList* list);
 
-Pos dynList_first (Pos pos);
-Pos dynList_next (Pos pos);
+Pos dynList_first (DynamicList list);
+Pos dynList_next (Pos* pos);
+void dynList_fwd(Pos* pos);
 void* dynList_getter (Pos pos);
 

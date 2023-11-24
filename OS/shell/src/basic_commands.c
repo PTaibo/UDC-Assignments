@@ -12,6 +12,7 @@
 #include "error_msgs.h"
 #include "file_commands.h"
 #include "history_commands.h"
+#include "mem_commands.h"
 #include "help_pages.h"
 
 struct cmd command_list[] = {
@@ -45,6 +46,7 @@ void cmd_quit(UNUSED int paramN, UNUSED char* params[])
     // Free all remaining memory
     rm_file_list();
     rm_history();
+    rm_mem();
     
     exit(0);
 }

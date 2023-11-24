@@ -7,23 +7,24 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
+#include <time.h>
+#include <unistd.h>
 
 #include "types.h"
 #include "error_msgs.h"
-#include "help_pages.h"
 
 #define TAM 2048
 
-struct cmd mem_commands[] = {
+struct cmd command_list[] = {
     {"malloc", cmd_malloc},
-    {"shared", cmd_shared},
-    {"mmap", cmd_mmap},
-    {"read", cmd_read},
-    {"write", cmd_write},
-    {"memdump", cmd_memdump},
-    {"memfill", cmd_memfill},
-    {"mem", cmd_mem},
-    {"recurse", cmd_recurse},
+    /* {"shared", cmd_shared}, */
+    /* {"mmap", cmd_mmap}, */
+    /* {"read", cmd_read}, */
+    /* {"write", cmd_write}, */
+    /* {"memdump", cmd_memdump}, */
+    /* {"memfill", cmd_memfill}, */
+    /* {"mem", cmd_mem}, */
+    /* {"recurse", cmd_recurse}, */
     {NULL, NULL}
 };
 
@@ -62,19 +63,104 @@ int check_mem_commands (int paramN, char* command[])
     return 0;
 }
 
+void print_mem_info (mem_block* mem)
+{
+    printf("%p %10d %s %s", mem->addr,
+                               mem->size,
+                               mem->alloc_time,
+                               mem->type);
+    if (mem->key != -1)
+        printf(" (key %d)", mem->key);
+    if (mem->fd != -1)
+        printf(" %ss (fd %d)", mem->file_name,
+                               mem->fd);
+    printf("\n");
+}
+
+void print_malloc ()
+{
+    printf(GREEN "\nAllocated blocks for process %d\n" RESET_CLR,
+            getpid());
+    Pos pos = dynList_first(memList);
+    for (; pos != NULL; pos = dynList_next(&pos)){
+        mem_block* mem = dynList_getter(pos);
+        if (!strcmp(mem->type, "malloc"))
+            print_mem_info(mem);
+    }
+    printf("\n");
+}
+
+struct tm* get_time ()
+{
+    time_t rawtime;
+    time (&rawtime);
+    return localtime(&rawtime);
+}
+
+void time_to_str (struct tm* time, char* str)
+{
+    char tmp[MAX_COMMAND_SIZE];
+    sprintf(tmp, "%d", time->tm_mday);
+    strcat(str, tmp); strcat(str, "/");
+    sprintf(tmp, "%d", time->tm_mon+1);
+    strcat(str, tmp); strcat(str, "/");
+    sprintf(tmp, "%d", time->tm_year + 1900);
+    strcat(str,tmp); strcat(str, " ");
+    sprintf(tmp, "%d", time->tm_hour);
+    strcat(str,tmp); strcat(str, ":");
+    sprintf(tmp, "%d", time->tm_min);
+    strcat(str,tmp);
+}
+
+char* parse_time ()
+{
+    struct tm *t;
+    t = get_time();
+    char* str = malloc(MAX_COMMAND_SIZE);
+    strcpy(str, "");
+    time_to_str(t, str);
+    return str;
+}
+
+int allocate_mem (int size)
+{
+    mem_block* info = malloc(sizeof(mem_block));
+    if (info == NULL) return 0;
+    info->addr = malloc(size);
+    info->size = size;
+    info->alloc_time = parse_time();
+    info->type = malloc(MAX_COMMAND_SIZE);
+    strcpy(info->type, "malloc");
+    info->key = -1;
+    info->fd = -1;
+    info->file_name = NULL;
+    dynList_add(info, &memList);
+    return 1;
+}
+
+void free_mem (int size)
+{
+    Pos pos = dynList_first(memList);
+    for (; pos != NULL; pos = dynList_next(&pos)){
+        mem_block* info = dynList_getter(pos);
+        if (strcmp(info->type, "malloc")) continue;
+        if (info->size != size) continue;
+        dynList_delete(delete_memblock, pos, &memList);
+        return;
+    }
+    printf(RED "Error: " RESET_CLR "no blocks of that size\n");
+}
+
 void cmd_malloc(int paramN, char* command[])
 {
     if (!paramN){
-        // print list of allocated blocks
+        print_malloc();
     }
     else if (paramN == 1 && atoi(command[0])) {
         // allocate specified amount of space (malloc)
-        size_t n = atol (command [0]);
-        printf("%p",malloc(n));
-        
     }
     else if (paramN == 2 && !strcmp(command[0], "-free")){
-        // free specified amount of space (free)
+        free_mem(atoi(command[1]));
     }
     else {
         invalid_param();
