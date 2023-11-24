@@ -6,7 +6,7 @@
 #include "types.h"
 #include "error_msgs.h"
 
-struct cmd command_list[] = {
+struct cmd mem_commands[] = {
     {"malloc", cmd_malloc},
     {"shared", cmd_shared},
     {"mmap", cmd_mmap},
