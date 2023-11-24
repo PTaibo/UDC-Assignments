@@ -5,6 +5,31 @@
 
 #include "types.h"
 #include "error_msgs.h"
+#include "list.h"
+#include "help_pages.h"
+#include "colors.h"
+
+DynamicList memList;
+
+void init_mem()
+{
+    dynList_init(&memList);
+}
+
+void delete_memblock (void* info)
+{
+    mem_block* memb = (mem_block*) info;
+    free(memb->addr);
+    free(memb->alloc_time);
+    free(memb->type);
+    if (memb->file_name != NULL)
+        free(memb->file_name);
+}
+
+void rm_mem()
+{
+    dynList_clear(delete_memblock, &memList);
+}
 
 struct cmd mem_commands[] = {
     {"malloc", cmd_malloc},
