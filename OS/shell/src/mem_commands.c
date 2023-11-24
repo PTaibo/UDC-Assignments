@@ -12,19 +12,44 @@
 
 #include "types.h"
 #include "error_msgs.h"
+#include "list.h"
+#include "help_pages.h"
+#include "colors.h"
 
 #define TAM 2048
 
-struct cmd command_list[] = {
+DynamicList memList;
+
+void init_mem()
+{
+    dynList_init(&memList);
+}
+
+void delete_memblock (void* info)
+{
+    mem_block* memb = (mem_block*) info;
+    free(memb->addr);
+    free(memb->alloc_time);
+    free(memb->type);
+    if (memb->file_name != NULL)
+        free(memb->file_name);
+}
+
+void rm_mem()
+{
+    dynList_clear(delete_memblock, &memList);
+}
+
+struct cmd mem_commands[] = {
     {"malloc", cmd_malloc},
-    /* {"shared", cmd_shared}, */
-    /* {"mmap", cmd_mmap}, */
-    /* {"read", cmd_read}, */
-    /* {"write", cmd_write}, */
-    /* {"memdump", cmd_memdump}, */
-    /* {"memfill", cmd_memfill}, */
-    /* {"mem", cmd_mem}, */
-    /* {"recurse", cmd_recurse}, */
+    {"shared", cmd_shared},
+    {"mmap", cmd_mmap}, 
+    {"read", cmd_read}, 
+    {"write", cmd_write},
+    {"memdump", cmd_memdump},
+    {"memfill", cmd_memfill}, 
+    {"mem", cmd_mem},
+    {"recurse", cmd_recurse},
     {NULL, NULL}
 };
 
@@ -49,6 +74,8 @@ struct cmd command_list[] = {
  * - close
  * - ...
  */
+
+
 
 int check_mem_commands (int paramN, char* command[])
 {
@@ -157,7 +184,8 @@ void cmd_malloc(int paramN, char* command[])
         print_malloc();
     }
     else if (paramN == 1 && atoi(command[0])) {
-        // allocate specified amount of space (malloc)
+        if (!allocate_mem(atoi(command[0])))
+              printf(RED "Error: " RESET_CLR "could not allocate memory\n");
     }
     else if (paramN == 2 && !strcmp(command[0], "-free")){
         free_mem(atoi(command[1]));
@@ -212,7 +240,7 @@ ssize_t readFile (char *f, void *p, ssize_t amount)
 {
     struct stat stats;
     ssize_t n;
-    int df, aux;
+    int df, UNUSED aux;
 
     if (stat (f, &stats) == -1 || (df = open(f, O_RDONLY)) == -1)
         return -1;
@@ -260,7 +288,7 @@ void cmd_read(int paramN, char* command[])
 ssize_t writeFile (char *f, void *p, size_t amount, int overwrite)
 {
     ssize_t n;
-    int df, aux, flags = O_CREAT | O_EXCL | O_WRONLY;
+    int df, flags = O_CREAT | O_EXCL | O_WRONLY;
 
     if (overwrite)
         flags = O_CREAT | O_WRONLY | O_TRUNC;
@@ -269,7 +297,6 @@ ssize_t writeFile (char *f, void *p, size_t amount, int overwrite)
         return -1;
 
     if ((n = write(df, p, amount)) == -1){
-        aux = errno;
         close (df);
         return -1;
     }
@@ -396,6 +423,7 @@ void makeRecurse (int n)
 
 void cmd_recurse(int paramN, char* command[])
 {
+    // repeat the recursive function [0] times
     if (paramN != 1) {
         invalid_param();
         return;
@@ -404,5 +432,4 @@ void cmd_recurse(int paramN, char* command[])
     int n = atoi(command[0]);
     if (n >= 0) makeRecurse(n);
     else makeRecurse(0);
-    // repeat the recursive function [0] times
 }
