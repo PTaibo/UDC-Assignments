@@ -1,18 +1,20 @@
 #include "mem_commands.h"
 
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <unistd.h>
 #include <errno.h>
 
 #include "types.h"
 #include "error_msgs.h"
+#include "help_pages.h"
 
 #define TAM 2048
 
-struct cmd command_list[] = {
+struct cmd mem_commands[] = {
     {"malloc", cmd_malloc},
     {"shared", cmd_shared},
     {"mmap", cmd_mmap},
@@ -49,10 +51,10 @@ struct cmd command_list[] = {
 
 int check_mem_commands (int paramN, char* command[])
 {
-    for (int i = 0; command_list[i].name != NULL; i++){
-        if (!strcmp(command[0], command_list[i].name)){
+    for (int i = 0; mem_commands[i].name != NULL; i++){
+        if (!strcmp(command[0], mem_commands[i].name)){
             if(!is_help_param(paramN, command))
-                (*command_list[i].funct)(paramN, command+1);
+                (*mem_commands[i].funct)(paramN, command+1);
             return 1;
         }
     }
@@ -67,6 +69,9 @@ void cmd_malloc(int paramN, char* command[])
     }
     else if (paramN == 1 && atoi(command[0])) {
         // allocate specified amount of space (malloc)
+        size_t n = atol (command [0]);
+        printf("%p",malloc(n));
+        
     }
     else if (paramN == 2 && !strcmp(command[0], "-free")){
         // free specified amount of space (free)
@@ -117,7 +122,7 @@ void cmd_mmap(int paramN, char* command[])
     }
 }
 
-ssize_t readFile (char *f, void *p, size_t amount)
+ssize_t readFile (char *f, void *p, ssize_t amount)
 {
     struct stat stats;
     ssize_t n;
@@ -150,10 +155,11 @@ void cmd_read(int paramN, char* command[])
     }
 
     void *p;
-    size_t amount = -1;
+    ssize_t amount = -1;
     ssize_t n;
 
-    p = stringtopointer(command[1]);
+    p = (void *) strtoul(command[1] ,NULL ,16);
+    //p = stringtopointer(command[1]);
 
     if (command[2] != NULL)
     amount = (size_t) atoll(command[2]);
@@ -188,21 +194,21 @@ ssize_t writeFile (char *f, void *p, size_t amount, int overwrite)
 
 void cmd_write(int paramN, char* command[])
 {
-    ssize_t n;
-    void* p;
-    size_t amount = -1;
-    int over = 0;
-    
     if (paramN == 3) {
+        ssize_t n;
+        void* p;
+        size_t amount = -1;
+        int over = 0;
         // Read write bytes to address/file
         if (strcmp (command[0],"-o"))
             invalid_param();
     
-        p = stringtopointer(command[1]);
-        if (amount != NULL)
+        p = (void *) strtoul(command[1] ,NULL ,16);
+        //p = stringtopointer(command[1]);
+        if (command[2] != NULL)
             amount = (size_t) atoll(command[2]);
         
-        if((n = writeFile(command[0], p, amount)) == -1)
+        if((n = writeFile(command[0], p, amount, over)) == -1)
             perror("Could not write file");
 
         else 
@@ -211,14 +217,19 @@ void cmd_write(int paramN, char* command[])
 
     else if (paramN == 4 && !strcmp(command[0], "-o")) {
         // Same but overwriting the file
+        ssize_t n;
+        void* p;
+        size_t amount = -1;
+        int over = 0;
         if (strcmp (command[0], "-o"))
             over = 1;
 
-        p = stringtopointer(command [2]);
-        if(amount != NULL)
+        p = (void *) strtoul(command[2] ,NULL ,16);
+        //p = stringtopointer(command [2]);
+        if(command[3] != NULL)
             amount = (size_t) atoll (command[3]);
 
-        if((n = writeFile(command[1], p, amount)) == -1)
+        if((n = writeFile(command[1], p, amount, over)) == -1)
             perror("Could not write file");
         
         else 
@@ -230,17 +241,32 @@ void cmd_write(int paramN, char* command[])
     }
 }
 
-void cmd_memdump(int paramN, char* command[])
+void cmd_memdump(int paramN, UNUSED char* command[])
 {
     if (paramN == 1) {
         // dump address contents to screen
+        //memdump <add> 
+        
     }
     else if (paramN == 2) {
         // dump specified number of bytes
+        //memdump <add> <amount>
     }
     else {
         invalid_param();
     }
+}
+
+void fillmem (void *p, size_t amount, unsigned char byte)
+{
+    unsigned char* arr = (unsigned char *) p;
+    size_t i;
+
+    for (i = 0; i < amount; i++){
+        arr[i] = byte;
+    }
+    printf("Assigned %lld bytes in %p\n", (long long) amount, p);
+    return;
 }
 
 void cmd_memfill(int paramN, char* command[])
@@ -250,6 +276,14 @@ void cmd_memfill(int paramN, char* command[])
         return;
     }
     // Fill n bytes with specified character
+    size_t amount = atoll(command[1]);
+    void* p = (void *) strtoul(command[0] ,NULL ,16);
+    //void* p = stringtopointer(command[0]);
+        
+    unsigned char byte = command[2][1];
+
+    fillmem(p, amount, byte);
+    return;
 }
 
 void cmd_mem(int paramN, char* command[])
