@@ -20,7 +20,7 @@ struct open_flags {
 
 typedef struct {
     void* addr;
-    unsigned long size;
+    size_t size;
     char* alloc_time;
     char* type; // malloc, shared, mapped
     key_t key;

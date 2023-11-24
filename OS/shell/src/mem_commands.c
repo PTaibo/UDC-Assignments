@@ -9,6 +9,7 @@
 #include <errno.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/mman.h>
 
 #include "types.h"
 #include "error_msgs.h"
@@ -100,7 +101,7 @@ void print_mem_info (mem_block* mem)
     if (mem->key != -1)
         printf(" (key %d)", mem->key);
     if (mem->fd != -1)
-        printf(" %ss (fd %d)", mem->file_name,
+        printf(" %s (fd %d)", mem->file_name,
                                mem->fd);
     printf("\n");
 }
@@ -151,7 +152,7 @@ char* parse_time ()
     return str;
 }
 
-int allocate_mem (unsigned long size)
+int allocate_mem (size_t size)
 {
     mem_block* info = malloc(sizeof(mem_block));
     if (info == NULL) return 0;
@@ -199,7 +200,7 @@ void cmd_malloc(int paramN, char* command[])
     }
 }
 
-int fill_shared_mem_info (key_t key, unsigned long size, void* address)
+int fill_shared_mem_info (key_t key, size_t size, void* address)
 {
     mem_block* info = malloc(sizeof(mem_block));
     if (info == NULL) return -1;
@@ -315,20 +316,92 @@ void cmd_shared(int paramN, char* command[])
     }
 }
 
+int get_permissions (char* p)
+{
+    int permissions = 0;
+    if (strchr(p, 'r') != NULL)
+        permissions |= PROT_READ;
+    if (strchr(p, 'w') != NULL)
+        permissions |= PROT_WRITE;
+    if (strchr(p, 'x') != NULL)
+        permissions |= PROT_EXEC;
+    return permissions;
+}
+
+int fill_mapped_file_info (int fd, char* file, size_t size, void* addrs)
+{
+    mem_block* info = malloc(sizeof(mem_block));
+    if (info == NULL) return -1;
+    info->addr = addrs;
+    info->size = size;
+    info->alloc_time = parse_time();
+    info->type = malloc(MAX_COMMAND_SIZE);
+    strcpy(info->type, "mapped");
+    info->key = -1;
+    info->fd = fd;
+    info->file_name = malloc(MAX_COMMAND_SIZE);
+    strcpy(info->file_name, file);
+    dynList_add(info, &memList);
+    return 0;
+}
+
+int map_file (int permissions, char* file)
+{
+    int mode = permissions & PROT_WRITE ?  O_RDWR : O_RDONLY;
+    struct stat s;
+    if (stat(file, &s) < 0){
+        return -1;
+    }
+    int fd = open(file, mode);
+    if (fd < 0)
+        return -1;
+    void* addrs = mmap(NULL, s.st_size, permissions, MAP_PRIVATE, fd, 0);
+    if (addrs == MAP_FAILED)
+        return -1;
+    if (fill_mapped_file_info(fd, file, s.st_size, addrs) < 0)
+        return -1;
+
+    printf("Mapped file %s at %p\n", file, addrs);
+    return 0;
+}
+
+int unmap_file (char* file)
+{
+    struct stat s;
+    if (stat(file, &s) < 0)
+        return -1;
+
+    Pos pos = dynList_first(memList);
+    for(; pos != NULL; pos = dynList_next(&pos)){
+        mem_block* info = dynList_getter(pos);
+        if (!strcmp(info->type, "mapped") && !strcmp(info->file_name, file)){
+            if (munmap(info->addr, s.st_size) < 0)
+                return -1;
+            dynList_delete(delete_memblock, pos, &memList);
+            return 0;
+        }
+    }
+    printf("No such file mapped in process\n");
+    return 0;
+}
+
 void cmd_mmap(int paramN, char* command[])
 {
     if (!paramN) {
-        // prints list
+        print_memory("Mapped", "mapped");
     }
     else if (paramN == 1) {
-        // mapear fichero (mmap)
-        // ayudaP2.c
+        if (map_file(0, command[0]) < 0)
+            perror("Couldn't map file");
     }
     else if (paramN == 2 && !strcmp(command[0], "-free")) {
-        // free specified file (munmap)
+        if (unmap_file (command[1]) < 0)
+            perror("Couldn't unmap file");
     }
     else if (paramN == 2) {
-        // mapear fichero con modos especificados
+        int permissions = get_permissions(command[1]);
+        if (map_file(permissions, command[0]) < 0)
+            perror ("Couldn't map file");
     }
     else {
         invalid_param();
