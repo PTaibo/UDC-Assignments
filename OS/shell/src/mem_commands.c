@@ -5,11 +5,12 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/mman.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #include <errno.h>
 #include <time.h>
 #include <unistd.h>
-#include <sys/mman.h>
 
 #include "types.h"
 #include "error_msgs.h"
@@ -609,10 +610,41 @@ void cmd_memfill(int paramN, char* command[])
     return;
 }
 
+void execute_pmap()
+{
+    char pid[32];
+    sprintf(pid, "%d", (int)getpid());
+
+    pid_t child_pid = fork();
+    if (child_pid < 0){
+        perror ("Can't create process");
+        return;
+    }
+
+    if (child_pid == 0) {
+        char* argv[4] = {"pmap", pid, NULL};
+        if (execvp(argv[0], argv) == -1)
+            perror ("Cannot execute pmap (linux, solaris)");
+
+
+        argv[0]="procstat"; argv[1]="vm"; argv[2]=pid; argv[3]=NULL;
+        if (execvp(argv[0],argv)==-1)/*No hay pmap, probamos procstat FreeBSD */
+            perror("cannot execute procstat (FreeBSD)");
+
+        argv[0]="procmap",argv[1]=pid;argv[2]=NULL;
+        if (execvp(argv[0],argv)==-1)  /*probamos procmap OpenBSD*/
+            perror("cannot execute procmap (OpenBSD)");
+
+        exit(1);
+    }
+    waitpid(child_pid, NULL, 0);
+
+}
+
 void cmd_mem(int paramN, char* command[])
 {
     if (paramN == 1 && !strcmp(command[0], "-pmap")) {
-        // output of pmap command
+        execute_pmap();
     }
     else {
         // use bit mask like in stats function
