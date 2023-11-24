@@ -224,9 +224,9 @@ int fileList_nextFD (int pos, file_list* list)
 
 typedef struct node node;
 
-void dynList_init (node* newList)
+void dynList_init (node** newList)
 {
-    newList = NULL;
+    *newList = NULL;
 }
 
 int dynList_isEmpty (node* list)
@@ -234,37 +234,51 @@ int dynList_isEmpty (node* list)
     return list == NULL;
 }
 
-void dynList_clear (node* list)
+void dynList_clear (node **list)
 {
-    while (list != NULL){
-        node* next = list->next;
-        free(list->info);
-        free(list);
-        list = next;
+    while (*list != NULL){
+        node* next = (*list)->next;
+        free((*list)->info);
+        free(*list);
+        *list = next;
     }
 }
 
-int dynList_add (void* element, node* list)
+int dynList_add (void* element, node **list)
 {
     node* newNode = malloc(sizeof(node));
     if (newNode == NULL) return 0;
     newNode->info = element;
+    newNode->prev = NULL;
 
-    if (dynList_isEmpty(list))
+    if (dynList_isEmpty(*list))
         newNode->next = NULL;
-    else 
-        newNode->next = list;
+    else {
+        newNode->next = *list;
+        (*list)->prev = newNode;
+    }
 
-    list = newNode;
+    *list = newNode;
     return 1;
 }
 
-void dynList_delete (node* pos)
+void dynList_delete (node *pos, node** list)
 {
-    node* next = pos->next;
-    pos->info = next->info;
-    pos->next = next->next;
-    free(next);
+    printf("Gets here :)\n");
+    fflush(stdout);
+    printf("Prev: %p Next: %p\n", pos->prev, pos->next);
+    if (pos->prev != NULL)
+        pos->prev->next = pos->next;
+    if (pos->next != NULL)
+        pos->next->prev = pos->prev;
+    else if (*list == pos)
+        *list = NULL;
+    printf("Links things correctly\n");
+    fflush(stdout);
+    free(pos->info);
+    free(pos);
+    printf("Finished delete\n");
+    fflush(stdout);
 }
 
 node* dynList_first (node* list)
@@ -272,9 +286,14 @@ node* dynList_first (node* list)
     return list;
 }
 
-node* dynList_next (node* pos)
+node* dynList_next (node** pos)
 {
-    return pos->next;
+    return (*pos)->next;
+}
+
+void dynList_fwd(node** pos)
+{
+    *pos = (*pos)->next;
 }
 
 void* dynList_getter (node* pos)
