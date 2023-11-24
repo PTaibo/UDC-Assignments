@@ -4,6 +4,8 @@
 // Get rid of unused parameter warnings
 #define UNUSED __attribute__((unused)) 
 
+#include <time.h>
+
 struct cmd {
     char *name;
     void (*funct)(int, char**);
@@ -15,13 +17,13 @@ struct open_flags {
     int flag;
 };
 
-struct mem_block {
-    void* addrs;
+typedef struct {
+    void* addr;
     int size;
-    // time of alloc
-    // type (malloc, shared, mampped)
+    char* alloc_time;
+    char* type; // malloc, shared, mapped
     int key;
     int fd;
     char* file_name;
-};
+} mem_block;
 
