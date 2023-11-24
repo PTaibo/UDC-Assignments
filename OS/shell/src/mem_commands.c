@@ -242,7 +242,7 @@ ssize_t readFile (char *f, void *p, ssize_t amount)
 {
     struct stat stats;
     ssize_t n;
-    int df, UNUSED aux;
+    int df, aux;
 
     if (stat (f, &stats) == -1 || (df = open(f, O_RDONLY)) == -1)
         return -1;
@@ -252,6 +252,8 @@ ssize_t readFile (char *f, void *p, ssize_t amount)
 
     if ((n = read(df, p, amount)) == -1){
         aux = errno;
+        close(df)
+        errno = aux;
     }
     close (df);
     return n;
@@ -290,7 +292,7 @@ void cmd_read(int paramN, char* command[])
 ssize_t writeFile (char *f, void *p, size_t amount, int overwrite)
 {
     ssize_t n;
-    int df, flags = O_CREAT | O_EXCL | O_WRONLY;
+    int df, aux, flags = O_CREAT | O_EXCL | O_WRONLY;
 
     if (overwrite)
         flags = O_CREAT | O_WRONLY | O_TRUNC;
@@ -299,7 +301,9 @@ ssize_t writeFile (char *f, void *p, size_t amount, int overwrite)
         return -1;
 
     if ((n = write(df, p, amount)) == -1){
+        aux = errno;
         close (df);
+        errno = aux;
         return -1;
     }
 
