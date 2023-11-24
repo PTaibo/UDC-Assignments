@@ -252,18 +252,18 @@ ssize_t readFile (char *f, void *p, ssize_t amount)
 
     if ((n = read(df, p, amount)) == -1){
         aux = errno;
-        close(df)
+        close(df);
         errno = aux;
     }
     close (df);
     return n;
 }
 
-void* stringtopointer (char* direction){
+/*void* stringtopointer (char* direction){
     void* h; 
     sscanf(direction, "%p", &h);
     return h;
-}
+}*/
 
 void cmd_read(int paramN, char* command[])
 {
@@ -297,7 +297,7 @@ ssize_t writeFile (char *f, void *p, size_t amount, int overwrite)
     if (overwrite)
         flags = O_CREAT | O_WRONLY | O_TRUNC;
 
-    if ((df = open (f, flags, 0777)) == -1 )
+    if ((df = open(f, flags, 0777)) == -1 )
         return -1;
 
     if ((n = write(df, p, amount)) == -1){
@@ -360,16 +360,50 @@ void cmd_write(int paramN, char* command[])
     }
 }
 
-void cmd_memdump(int paramN, UNUSED char* command[])
+void dumpmem (long p, int amount)
+{
+    long aux = p;
+    
+    for (int i = 0; i < amount; i++){
+        char curretcar = *(char *) p;
+        if (curretcar == '\0') {
+            continue;
+        }
+        printf(" %c ",(curretcar == '\n') ? ' ' : curretcar);
+        p++;
+    }
+    printf("\n");
+
+    for(int i = 0; i< amount; i++){
+        char curretcar = *(char *) aux;
+        if (curretcar == '\0')
+            continue;
+        printf("%02X ",curretcar);
+        aux++;
+    }
+    printf("\n");
+}
+
+void cmd_memdump(int paramN, char* command[])
 {
     if (paramN == 1) {
         // dump address contents to screen
         //memdump <add> 
+        long p = strtoul (command[0], NULL, 16);
+        int amount = 26;
+
+        dumpmem(p, amount);
         
     }
     else if (paramN == 2) {
         // dump specified number of bytes
         //memdump <add> <amount>
+        long p;
+        int amount = atoi (command[1]);
+
+        p = strtoul(command[0], NULL, 16);
+
+        dumpmem(p, amount);
     }
     else {
         invalid_param();
