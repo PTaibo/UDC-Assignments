@@ -154,6 +154,8 @@ int allocate_mem (int size)
     mem_block* info = malloc(sizeof(mem_block));
     if (info == NULL) return 0;
     info->addr = malloc(size);
+    printf("%d bytes allocated at %p\n", size,
+                                    info->addr);
     info->size = size;
     info->alloc_time = parse_time();
     info->type = malloc(MAX_COMMAND_SIZE);
