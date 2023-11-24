@@ -6,12 +6,14 @@
 #include "command_processor.h"
 #include "history_commands.h"
 #include "file_commands.h"
+#include "mem_commands.h"
 
 int main()
 {
     char line [MAX_COMMAND_SIZE];
     init_file_list();
     init_history();
+    init_mem();
 
     char cwd[MAX_COMMAND_SIZE];
     getcwd(cwd, MAX_COMMAND_SIZE);
