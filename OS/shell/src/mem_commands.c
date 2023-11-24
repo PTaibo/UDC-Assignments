@@ -20,6 +20,16 @@
 
 #define TAM 2048
 
+#define P_BLK 1
+#define P_FUN 2
+#define P_VAR 4
+#define P_ALL 7
+
+int global1, global2, global3;
+int iGlobal1 = 1;
+int iGlobal2 = 2;
+int iGlobal3 = 3;
+
 DynamicList memList;
 
 void init_mem()
@@ -641,13 +651,72 @@ void execute_pmap()
 
 }
 
+int mem_options (int paramN, char* command[])
+{
+    int options = 0;
+    for (int i = 0; i < paramN; i++){
+        if (!strcmp(command[i], "-all"))
+            options |= P_ALL;
+        else if (!strcmp(command[i], "-blocks"))
+            options |= P_BLK;
+        else if (!strcmp(command[i], "-funcs"))
+            options |= P_FUN;
+        else if (!strcmp(command[i], "-vars"))
+            options |= P_VAR;
+    }
+    if (!options) options = P_ALL;
+    return options;
+}
+
+void print_blocks()
+{
+    printf(GREEN "List of blocks assigned to process %d\n" RESET_CLR,
+                                                        getpid());
+    Pos pos = dynList_first(memList);
+    for (; pos != NULL; pos = dynList_next(&pos)){
+        mem_block* mem = dynList_getter(pos);
+        print_mem_info(mem);
+    }
+}
+
+void print_vars()
+{
+    int p1, p2, p3;
+    static int s1, s2, s3;
+    static int is1 = 1, is2 = 2, is3 = 3;
+    printf("Local variables %23p, %18p, %18p\n",
+            &p1, &p2, &p3);
+    printf("Global variables %22p, %18p, %18p\n",
+            &iGlobal1, &iGlobal2, &iGlobal3);
+    printf("Global variables (N.I.) %15p, %18p, %18p\n",
+            &global1, &global2, &global3);
+    printf("Static variables %22p, %18p, %18p\n",
+            &is1, &is2, &is3);
+    printf("Static variables (N.I.) %15p, %18p, %18p\n",
+            &s1, &s2, &s3);
+}
+
+void print_funcs()
+{
+    printf("Program functions %21p, %18p, %18p\n",
+            &print_vars, &print_funcs, &cmd_mem);
+    printf("Library functions %21p, %18p, %18p\n",
+            &malloc, &mmap, &strcmp);
+}
+
 void cmd_mem(int paramN, char* command[])
 {
     if (paramN == 1 && !strcmp(command[0], "-pmap")) {
         execute_pmap();
     }
     else {
-        // use bit mask like in stats function
+        int options = mem_options(paramN, command);
+        if (options & P_VAR)
+            print_vars();
+        if (options & P_FUN)
+            print_funcs();
+        if (options & P_BLK)
+            print_blocks();
     }
 }
 
