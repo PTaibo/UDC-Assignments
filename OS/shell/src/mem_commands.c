@@ -104,14 +104,15 @@ void print_mem_info (mem_block* mem)
     printf("\n");
 }
 
-void print_malloc ()
+void print_memory (char* action, char* type)
 {
-    printf(GREEN "\nAllocated blocks for process %d\n" RESET_CLR,
+    printf(GREEN "\n%s memory for process %d\n" RESET_CLR,
+            action,
             getpid());
     Pos pos = dynList_first(memList);
     for (; pos != NULL; pos = dynList_next(&pos)){
         mem_block* mem = dynList_getter(pos);
-        if (!strcmp(mem->type, "malloc"))
+        if (!strcmp(mem->type, type))
             print_mem_info(mem);
     }
     printf("\n");
@@ -183,7 +184,7 @@ void free_mem (int size)
 void cmd_malloc(int paramN, char* command[])
 {
     if (!paramN){
-        print_malloc();
+        print_memory("Allocated", "malloc");
     }
     else if (paramN == 1 && atoi(command[0])) {
         if (!allocate_mem(atoi(command[0])))
