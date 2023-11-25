@@ -98,8 +98,14 @@ because it is the start of the execution, but it soon stabilizes.
 
 Conclusions:
 
+The theory dictates that the dijkstra algorithm has a complexity of (n+m)logn,
+which can be rounded to n^2. However, after testing our program with said
+complexity, it became obvious that this value did not suit our code. By
+method of trial and error we arrived at the conclusion that the complexity
+in our case is O(2.7).
+
 After empiricallya analysing the time complexity of the dijkstra algorithm
-it is demonstrated that it's complexity is 2.7 . Theoreticaly it is indicated
+it is demonstrated that it's complexity is 2.7. Theoreticaly it is indicated
 as (m + n)log n which is close to n^2, however after trying we have seen that
 it does not suit. So, we incremented until 2.7 giving us a stable constant.
 

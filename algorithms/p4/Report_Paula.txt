@@ -79,9 +79,8 @@ Observations:
 As always, the first couple of measurements are a bit different
 because it is the start of the execution, but it soon stabilizes.
 
-Conclusions: TODO
-
-After empiricallya analysing the time complexity of the dijkstra algorithm
-it is demonstrated that it coincides with the mathematical theory,
-which stated that it had a complexity of (m*n)logn.
-
+Conclusions:
+which can be rounded to n^2. However, after testing our program with said
+complexity, it became obvious that this value did not suit our code. By
+method of trial and error we arrived at the conclusion that the complexity
+in our case is O(2.7).
