@@ -1,0 +1,66 @@
+/*                                                                                                                   
+TITLE: ALGORITHMS             SUBTITLE:P4
+AUTHOR 1:PAULA TAIBO SUAREZ   LOGIN:P.TAIBO
+AUTHOR 2:SIYUAN HE            LOGIN:SIYUAN.HE
+GROUP:6.1                     DATE:09/10/2023
+*/
+
+This practical was executed in a laptop with the next specifications:
+
+OS: Linuxmint 6 faye
+Kernel: x86_64 Linux 6.1.0-13-amd64
+Window System: X11
+Windows Manager: i3
+CPU: 13th Gen Intel Core i7-1355U @ 12x 5GHz
+RAM: 16GB
+Battery: 100% and plugged
+
+
+And and was compiled with the next specifications:
+
+Compiler: gcc (Debian 12.2.0-14) 12.2.0
+Flags: -Wall -Wextra
+
+Te purpose of this practical is to implement the dijkstra
+algorithm and empirically check its complexity.
+
+First we are going to test that the algorithm works correctly.
+We try it out with two matrices for which we know the correct
+answer to see if the results are as expected.
+
+TODO INPUT HERE
+
+The tests demonstrates the correctness of the algorithm.
+We now procede to determine its execution time using
+matrices of size TODO SIZE GOES HERE to empirically
+check the complexity of the algorithm. We will accomplish
+this by doing the calculations with the estimated bound and
+a higher and lower bounds.
+
+NOTES:
+    - All the execution times are measured in microseconds
+    - If the execution time is below 500 microseconds it is indicated
+      with an asterisk (*). To get an accurate measurement, the operation
+      will be repeated K times and the result will be the mean of those
+      calculations. The constant K has to be a power of 10 for the
+      measurement to be correct so we chose 1000.
+
+TODO: HERE GOES INPUT
+
+Slightly underestimated bound: TODO
+Tight bound: TODO
+Slightly overestimated bound: TODO
+
+Analysing the results we observe that the hypothesized tight bound
+tends to the constant TODO while the other two tend to zero and
+infinity. This proves the complexity of the algorithm is indeed TODO.
+
+Observations:
+TODO
+
+Conclusions: TODO
+
+After empiricallya nalysing the time complexity of the dijkstra algorithm
+it is demonstrated that it coincides with the mathematical theory,
+which stated that it had a complexity of (m*n)logn.
+
