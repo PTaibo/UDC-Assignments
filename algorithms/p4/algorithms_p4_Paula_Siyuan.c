@@ -191,10 +191,10 @@ void PrintlogValues(int i,double v)
 
     t=v;
     double j= (double) i; //pow needs doubles
-    t08=t/pow(j,1);
-    t1=t/(j*log(j));
-    //t1=t/pow(j,1.3);
-    t12=t/pow(j,1.4);
+    t08=t/pow(j,2);
+    //t1=t/(j + )*log(j));
+    t1=t/pow(j,2.7);
+    t12=t/pow(j,3.2);
 
     //printing results
     printf("%5d\t",i);
@@ -212,14 +212,14 @@ void get_complexity()
 
     double timev = 0;
 
-    for (int i = 500; i <= 32000; i = i*2){
+    for (int i = 5; i <= 320; i = i*2){
         matrix m, d;
         m = createMatrix(i);
         d = createMatrix(i);
         randomInit(i, m);
-        int ta = microseconds();
+        double ta = microseconds();
         dijkstra(m, d, i);
-        int tb = microseconds();
+        double tb = microseconds();
         timev = tb - ta;
 
         if (timev < 500) { // Confidence threshold
@@ -232,13 +232,13 @@ void get_complexity()
             }
             tb = microseconds();
             
-            int tCreateA = microseconds();
+            double tCreateA = microseconds();
 
             for (int cnt = 0; cnt < K; cnt++){
                 dijkstra(m, d, i);
             }
 
-            int tCreateB = microseconds();
+            double tCreateB = microseconds();
 
             timev = ((tb - ta) - (tCreateA - tCreateB)) / K;
         }
@@ -249,6 +249,7 @@ void get_complexity()
 
 int main(){
     init_seed();
-    test1();
+    //test1();
     //test2();
+    get_complexity();
 }
