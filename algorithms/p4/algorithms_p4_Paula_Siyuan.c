@@ -159,7 +159,7 @@ void init_seed()
     /* set the seed of a new sequence of pseudo-random integers */
 }
 
-int randomInit(int n, matrix m)
+void randomInit(int n, matrix m)
 {
     int edges = 0;
     for (int i = 0; i < n; i++)
@@ -173,7 +173,7 @@ int randomInit(int n, matrix m)
                 m[i][j] = m[j][i];
                 edges++;
             }
-    return edges;
+    return;
 }
 
 double microseconds() { /* obtains the system time in microseconds */
@@ -197,7 +197,7 @@ void PrintlogValues(int i, double v)
     t=v;
     double j= (double) i; //pow needs doubles
     t08=t/pow(j,2);
-    //t1=t/(pow(j, 2))*log(j);
+    //t1=t/((j + ed)*log(j));
     t1=t/pow(j,2.7);
     t12=t/pow(j,3.2);
 
@@ -222,10 +222,11 @@ void get_complexity()
         m = createMatrix(i);
         d = createMatrix(i);
         randomInit(i, m);
-        if (m )
+
         ta = microseconds();
         dijkstra(m, d, i);
         tb = microseconds();
+
         timev = tb - ta;
 
         if (timev < 500) { // Confidence threshold
@@ -237,16 +238,15 @@ void get_complexity()
                 dijkstra(m, d, i);
             }
             tb = microseconds();
-            
-            double tCreateA = microseconds();
+
+            double timea = microseconds();
 
             for (int cnt = 0; cnt < K; cnt++){
-                randomInit(i,m);
-            }
+                randomInit(i, m);
+            } 
 
-            double tCreateB = microseconds();
-
-            timev = ((tb - ta) - (tCreateA - tCreateB)) / K;
+            double timeb = microseconds();
+            timev = ((tb - ta) - (timeb - timea) )/ K;
         }
 
         PrintlogValues(i, timev);
@@ -255,7 +255,7 @@ void get_complexity()
 
 int main(){
     init_seed();
-    //test1();
-    //test2();
+    test1();
+    test2();
     get_complexity();
 }
