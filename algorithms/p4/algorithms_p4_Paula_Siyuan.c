@@ -63,7 +63,7 @@ void dijkstra(matrix graph, matrix distances, int sz)
             unvisited[v] = 0;
 
             //we check for the rest of the unvisited 
-            for (int j = 0; j < n; j++) {
+            for (int j = 0; j < sz; j++) {
                 if (unvisited[j] && distances[n][j] > distances[n][v] + graph[v][j]) {
                     distances[n][j] = distances[n][v] + graph[v][j];
                 }   
