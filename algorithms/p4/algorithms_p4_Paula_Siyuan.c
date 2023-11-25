@@ -9,7 +9,7 @@ typedef int **matrix;
 int minimindistance (int *distances, int *unvisited, int n){
 
     int minIndex = -1;
-    int minValue = INT_MAX;
+    int minValue = -1;
 
     for (int i = 0; i < n; i++) {
         if (unvisited[i] && distances[i] < minValue) {
@@ -35,14 +35,14 @@ void dijkstra(matrix graph, matrix distances, int sz)
         }
         unvisited[n] = 0;
 
-        for (int i = 0; i < n -2; i++){
-            int v = minimindistance(distances[n], unvisited, n);
+        for (int i = 0; i < n - 2; i++){
 
+            int v = minimindistance(distances[n], unvisited, n);
             unvisited[v] = 0;
 
              for (int j = 0; j < n; j++) {
-                if (unvisited[j] && Distances[n][j] > Distancesn[n][j] + M[v][j]) {
-                    Distances[n][j] = Distances[n][v] + M[v][j];
+                if (unvisited[j] && distances[n][j] > distances[n][j] + graph[v][j]) {
+                    distances[n][j] = distances[n][v] + graph[v][j];
                 }   
 
             }
