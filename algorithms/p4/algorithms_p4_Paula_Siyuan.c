@@ -1,8 +1,18 @@
+/*
+ * TITLE: ALGORITHMS                SUBTITLE: P4
+ * AUTHOR 1: PAULA TAIBO SUÁREZ     LOGIN: P.TAIBO
+ * AUTHOR 2: SIYUAN HE              LOGIN: SIYUAN.HE
+ * GROUP: 6.1                       DATE: 09/10/2023
+ */
+
 #include <stdio.h>
 #include <limits.h>
 #include <stdlib.h>
+#include <time.h>
+#include <sys/time.h>
 
 #define MAX_SIZE 1000
+#define K 1000
 
 typedef int **matrix;
 
@@ -128,4 +138,68 @@ void test2 ()
     test_dijkstra(4, data, correct);
 }
 
+void randomInit(int n, matrix m)
+{
+    for (int i = 0; i < n; i++)
+        for (int j = i + 1; j < n; j++)
+            m[i][j] = rand() % MAX_SIZE + 1;
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j <= i; j++)
+            if (i == j)
+                m[i][j] = 0;
+            else
+                m[i][j] = m[j][i];
+}
+
+double microseconds() { /* obtains the system time in microseconds */
+    struct timeval t;
+    if (gettimeofday(&t, NULL) < 0 )
+        return 0.0;
+
+    return (t.tv_usec + t.tv_sec * 1000000.0);
+}
+
+void printComplexityValues (int i, double v)
+{
+}
+
+void get_complexity()
+{
+    printf("Dijkstra execution time:\n");
+    print_title();
+
+    double timev = 0;
+
+    for (int i = 500; i <= 32000; i = i*2){
+        matrix m, d;
+        randomInit(i, m);
+        int ta = microseconds();
+        dijkstra(m, d, i);
+        int tb = microseconds();
+        timev = tb - ta;
+
+        if (timev < 500) { // Confidence threshold
+            printf("*");
+
+            ta = microseconds();
+            for (int cnt = 0; cnt < K; cnt++){
+                randomInit(i, m);
+                dijkstra(m, d, i);
+            }
+            tb = microseconds();
+            
+            int tCreateA = microseconds();
+
+            for (int cnt = 0; cnt < K; cnt++){
+                dijkstra(m, d, i);
+            }
+
+            int tCreateB = microseconds();
+
+            timev = ((tb - ta) - (tCreateA - tCreateB)) / K;
+        }
+
+        printComplexityValues(i, timev);
+    }
+}
 
