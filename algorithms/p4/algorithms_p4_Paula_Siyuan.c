@@ -181,7 +181,7 @@ double microseconds() { /* obtains the system time in microseconds */
 
 void printlogTitles(){
 
-    printf(" n\t   t(n)\t\tt(n)/n^1\tt(n)/n*logn\t        t(n)/n^1.4\n");
+    printf(" n\t   t(n)\t\tt(n)/n^2\tt(n)/2.7\t        t(n)/n^3.2\n");
 
 }
 
@@ -192,7 +192,7 @@ void PrintlogValues(int i, double v)
     t=v;
     double j= (double) i; //pow needs doubles
     t08=t/pow(j,2);
-    //t1=t/(j + )*log(j));
+    //t1=t/(pow(j, 2))*log(j);
     t1=t/pow(j,2.7);
     t12=t/pow(j,3.2);
 
