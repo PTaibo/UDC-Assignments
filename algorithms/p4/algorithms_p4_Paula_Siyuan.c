@@ -190,7 +190,7 @@ void printlogTitles(){
 
 }
 
-void PrintlogValues(int i,double v)
+void PrintlogValues(int i, double v)
 {
     double t,t08,t1,t12;
 
@@ -215,16 +215,17 @@ void get_complexity()
     printf("Dijkstra execution time:\n");
     printlogTitles();
 
-    double timev = 0;
+    double timev = 0, ta, tb;
 
     for (int i = 5; i <= 320; i = i*2){
         matrix m, d;
         m = createMatrix(i);
         d = createMatrix(i);
         randomInit(i, m);
-        double ta = microseconds();
+        if (m )
+        ta = microseconds();
         dijkstra(m, d, i);
-        double tb = microseconds();
+        tb = microseconds();
         timev = tb - ta;
 
         if (timev < 500) { // Confidence threshold
@@ -240,7 +241,7 @@ void get_complexity()
             double tCreateA = microseconds();
 
             for (int cnt = 0; cnt < K; cnt++){
-                dijkstra(m, d, i);
+                randomInit(i,m);
             }
 
             double tCreateB = microseconds();
