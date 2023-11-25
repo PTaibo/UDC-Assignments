@@ -7,20 +7,18 @@ GROUP:6.1                     DATE:09/10/2023
 
 This practical was executed in a laptop with the next specifications:
 
-TODO
-OS: Linuxmint 6 faye
-Kernel: x86_64 Linux 6.1.0-13-amd64
-Window System: X11
-Windows Manager: i3
-CPU: 13th Gen Intel Core i7-1355U @ 12x 5GHz
-RAM: 16GB
+OS: Linux Mint 21.2 x86_64 
+Kernel: 5.15.0-87-generic 
+Window System: kde-plasma
+Windows Manager: kWin
+CPU: 11th Gen Intel i7-1195G7 (8) @ 4.800GHz 
+RAM: 16GB 
 Battery: 100% and plugged
 
 And and was compiled with the next specifications:
 
-TODO
-Compiler: gcc (Debian 12.2.0-14) 12.2.0
-Flags: -Wall -Wextra -lm
+Compiler: gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+Flags: -Wall -Wextra -O2
 
 Te purpose of this practical is to implement the dijkstra
 algorithm and empirically check its complexity.
@@ -29,29 +27,36 @@ First we are going to test that the algorithm works correctly.
 We try it out with two matrices for which we know the correct
 answer to see if the results are as expected.
 
-Trying disjkstra with:
-    0 1 3 4 6
-    1 0 2 5 5
-    3 2 0 7 5
-    4 5 7 0 3
-    6 5 5 3 0
-Distances are correct
+First one:
+    Trying disjkstra with:
 
-Trying disjkstra with:
-    0 1 3 6
-    1 0 2 5
-    3 2 0 3
-    6 5 3 0
-Distances are correct
+        0 1 3 4 6
+        1 0 2 5 5
+        3 2 0 7 5
+        4 5 7 0 3
+        6 5 5 3 0
+
+    Distances are correct
+
+Second one:
+    Trying disjkstra with:
+
+        0 1 3 6
+        1 0 2 5
+        3 2 0 3
+        6 5 3 0
+        
+    Distances are correct
 
 The tests demonstrates the correctness of the algorithm.
 We now procede to determine its execution time using
-matrices of size TODO 5, 10, 20, 40, 80, 160 and 320 to empirically
+matrices of size 5, 10, 20, 40, 80, 160 and 320 to empirically
 check the complexity of the algorithm. We will accomplish
 this by doing the calculations with the estimated bound and
 a higher and lower bounds.
 
 NOTES:
+
     - All the execution times are measured in microseconds
     - If the execution time is below 500 microseconds it is indicated
       with an asterisk (*). To get an accurate measurement, the operation
@@ -59,32 +64,42 @@ NOTES:
       calculations. The constant K has to be a power of 10 for the
       measurement to be correct so we chose 1000.
 
-TODO
+
 Dijkstra execution time:
-     n	  t(n)		    t(n)/n^2	t(n)/2.7	   t(n)/n^3.2
-*    5	2.753000	    0.110120	0.035693		0.015963		
-*   10	17.242000	    0.172420	0.034402		0.010879		
-*   20	74.187000	    0.185468	0.022780		0.005094		
-*   40	488.774000   	0.305484	0.023096		0.003652		
-    80	3340.000000	    0.521875	0.024289		0.002716		
-   160	19998.000000	0.781172	0.022380		0.001769		
-   320	139699.000000	1.364248	0.024060		0.001345
+ n         t(n)         t(n)/n^2        t(n)/2.7          t(n)/n^3.2
+*    5  1.975000        0.079000        0.025606           0.011452
+*   10  23.296000       0.232960        0.046482           0.014699
+*   20  125.750000      0.314375        0.038612           0.008634
+   40   722.000000      0.451250        0.034117           0.005394
+   80   5522.000000     0.862812        0.040156           0.004490
+  160   34857.000000    1.361602        0.039009           0.003084
+  320   203450.000000   1.986816        0.035039           0.001959
 
 Slightly underestimated bound: n^2
 Tight bound: 2.7
 Slightly overestimated bound: n^3.2
 
 Analysing the results we observe that the hypothesized tight bound
-tends to the constant TODO 0.02 while the other two tend to zero and
-infinity. This proves the complexity of the algorithm is indeed TODO 2.7.
+tends to the constant 0.038612 while the other two tend to zero and
+infinity. This proves the complexity of the algorithm is indeed 2.7.
 
-Observations: TODO
+Observations: 
 As always, the first couple of measurements are a bit different
 because it is the start of the execution, but it soon stabilizes.
 
-Conclusions: TODO
+ n         t(n)         t(n)/n^2        t(n)/2.7                t(n)/n^3.2
+*    5  3.431000        0.137240        0.044484                0.019894
+*   10  38.652000       0.386520        0.077121                0.024388
+*   20  216.962000      0.542405        0.066620                0.014897
+   40   1366.000000     0.853750        0.064549                0.010206
+   80   9800.000000     1.531250        0.071266                0.007968
+  160   66122.000000    2.582891        0.073998                0.005850
+  320   411854.000000   4.022012        0.070931                0.003965
+
+Conclusions:
 
 After empiricallya analysing the time complexity of the dijkstra algorithm
-it is demonstrated that it coincides with the mathematical theory,
-which stated that it had a complexity of (m*n)logn.
+it is demonstrated that it's complexity is 2.7 . Theoreticaly it is indicated
+as (m + n)log n which is close to n^2, however after trying we have seen that
+it does not suit. So, we incremented until 2.7 giving us a stable constant.
 
