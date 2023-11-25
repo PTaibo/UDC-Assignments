@@ -7,6 +7,7 @@ GROUP:6.1                     DATE:09/10/2023
 
 This practical was executed in a laptop with the next specifications:
 
+TODO
 OS: Linuxmint 6 faye
 Kernel: x86_64 Linux 6.1.0-13-amd64
 Window System: X11
@@ -17,6 +18,7 @@ Battery: 100% and plugged
 
 And and was compiled with the next specifications:
 
+TODO
 Compiler: gcc (Debian 12.2.0-14) 12.2.0
 Flags: -Wall -Wextra -lm
 
@@ -44,7 +46,7 @@ Distances are correct
 
 The tests demonstrates the correctness of the algorithm.
 We now procede to determine its execution time using
-matrices of size 5, 10, 20, 40, 80, 160 and 320 to empirically
+matrices of size TODO 5, 10, 20, 40, 80, 160 and 320 to empirically
 check the complexity of the algorithm. We will accomplish
 this by doing the calculations with the estimated bound and
 a higher and lower bounds.
@@ -57,6 +59,7 @@ NOTES:
       calculations. The constant K has to be a power of 10 for the
       measurement to be correct so we chose 1000.
 
+TODO
 Dijkstra execution time:
      n	  t(n)		    t(n)/n^2	t(n)/2.7	   t(n)/n^3.2
 *    5	2.753000	    0.110120	0.035693		0.015963		
@@ -72,10 +75,10 @@ Tight bound: 2.7
 Slightly overestimated bound: n^3.2
 
 Analysing the results we observe that the hypothesized tight bound
-tends to the constant 0.02 while the other two tend to zero and
-infinity. This proves the complexity of the algorithm is indeed 2.7.
+tends to the constant TODO 0.02 while the other two tend to zero and
+infinity. This proves the complexity of the algorithm is indeed TODO 2.7.
 
-Observations:
+Observations: TODO
 As always, the first couple of measurements are a bit different
 because it is the start of the execution, but it soon stabilizes.
 
