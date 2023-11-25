@@ -117,8 +117,9 @@ void test_dijkstra (int n, int data[], int correct[])
     matrix distances = createMatrix(n);
     initMatrix(data, n, graph);
     dijkstra(graph, distances, n);
+    printf("Trying dijkstra with:\n");
     printmatrix(distances,n);
-    printf("Distances are %s\n",
+    printf("Distances are %s\n\n",
             compare(correct, n, distances) == 1 ?
                 "correct" :
                 "wrong");
@@ -158,8 +159,9 @@ void init_seed()
     /* set the seed of a new sequence of pseudo-random integers */
 }
 
-void randomInit(int n, matrix m)
+int randomInit(int n, matrix m)
 {
+    int edges = 0;
     for (int i = 0; i < n; i++)
         for (int j = i + 1; j < n; j++)
             m[i][j] = rand() % MAX_SIZE + 1;
@@ -167,8 +169,11 @@ void randomInit(int n, matrix m)
         for (int j = 0; j <= i; j++)
             if (i == j)
                 m[i][j] = 0;
-            else
+            else {
                 m[i][j] = m[j][i];
+                edges++;
+            }
+    return edges;
 }
 
 double microseconds() { /* obtains the system time in microseconds */
