@@ -461,7 +461,7 @@ void cmd_read(int paramN, char* command[])
     //p = stringtopointer(command[1]);
 
     if (command[2] != NULL)
-    amount = (size_t) atoll(command[2]);
+        amount = (size_t) atoll(command[2]);
 
     if ((n = readFile(command[0], p, amount)) == -1)
         perror ("Could not read file");
