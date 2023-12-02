@@ -34,4 +34,14 @@ void help_memdump();
 void help_memfill();
 void help_mem();
 void help_recurse();
+void help_uid();
+void help_showvar();
+void help_changevar();
+void help_subsvar();
+void help_showenv();
+void help_fork();
+void help_exec();
+void help_jobs();
+void help_deljobs();
+void help_job();
 

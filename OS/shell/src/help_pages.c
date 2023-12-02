@@ -14,38 +14,48 @@ struct help {
 };
 
 struct help help_page[] = {
-  {"-l", list_commands},
-  {"help", help_help},
-  {"authors", help_authors},
-  {"pid", help_pid},
-  {"chdir", help_chdir},
-  {"date", help_date},
-  {"time", help_time},
-  {"hist", help_hist},
-  {"command", help_command},
-  {"open", help_open},
-  {"close", help_close},
-  {"dup", help_dup},
-  {"listopen", help_listopen},
-  {"infosys", help_infosys},
-  {"quit", help_quit},
-  {"exit", help_quit},
-  {"bye", help_quit},
-  {"create", help_create},
-  {"stat", help_stat},
-  {"list", help_list},
-  {"delete", help_delete},
-  {"deltree", help_deltree},
-  {"malloc", help_malloc},
-  {"shared", help_shared},
-  {"mmap", help_mmap},
-  {"read", help_read},
-  {"write", help_write},
-  {"memdump", help_memdump},
-  {"memfill", help_memfill},
-  {"mem", help_mem},
-  {"recurse", help_recurse},
-  {NULL, NULL}
+    {"-l", list_commands},
+    {"help", help_help},
+    {"authors", help_authors},
+    {"pid", help_pid},
+    {"chdir", help_chdir},
+    {"date", help_date},
+    {"time", help_time},
+    {"hist", help_hist},
+    {"command", help_command},
+    {"open", help_open},
+    {"close", help_close},
+    {"dup", help_dup},
+    {"listopen", help_listopen},
+    {"infosys", help_infosys},
+    {"quit", help_quit},
+    {"exit", help_quit},
+    {"bye", help_quit},
+    {"create", help_create},
+    {"stat", help_stat},
+    {"list", help_list},
+    {"delete", help_delete},
+    {"deltree", help_deltree},
+    {"malloc", help_malloc},
+    {"shared", help_shared},
+    {"mmap", help_mmap},
+    {"read", help_read},
+    {"write", help_write},
+    {"memdump", help_memdump},
+    {"memfill", help_memfill},
+    {"mem", help_mem},
+    {"recurse", help_recurse},
+    {"uid", help_uid},
+    {"showvar", help_showvar},
+    {"changevar", help_changevar},
+    {"subsvar", help_subsvar},
+    {"showenv", help_showenv},
+    {"fork", help_fork},
+    {"exec", help_exec},
+    {"jobs", help_jobs},
+    {"deljobs", help_deljobs},
+    {"job", help_job},
+    {NULL, NULL}
 }; 
 
 int find_help_page (char* command)
@@ -361,5 +371,98 @@ void help_recurse()
     printf(CMD_NAME_CLR "\nRECURSE\n" RESET_CLR
             "\tExecutes a recursive function n times\n"
             "\tUsage: recurse n\n");
+}
+
+void help_uid()
+{
+    printf(CMD_NAME_CLR "\nUID\n" RESET_CLR
+           "\tView the process's credentials\n"
+           "\tUsage: uid [-get|-set] [-l][id]\n"
+           "\tParameters:\n"
+           "\t\t-get: prints the credentials (same as no parameters)\n"
+           "\t\t-set id: sets the credentials to that id\n"
+           "\t\t-set -l id: sets the credentiasl to a login id\n");
+}
+
+void help_showvar()
+{
+    printf(CMD_NAME_CLR "\nSHOWVAR\n" RESET_CLR
+           "\tShows the value and address of the enviroment variable\n"
+           "\tUsage: showvar var\n");
+}
+
+void help_changevar()
+{
+    printf(CMD_NAME_CLR "\nCHANGEVAR\n" RESET_CLR
+           "\tChanges the value of an enviroment variable\n"
+           "\tUsage: changevar [-a|-e|-p] var value\n"
+           "\tParameters:\n"
+           "\t\t-a: accesses using the third argument of main\n"
+           "\t\t-e: accesses using environ\n"
+           "\t\t-p: accesses using putenv\n");
+}
+
+void help_subsvar()
+{
+    printf(CMD_NAME_CLR "\nSUBSVAR\n" RESET_CLR
+           "\tChanges one enviroment variable for other\n"
+           "\tUsage: [-a|-e] var1 var2 value\n"
+           "\tParameters:\n"
+           "\t\t-a: accesses using the third argument of main\n"
+           "\t\t-e: accesses using environ\n");
+}
+
+void help_showenv()
+{
+    printf(CMD_NAME_CLR "\nSHOWENV\n" RESET_CLR
+           "\tShows the process enviroment.\n"
+           "\tAccesses using the third argument of main\n"
+           "\tUsage: showenv [-environ|-addr]\n"
+           "\tParameters:\n"
+           "\t\t-environ: accesses using environ\n"
+           "\t\t-addr: shows the value and storage address\n"
+           "\t\t       of environ and the third argument of main\n");
+}
+
+void help_fork()
+{
+    printf(CMD_NAME_CLR "\nFORK\n" RESET_CLR
+           "\tThe shell does the fork system call\n"
+           "\tand waits for its child to end\n"
+           "\tUsage: fork\n");
+}
+
+void help_exec()
+{
+    printf(CMD_NAME_CLR "\nFORK\n" RESET_CLR
+           "\tExecutes a program with arguments\n"
+           "\twithout creating a new process\n"
+           "\tUsage: exec program arguments\n");
+}
+
+void help_jobs()
+{
+    printf(CMD_NAME_CLR "\nJOBS\n" RESET_CLR
+           "\tLists background processes\n"
+           "\tUsage: jobs\n");
+}
+
+void help_deljobs()
+{
+    printf(CMD_NAME_CLR "\nDELJOBS\n" RESET_CLR
+           "\tDeletes background processes from the list\n"
+           "\tUsage: deljobs [-term][-sig]\n"
+           "\tParameters:\n"
+           "\t\t-term: terminated processes\n"
+           "\t\t-sig: terminated by signal\n");
+}
+
+void help_job()
+{
+    printf(CMD_NAME_CLR "\nJOB\n" RESET_CLR
+           "\tShows info on a background process\n"
+           "\tUsage: job [-fg] pid\n"
+           "\tParameters:\n"
+           "\t\t-fg: changes it to foreground\n");
 }
 
