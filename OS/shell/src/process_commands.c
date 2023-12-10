@@ -4,6 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <pwd.h>
 
 #include "types.h"
 #include "list.h"
@@ -55,15 +56,76 @@ int check_process_commands (int paramN, char* command[])
 }
 
 void dysplayUID(){
-    printf("Real credential: %d",getuid());
-    printf("Effective credential: %d",geteuid());
+    uid_t uid = getuid();
+    uid_t euid = geteuid();
+
+    struct passwd *u = getpwuid(uid);
+    struct passwd *e = getpwuid (euid);
+
+    if (u == NULL){
+        perror("No user");
+    }
+    else printf("Real credential: %d User:%s\n",uid, e->pw_name);
+
+    if (e == NULL){
+        perror("No user");
+    }
+    else printf("Effective credential: %d User:%s\n",euid, e->pw_name);
+}
+
+void changeUID(char* command, int type){
+    uid_t uid = (uid_t) atoi(command);
+    
+    if (!type){
+        if (setuid(uid) == -1){
+            printf(RED "Error: " RESET_CLR "cannot change credential\n");
+        }
+        else dysplayUID();
+    }
+    else {
+        struct passwd *p;
+        if ( (p = getpwnam(command)) == NULL){
+           printf(RED "Error: " RESET_CLR "No user %s\n",command);
+           return;
+        }
+        if (setuid(p->pw_uid) == -1){
+            printf(RED "Error: " RESET_CLR "cannot change credential\n");
+            return;
+        }
+        else dysplayUID();
+    }
+    return;
 }
 
 void cmd_uid(int paramN, char* command[])
 {
-    if (!command){
+    //uid [-get|-set] [-l] [id] no get
+    if (!paramN)
         dysplayUID();
+    else if (paramN > 0){
+
+        if (paramN == 1 && !strcmp(command[0],"-get")){
+            dysplayUID();
+            return;
+        }
+
+        else if (!strcmp(command[0],"-set")){
+            if ((paramN == 2) && (strcmp(command[1],"-l"))){
+                changeUID(command[1], 0);
+                return;
+            }
+            if (paramN == 3){
+                if (!strcmp(command[1],"-l")){
+                    changeUID(command[2], 1);
+                    return;
+                }
+            }
+        }
+
+        invalid_param();
     }
+    else invalid_param();
+    return;
 }
 
 /* void cmd_showvar(int paramN, char **command) */
