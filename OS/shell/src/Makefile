@@ -36,7 +36,7 @@ build/mem_commands.o: mem_commands.c mem_commands.h build
 	gcc ${CFLAGS} -c mem_commands.c -o build/mem_commands.o
 
 build/process_commands.o: process_commands.c process_commands.h build
-	gcc ${CFLAGS} -C process_commands.c -o build/process_commands.o
+	gcc ${CFLAGS} -c process_commands.c -o build/process_commands.o
 
 build:
 	mkdir -p build
