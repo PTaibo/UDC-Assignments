@@ -6,6 +6,7 @@
 #include "file_commands.h"
 #include "stat_commands.h"
 #include "mem_commands.h"
+#include "process_commands.h"
 #include "help_pages.h"
 #include "colors.h"
 #include "types.h"
@@ -32,6 +33,7 @@ void executeCommand (int paramN, char* command_chunks[])
     else if (check_file_commands(paramN, command_chunks));
     else if (check_stat_commands(paramN, command_chunks));
     else if (check_mem_commands(paramN, command_chunks));
+    else if (check_process_commands(paramN, command_chunks));
     else
         printf(RED "Error: " RESET_CLR "not a valid command\n");
 }
