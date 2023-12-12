@@ -12,6 +12,7 @@
 #include "history_commands.h"
 #include "file_commands.h"
 #include "mem_commands.h"
+#include "env.h"
 
 int main()
 {
@@ -19,6 +20,7 @@ int main()
     init_file_list();
     init_history();
     init_mem();
+    set_environment(env);
 
     char cwd[MAX_COMMAND_SIZE];
     getcwd(cwd, MAX_COMMAND_SIZE);

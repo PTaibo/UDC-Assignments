@@ -10,6 +10,7 @@
 #include "help_pages.h"
 #include "colors.h"
 #include "error_msgs.h"
+#include "env.h"
 
 /* DynamicList procList; */
 
