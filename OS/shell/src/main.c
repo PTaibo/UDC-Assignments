@@ -14,7 +14,7 @@
 #include "mem_commands.h"
 #include "env.h"
 
-int main()
+int main(int argc, char* argv[], char* env[])
 {
     char line [MAX_COMMAND_SIZE];
     init_file_list();
