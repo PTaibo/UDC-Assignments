@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <pwd.h>
+#include <errno.h>
 
 #include "types.h"
 #include "list.h"
@@ -30,10 +31,10 @@
 
 struct cmd proc_commands[] = {
     {"uid", cmd_uid},
-    /* {"showvar", cmd_showvar}, */
+    {"showvar", cmd_showvar},
     /* {"changevar", cmd_changevar}, */
     /* {"subsvar", cmd_subsvar}, */
-    /* {"showenv", cmd_showenv}, */
+    {"showenv", cmd_showenv},
     /* {"fork", cmd_fork}, */
     /* {"exec", cmd_exec}, */
     /* {"jobs", cmd_jobs}, */
@@ -128,9 +129,54 @@ void cmd_uid(int paramN, char* command[])
     return;
 }
 
-/* void cmd_showvar(int paramN, char **command) */
-/* { */
-/* } */
+void showenv(char **enviroment, char* enviromentname)
+{
+    for (int i = 0; enviroment[i] != NULL; i++){
+        printf("%p->%s[%d]=(%p) %s\n",&enviroment[i],
+                                      enviromentname,
+                                      i,
+                                      enviroment[i],
+                                      enviroment[i]);
+    }
+}
+
+void postionvar(char **env, char* var)
+{
+    int p = -1;
+    for (int i = 0; env[i] != NULL; i++){
+        if (!strncmp(env[i],var,strlen(var)) && env[i][strlen(var)] == '='){
+            p = i;
+            continue;
+        }
+    }
+
+    if (p == -1){
+            errno=ENOENT;
+            //printf(RED "Error: " RESET_CLR "cannot find variable %s", var);
+            perror(RED "Error: " RESET_CLR "cannot find variable");
+    }
+    else{
+            printf(CYAN "Con main arg3 = " RESET_CLR"%s(%p) @%p\n", env[p], env[p], &env[p]);
+            printf(CYAN "Con environ = " RESET_CLR"%s(%p) @%p\n", env[p], env[p], &env[p]);
+            printf(CYAN "Con getenv = " RESET_CLR "(%p)\n", getenv(var));
+        }
+    
+}
+
+void cmd_showvar(int paramN, char* command[]) 
+{ 
+    if (!paramN){
+        //showvar
+        showenv(__environ,"main arg3");
+    }
+    
+    else if (paramN == 1)
+        //showvar <var>
+        postionvar(__environ,command[0]);
+        
+
+    else invalid_param();
+} 
 
 /* void cmd_changevar(int paramN, char **command) */
 /* { */
@@ -140,9 +186,37 @@ void cmd_uid(int paramN, char* command[])
 /* { */
 /* } */
 
-/* void cmd_showenv(int paramN, char **command) */
-/* { */
-/* } */
+void mainthird(int n, char **env, char *envp){
+
+    if (n == 0){
+    printf("environ: %p (keep in %p)\n", &env[0], env);
+    printf("main arg3: %p (keep in %p)\n", &env[0], envp);
+    }
+}
+
+void cmd_showenv(int paramN, char* command[])
+{
+    if(!paramN){
+        //showenv
+        showenv(__environ,"main arg3");
+    }
+
+    else if (paramN == 1){
+        //showenv -environ
+        if (!strcmp(command[0],"-environ")){
+            showenv(__environ,"environ");
+        }
+        //showenv -addr 
+        else if (!strcmp(command[0],"-addr")){
+            mainthird(0, __environ, "args");
+            //printf("environ: %p (keep in %p)\n", &__environ[0], __environ);
+            //printf("main arg3: %p (keep in %p)", &__environ[0], __environ);
+        }
+        else invalid_param();
+    }
+
+    else invalid_param();
+}
 
 /* void cmd_fork(int paramN, char **command) */
 /* { */
