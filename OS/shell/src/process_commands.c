@@ -132,6 +132,13 @@ void cmd_uid(int paramN, char* command[])
 
 void showenv(char **enviroment, char* enviromentname)
 {
+    int argc = (int) get_args();
+    if (argc){
+        char** argv = get_argv();
+        for (int i = 0; i < argc; i++)
+        printf ("%p->argv[%d]=(%p) %s\n", &argv[i], i, argv[i], argv[i]);
+    }
+
     for (int i = 0; enviroment[i] != NULL; i++){
         printf("%p->%s[%d]=(%p) %s\n",&enviroment[i],
                                       enviromentname,
