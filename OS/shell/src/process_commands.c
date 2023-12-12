@@ -148,7 +148,7 @@ void showenv(char **enviroment, char* enviromentname)
     }
 }
 
-void postionvar(char **env, char* var)
+int postionvar(char **env, char* var)
 {
     int p = -1;
     for (int i = 0; env[i] != NULL; i++){
@@ -157,20 +157,23 @@ void postionvar(char **env, char* var)
             p = i;
             continue;
         }
-    }
+    }    
+    return p;
+}
 
+void printvar(int p, char* var, char **env)
+{
     if (p == -1){
-            //errno=ENOENT;
-            printf(RED "Error: " RESET_CLR "cannot find variable %s\n", var);
-            //perror(RED "Error: " RESET_CLR "cannot find
+        //errno=ENOENT;
+        printf(RED "Error: " RESET_CLR "cannot find variable %s\n", var);
+        //perror(RED "Error: " RESET_CLR "cannot find
     } 
     else{
-            char** marg = get_mainarg3();
-            printf(CYAN "Con main arg3 = " RESET_CLR"%s(%p) @%p\n", marg[p], marg[p], &marg[p]);
-            printf(CYAN "Con environ = " RESET_CLR"%s(%p) @%p\n", env[p], env[p], &env[p]);
-            printf(CYAN "Con getenv = " RESET_CLR "(%p)\n", getenv(var));
-        }
-    
+        char** marg = get_mainarg3();
+        printf(CYAN "Con main arg3 = " RESET_CLR"%s(%p) @%p\n", marg[p], marg[p], &marg[p]);
+        printf(CYAN "Con environ = " RESET_CLR"%s(%p) @%p\n", env[p], env[p], &env[p]);
+        printf(CYAN "Con getenv = " RESET_CLR "%s (%p)\n", getenv(var), getenv(var));
+    }
 }
 
 void cmd_showvar(int paramN, char* command[]) 
@@ -180,24 +183,75 @@ void cmd_showvar(int paramN, char* command[])
         showenv(get_mainarg3(),"main arg3");
     }
     
-    else if (paramN == 1)
+    else if (paramN == 1){
         //showvar <var>
-        postionvar(get_mainarg3(),command[0]);
-        
+        int pos = 0;
+        pos = postionvar(get_mainarg3(),command[0]);
+        printvar(pos, command[0], __environ);
+    }
 
     else invalid_param();
 } 
 
-/* void cmd_changevar(int paramN, char **command) */
-/* { */
-/* } */
+int changevar (char** env, char* var, char* valor)
+{                                                   
+  int pos;
+  char *aux;
+   
+  if ((pos=postionvar(env, var)) == -1)
+    return(-1);
+ 
+  if ((aux=(char *)malloc(strlen(var)+strlen(valor)+2)) == NULL)//for the = and the \0
+	return -1;
+
+  strcpy(aux,var);
+  strcat(aux,"=");
+  strcat(aux,valor);
+
+  env[pos]=aux;
+  return (pos);
+}
+
+void cmd_changevar(int paramN, char* command[])
+{
+    //changevar [-a| -e | -p] var valor
+    if (paramN < 3){
+        missing_param();
+    }
+    
+    else if (paramN == 3){
+    
+        if (strcmp(command[0],"-a")){
+            int p = 0;
+            p = changevar(get_mainarg3(), command[1], command[2]);
+            printvar(p, command[1],get_mainarg3());
+        }
+        else if (strcmp(command[0], "-e")){
+            int p = 0;
+            p = changevar(__environ, command[1], command[2]);
+            printvar(p, command[1], __environ);
+        }
+
+        else if (strcmp(command[0], "-p")){
+            int p = 0;
+            p = changevar(__environ, command[1], command[2]);
+            printvar(p, command[1], __environ);
+        }
+
+        else invalid_param(); 
+        
+
+    } 
+
+    else invalid_param();
+}
 
 /* void cmd_subsvar(int paramN, char **command) */
 /* { */
 /* } */
 
 
-void cmd_showenv(int paramN, char* command[])
+void cmd_showenv (int paramN, char* command[])
 {
     if(!paramN){
         //showenv
