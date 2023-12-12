@@ -109,10 +109,12 @@ void help_help()
 void list_commands()
 {
     printf("\nThe avaliable commands are:\n");
-        for (int i = 1; help_page[i].command != NULL; i++){
-            printf("\t%s\n", help_page[i].command);
-        }
-        return;
+    for (int i = 1; help_page[i].command != NULL; i++){
+        printf("\t%s\n", help_page[i].command);
+    }
+    printf("You can also execute some external commands\n"
+           "(ls, cal...)\nAdd & to the end to execute in the background");
+    return;
 }
 
 void help_authors()
