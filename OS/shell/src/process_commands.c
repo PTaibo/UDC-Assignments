@@ -7,6 +7,8 @@
 #include <pwd.h>
 #include <errno.h>
 #include <sys/resource.h>
+#include <sys/wait.h>
+#include <time.h>
 
 #include "types.h"
 #include "list.h"
@@ -14,6 +16,8 @@
 #include "colors.h"
 #include "error_msgs.h"
 #include "proc_signals.h"
+#include "env.h"
+#include "mem_commands.h"
 
 DynamicList procList;
 
@@ -27,7 +31,6 @@ void delete_procblock(void* p)
     process *proc = (process*) p;
     free(proc->name);
     free(proc->launch_time);
-    free(proc->launch_date);
 }
 
 void rm_proc()
@@ -227,6 +230,17 @@ void cmd_showenv(int paramN, char* command[])
 /* { */
 /* } */
 
+void new_process (char* name, pid_t pid)
+{
+    process *proc = malloc(sizeof(process));
+    proc->pid = pid;
+    proc->status = proc_status[0].value;
+    proc->name = malloc(MAX_ELEMENTS);
+    strcpy(proc->name, name);
+    proc->launch_time = parse_time();
+    dynList_add(proc, &procList);
+}
+
 int update_proc_info (process *proc)
 {
     // TODO
@@ -238,16 +252,18 @@ int update_proc_info (process *proc)
 
 void print_proc_info (process *proc)
 {
-    update_proc_info(proc);
-    printf("%d %s %s ", proc->pid,
-                        proc->launch_date,
+    int priority = update_proc_info(proc);
+    printf("%d  p:%d  %s ", proc->pid,
+                        priority,
                         proc-> launch_time);
     for (int i = 0; proc_status[i].value != -1; i++) {
         if (proc->status == proc_status[i].value){
-            printf("%s ", proc_status[i].name);
+            printf(" %s ", proc_status[i].name);
             break;
         }
     }
+    printf(" %s ", proc->name);
+    printf("\n");
 }
 
 void cmd_jobs(UNUSED int paramN, UNUSED char **command)

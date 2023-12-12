@@ -6,6 +6,7 @@
 #include <sys/wait.h>
 
 #include "colors.h"
+#include "process_commands.h"
 
 void print_error()
 {
@@ -19,11 +20,15 @@ pid_t create_child (char* command[])
 
     if (child == 0) {
         int status_code = execvp(command[0], command);
-
         if (status_code == -1) {
             print_error();
             return -1;
         }
+    }
+
+    if (child < 0){
+        print_error();
+        return -1;
     }
 
     return child;
@@ -41,13 +46,10 @@ void execute_external_command(int arguments, char* command[])
 
     pid_t child = create_child (command);
 
-    if (child < 0){
-        print_error();
-        return;
+    if (child != -1 && !background_process){
+        waitpid(child, NULL, 0);
+        new_process(command[0], child);
     }
 
-    if (!background_process)
-        waitpid(child, NULL, 0);
-
-    return;
+   return;
 }
