@@ -1,7 +1,7 @@
 #CFLAGS = -Wall -Wextra -O2
  CFLAGS = -Wall -Wextra -g
 
-MAIN_OBJ = build/basic_commands.o build/help_pages.o build/file_commands.o build/list.o build/history_commands.o build/command_processor.o build/error_msgs.o build/stat_commands.o build/mem_commands.o build/process_commands.o build/env.o
+MAIN_OBJ = build/basic_commands.o build/help_pages.o build/file_commands.o build/list.o build/history_commands.o build/command_processor.o build/error_msgs.o build/stat_commands.o build/mem_commands.o build/process_commands.o build/env.o build/external_commands.o
 
 all: build/shell
 
@@ -41,6 +41,9 @@ build/process_commands.o: process_commands.c process_commands.h build
 build/env.o: env.c env.h build
 	gcc ${CFLAGS} -c env.c -o build/env.o
 
+build/external_commands.o: external_commands.c external_commands.h build
+	gcc ${CFLAGS} -c  external_commands.c -o build/external_commands.o
+ 
 build:
 	mkdir -p build
 

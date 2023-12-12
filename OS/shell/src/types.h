@@ -18,6 +18,12 @@ struct open_flags {
     int flag;
 };
 
+// Signal values
+struct map {
+    char *name;
+    int value;
+};
+
 typedef struct {
     void* addr;
     size_t size;
@@ -27,4 +33,13 @@ typedef struct {
     int fd;
     char* file_name;
 } mem_block;
+
+typedef struct {
+    pid_t pid;
+    char *name;
+    char *launch_date;
+    char *launch_time;
+    int status;
+    // ? command line
+} process;
 

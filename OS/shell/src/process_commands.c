@@ -6,29 +6,34 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <errno.h>
+#include <sys/resource.h>
 
 #include "types.h"
 #include "list.h"
 #include "help_pages.h"
 #include "colors.h"
 #include "error_msgs.h"
-#include "env.h"
+#include "proc_signals.h"
 
-/* DynamicList procList; */
+DynamicList procList;
 
-/* void init_proc() */
-/* { */
-/*     dynList_init(&procList); */
-/* } */
+void init_proc()
+{
+    dynList_init(&procList);
+}
 
-/* void delete_procblock() */
-/* { */
-/* } */
+void delete_procblock(void* p)
+{
+    process *proc = (process*) p;
+    free(proc->name);
+    free(proc->launch_time);
+    free(proc->launch_date);
+}
 
-/* void rm_proc() */
-/* { */
-/*     dynList_clear(delete_procblock, &procList); */
-/* } */
+void rm_proc()
+{
+    dynList_clear(delete_procblock, &procList);
+}
 
 struct cmd proc_commands[] = {
     {"uid", cmd_uid},
@@ -36,11 +41,11 @@ struct cmd proc_commands[] = {
     // {"changevar", cmd_changevar},
     // {"subsvar", cmd_subsvar}, 
     {"showenv", cmd_showenv},
-    // {"fork", cmd_fork}, 
-    // {"exec", cmd_exec}, 
-    /* {"jobs", cmd_jobs}, */
+    /* {"fork", cmd_fork}, */
+    /* {"exec", cmd_exec}, */
+    {"jobs", cmd_jobs},
     /* {"deljobs", cmd_deljobs}, */
-    /* {"job", cmd_job}, */
+    {"job", cmd_job},
     {NULL, NULL}
 };
 
@@ -132,13 +137,6 @@ void cmd_uid(int paramN, char* command[])
 
 void showenv(char **enviroment, char* enviromentname)
 {
-    int argc = (int) get_args();
-    if (argc){
-        char** argv = get_argv();
-        for (int i = 0; i < argc; i++)
-        printf ("%p->argv[%d]=(%p) %s\n", &argv[i], i, argv[i], argv[i]);
-    }
-
     for (int i = 0; enviroment[i] != NULL; i++){
         printf("%p->%s[%d]=(%p) %s\n",&enviroment[i],
                                       enviromentname,
@@ -246,7 +244,7 @@ void cmd_changevar(int paramN, char* command[])
     else invalid_param();
 }
 
-/* void cmd_subsvar(int paramN, char **command) */
+/* void cmd_subsvar(int paramN, char* command[]) */
 /* { */
 /* } */
 
@@ -275,23 +273,92 @@ void cmd_showenv (int paramN, char* command[])
     else invalid_param();
 }
 
-/* void cmd_fork(int paramN, char **command) */
+/* void cmd_fork(int paramN, char* command[]) */
 /* { */
 /* } */
 
-/* void cmd_exec(int paramN, char **command) */
+/* void cmd_exec(int paramN, char* command[]) */
 /* { */
 /* } */
 
-/* void cmd_jobs(int paramN, char **command) */
-/* { */
-/* } */
+int update_proc_info (process *proc)
+{
+    // TODO
+    // waitpid reports status changes (not the state itself)
+    // wstats has only a meaningful value if waitpid returns the pid
+    // Priority is checked here. Return it.
+    return getpriority(PRIO_PROCESS, proc->pid);
+}
 
-/* void cmd_deljobs(int paramN, char **command) */
-/* { */
-/* } */
+void print_proc_info (process *proc)
+{
+    update_proc_info(proc);
+    printf("%d %s %s ", proc->pid,
+                        proc->launch_date,
+                        proc-> launch_time);
+    for (int i = 0; proc_status[i].value != -1; i++) {
+        if (proc->status == proc_status[i].value){
+            printf("%s ", proc_status[i].name);
+            break;
+        }
+    }
+}
 
-/* void cmd_job(int paramN, char **command) */
-/* { */
-/* } */
+void cmd_jobs(UNUSED int paramN, UNUSED char **command)
+{
+    Pos pos = dynList_first(procList);
+    for (; pos != NULL; pos = dynList_next(&pos)){
+        process *proc = dynList_getter(pos);
+        print_proc_info(proc);
+    }
+}
+
+void cmd_deljobs(int paramN, char* command[])
+{
+    
+}
+
+process* find_job_by_pid (int pid){
+    Pos pos = dynList_first(procList);
+    for (; pos != NULL; pos = dynList_next(&pos)) {
+        process *proc = dynList_getter(pos);
+        if (proc->pid == pid) {
+            return proc;
+        }
+    }   
+    return NULL;
+}
+
+void delete_process (int pid)
+{
+    Pos pos = dynList_first(procList);
+    for (; pos != NULL; pos = dynList_next(&pos)) {
+        process *proc = dynList_getter(pos);
+        if (proc->pid == pid) {
+            dynList_delete(delete_procblock, pos, &procList);
+            return;
+        }
+    }
+}
+
+void move_to_foreground (int pid)
+{
+    // tcsetpgrp(fd, pid);
+    delete_process(pid);
+}
+
+void cmd_job(int paramN, char* command[])
+{
+    if (!paramN)
+        return missing_param();
+    if (paramN == 1 && atoi(command[0])) {
+        process *proc = find_job_by_pid(atoi(command[0]));
+        if (proc == NULL)
+            printf(RED "Error: " RESET_CLR "pid not in list\n");
+        else
+            print_proc_info(proc);
+    }
+    if (paramN == 2 && !strcmp(command[0], "-fg"))
+        move_to_foreground(atoi(command[1]));
+}
 
