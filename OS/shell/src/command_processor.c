@@ -10,6 +10,7 @@
 #include "help_pages.h"
 #include "colors.h"
 #include "types.h"
+#include "external_commands.h"
 
 int divideLine (char* line, char* command_chunks[])
 {
@@ -35,7 +36,8 @@ void executeCommand (int paramN, char* command_chunks[])
     else if (check_mem_commands(paramN, command_chunks));
     else if (check_process_commands(paramN, command_chunks));
     else
-        printf(RED "Error: " RESET_CLR "not a valid command\n");
+        // printf(RED "Error: " RESET_CLR "not a valid command\n");
+        execute_external_command(paramN, command_chunks);
 }
 
 void processCommand (char* line){
