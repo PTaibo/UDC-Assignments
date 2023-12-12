@@ -33,11 +33,11 @@
 struct cmd proc_commands[] = {
     {"uid", cmd_uid},
     {"showvar", cmd_showvar},
-    /* {"changevar", cmd_changevar}, */
-    /* {"subsvar", cmd_subsvar}, */
+    // {"changevar", cmd_changevar},
+    // {"subsvar", cmd_subsvar}, 
     {"showenv", cmd_showenv},
-    /* {"fork", cmd_fork}, */
-    /* {"exec", cmd_exec}, */
+    // {"fork", cmd_fork}, 
+    // {"exec", cmd_exec}, 
     /* {"jobs", cmd_jobs}, */
     /* {"deljobs", cmd_deljobs}, */
     /* {"job", cmd_job}, */
@@ -145,19 +145,21 @@ void postionvar(char **env, char* var)
 {
     int p = -1;
     for (int i = 0; env[i] != NULL; i++){
-        if (!strncmp(env[i],var,strlen(var)) && env[i][strlen(var)] == '='){
+        int lengthvar = strlen(var);
+        if (!strncmp(env[i],var,lengthvar) && env[i][lengthvar] == '='){
             p = i;
             continue;
         }
     }
 
     if (p == -1){
-            errno=ENOENT;
-            //printf(RED "Error: " RESET_CLR "cannot find variable %s", var);
-            perror(RED "Error: " RESET_CLR "cannot find variable");
-    }
+            //errno=ENOENT;
+            printf(RED "Error: " RESET_CLR "cannot find variable %s\n", var);
+            //perror(RED "Error: " RESET_CLR "cannot find
+    } 
     else{
-            printf(CYAN "Con main arg3 = " RESET_CLR"%s(%p) @%p\n", env[p], env[p], &env[p]);
+            char** marg = get_mainarg3();
+            printf(CYAN "Con main arg3 = " RESET_CLR"%s(%p) @%p\n", marg[p], marg[p], &marg[p]);
             printf(CYAN "Con environ = " RESET_CLR"%s(%p) @%p\n", env[p], env[p], &env[p]);
             printf(CYAN "Con getenv = " RESET_CLR "(%p)\n", getenv(var));
         }
@@ -168,12 +170,12 @@ void cmd_showvar(int paramN, char* command[])
 { 
     if (!paramN){
         //showvar
-        showenv(__environ,"main arg3");
+        showenv(get_mainarg3(),"main arg3");
     }
     
     else if (paramN == 1)
         //showvar <var>
-        postionvar(__environ,command[0]);
+        postionvar(get_mainarg3(),command[0]);
         
 
     else invalid_param();
@@ -187,19 +189,12 @@ void cmd_showvar(int paramN, char* command[])
 /* { */
 /* } */
 
-void mainthird(int n, char **env, char *envp){
-
-    if (n == 0){
-    printf("environ: %p (keep in %p)\n", &env[0], env);
-    printf("main arg3: %p (keep in %p)\n", &env[0], envp);
-    }
-}
 
 void cmd_showenv(int paramN, char* command[])
 {
     if(!paramN){
         //showenv
-        showenv(__environ,"main arg3");
+        showenv(get_mainarg3(),"main arg3");
     }
 
     else if (paramN == 1){
@@ -209,9 +204,9 @@ void cmd_showenv(int paramN, char* command[])
         }
         //showenv -addr 
         else if (!strcmp(command[0],"-addr")){
-            mainthird(0, __environ, "args");
-            //printf("environ: %p (keep in %p)\n", &__environ[0], __environ);
-            //printf("main arg3: %p (keep in %p)", &__environ[0], __environ);
+            char** mainarg = get_mainarg3();
+            printf(CYAN"environ: " RESET_CLR"%p (keep in %p)\n", __environ, &__environ);
+            printf(CYAN"main arg3: "RESET_CLR"%p (keep in %p)\n", mainarg, &mainarg);
         }
         else invalid_param();
     }

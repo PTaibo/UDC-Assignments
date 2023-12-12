@@ -14,13 +14,13 @@
 #include "mem_commands.h"
 #include "env.h"
 
-int main(int argc, char* argv[], char* env[])
+int main(UNUSED int argc,UNUSED char* argv[], char* env[])
 {
     char line [MAX_COMMAND_SIZE];
     init_file_list();
     init_history();
     init_mem();
-    set_environment(env);
+    set_mainarg3(env);
 
     char cwd[MAX_COMMAND_SIZE];
     getcwd(cwd, MAX_COMMAND_SIZE);
