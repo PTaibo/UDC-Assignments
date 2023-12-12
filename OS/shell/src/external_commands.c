@@ -46,10 +46,11 @@ void execute_external_command(int arguments, char* command[])
 
     pid_t child = create_child (command);
 
-    if (child != -1 && !background_process){
+    if (child == -1) return;
+    if (!background_process)
         waitpid(child, NULL, 0);
+    else
         new_process(command[0], child);
-    }
 
    return;
 }
