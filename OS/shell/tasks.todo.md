@@ -29,3 +29,5 @@
     - [X] Compiled program is called p1 (Makefile)
     - [X] Main file is called p1.c
     - [X] Names and logins appear in the source code of the main programs (at the top)
+- [ ] Memdump
+	- [ ] Make memdump to print things properly line with posicion and not all posicion and info
