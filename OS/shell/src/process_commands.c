@@ -275,10 +275,10 @@ void cmd_jobs(UNUSED int paramN, UNUSED char **command)
     }
 }
 
-void cmd_deljobs(int paramN, char* command[])
-{
-    
-}
+// void cmd_deljobs(int paramN, char* command[])
+// {
+//     
+// }
 
 process* find_job_by_pid (int pid){
     Pos pos = dynList_first(procList);
@@ -303,10 +303,33 @@ void delete_process (int pid)
     }
 }
 
+void add_handlers_foreground ()
+{
+    struct sigaction act;
+    memset(&act, 0, sizeof(act));
+    act.sa_handler = SIG_IGN;
+    sigaction(SIGTTOU, &act, NULL);
+}
+
+void remove_hanlders_foreground ()
+{
+    struct sigaction act;
+    memset(&act, 0, sizeof(act));
+    act.sa_handler = SIG_DFL;
+    sigaction(SIGTTOU, &act, NULL);
+}
+
 void move_to_foreground (int pid)
 {
-    // tcsetpgrp(fd, pid);
+    if (find_job_by_pid(pid) == NULL) {
+        printf(RED "Error: " RESET_CLR "pid not in list\n");
+        return;
+    }
+    add_handlers_foreground();
+    setpgid(pid, getpgid(getpid()));
     delete_process(pid);
+    waitpid(pid, NULL, 0);
+    remove_hanlders_foreground();
 }
 
 void cmd_job(int paramN, char* command[])
