@@ -63,7 +63,7 @@ struct cmd proc_commands[] = {
     {"subsvar", cmd_subsvar}, 
     {"showenv", cmd_showenv},
     {"fork", cmd_fork},
-    /* {"exec", cmd_exec}, */
+    {"exec", cmd_exec},
     {"jobs", cmd_jobs},
     /* {"deljobs", cmd_deljobs}, */
     {"job", cmd_job},
@@ -376,9 +376,40 @@ void cmd_fork(int paramN, UNUSED char* command[])
     else invalid_param();
 }
 
-/* void cmd_exec(int paramN, char* command[]) */
-/* { */
-/* } */
+void cmd_exec(int paramN, char* command[])
+{ 
+    if (paramN <= 0){
+        missing_param();
+    }
+    else {
+        pid_t pid;
+        
+        pid = fork();
+
+        if (pid == -1){
+            printf("Error: executing");
+            return;
+        }
+
+        if (pid == 0){
+            if (command[paramN - 1][0] == '&'){
+            command[paramN - 1] = NULL;
+            setsid();
+        }
+        
+
+        execvp(command[0], command);
+
+        perror("Error in execvp");
+        return;
+        }
+        else{
+            if (command[paramN - 1][0] != '&'){
+                waitpid(pid, NULL, 0);
+            }
+        }
+    }
+} 
 
 int status_value (char* status)
 {
