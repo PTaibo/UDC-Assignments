@@ -37,7 +37,6 @@ typedef struct {
 typedef struct {
     pid_t pid;
     char *name;
-    char *launch_date;
     char *launch_time;
     int status;
     // ? command line

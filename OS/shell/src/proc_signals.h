@@ -5,10 +5,10 @@
 #include "types.h"
 
 static struct map proc_status[] = {
+    {"ACTIVE", 8},
     {"FINISHED", 1},
     {"STOPPED", 2},
     {"SIGNALED", 4},
-    {"ACTIVE", 8},
     {NULL, -1}
 };
 

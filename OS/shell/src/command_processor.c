@@ -35,9 +35,7 @@ void executeCommand (int paramN, char* command_chunks[])
     else if (check_stat_commands(paramN, command_chunks));
     else if (check_mem_commands(paramN, command_chunks));
     else if (check_process_commands(paramN, command_chunks));
-    else
-        // printf(RED "Error: " RESET_CLR "not a valid command\n");
-        execute_external_command(paramN, command_chunks);
+    else execute_external_command(paramN + 1, command_chunks);
 }
 
 void processCommand (char* line){
