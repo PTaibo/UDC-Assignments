@@ -238,7 +238,8 @@ void dynList_clear (void (*d)(void* info), node **list)
 {
     while (*list != NULL){
         node* next = (*list)->next;
-        d((*list)->info);
+        if (d != NULL)
+            d((*list)->info);
         free((*list)->info);
         free(*list);
         *list = next;
@@ -276,7 +277,8 @@ void dynList_delete (void (*d)(void* info), node *pos, node** list)
         pos->next->prev = pos->prev;
 
     if (pos->info != NULL){
-        d(pos->info);
+        if (d != NULL)
+            d(pos->info);
         free(pos->info);
     }
     free(pos);
