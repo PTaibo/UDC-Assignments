@@ -364,15 +364,17 @@ void cmd_showenv (int paramN, char* command[])
 void cmd_fork(int paramN, UNUSED char* command[]) 
 { 
     if (paramN == 0){
-    pid_t pid;
-	
-	if ((pid=fork())==0){
-/*		VaciarListaProcesos(&LP); Depende de la implementación de cada uno*/
-		printf ("ejecutando proceso %d\n", getpid());
-	}
-	else if (pid!=-1)
-		waitpid (pid,NULL,0);
-    }
+        pid_t pid;
+        
+        if ((pid=fork())==0){
+            printf ("Executing process %d\n", getpid());
+        }
+        if(pid == -1){
+            printf(RED "Error: " RESET_CLR "in pid");
+        }
+        else if (pid!=-1)
+            waitpid (pid,NULL,0);
+        }
     else invalid_param();
 }
 
@@ -399,7 +401,6 @@ void cmd_exec(int paramN, char* command[])
         
 
         execvp(command[0], command);
-
         perror("Error in execvp");
         return;
         }
