@@ -65,7 +65,7 @@ struct cmd proc_commands[] = {
     {"fork", cmd_fork},
     {"exec", cmd_exec},
     {"jobs", cmd_jobs},
-    /* {"deljobs", cmd_deljobs}, */
+    {"deljobs", cmd_deljobs},
     {"job", cmd_job},
     {NULL, NULL}
 };
@@ -478,10 +478,33 @@ void cmd_jobs(UNUSED int paramN, UNUSED char **command)
     }
 }
 
-// void cmd_deljobs(int paramN, char* command[])
-// {
-//     
-// }
+void delete_jobs (int status)
+{
+    Pos pos = dynList_first(procList);
+    while (pos != NULL) {
+        process *proc = dynList_getter(pos);
+        if (proc->status == status) {
+            Pos tmp = dynList_next(&pos);
+            dynList_delete(delete_procblock, pos, &procList);
+            pos = tmp;
+        }
+        else {
+            print_proc_info(dynList_getter(pos));
+            pos = dynList_next(&pos);
+        }
+    }
+}
+
+void cmd_deljobs(int paramN, char* command[])
+{
+    if (!paramN)
+        return missing_param();
+    else if (paramN == 1 && !strcmp(command[0], "-term"))
+        delete_jobs(status_value("FINISHED"));
+    else if (paramN == 1 && !strcmp(command[0], "-sig"))
+        delete_jobs(status_value("SIGNALED"));
+    else invalid_param();
+}
 
 process* find_job_by_pid (int pid){
     Pos pos = dynList_first(procList);
