@@ -1,5 +1,6 @@
 #include "process_commands.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -7,6 +8,8 @@
 #include <pwd.h>
 #include <errno.h>
 #include <sys/resource.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #include "types.h"
 #include "list.h"
@@ -14,6 +17,7 @@
 #include "colors.h"
 #include "error_msgs.h"
 #include "proc_signals.h"
+#include "env.h"
 
 DynamicList procList;
 
@@ -38,10 +42,10 @@ void rm_proc()
 struct cmd proc_commands[] = {
     {"uid", cmd_uid},
     {"showvar", cmd_showvar},
-    // {"changevar", cmd_changevar},
-    // {"subsvar", cmd_subsvar}, 
+    {"changevar", cmd_changevar},
+    {"subsvar", cmd_subsvar}, 
     {"showenv", cmd_showenv},
-    /* {"fork", cmd_fork}, */
+    {"fork", cmd_fork},
     /* {"exec", cmd_exec}, */
     {"jobs", cmd_jobs},
     /* {"deljobs", cmd_deljobs}, */
@@ -168,9 +172,9 @@ void printvar(int p, char* var, char **env)
     } 
     else{
         char** marg = get_mainarg3();
-        printf(CYAN "Con main arg3 = " RESET_CLR"%s(%p) @%p\n", marg[p], marg[p], &marg[p]);
-        printf(CYAN "Con environ = " RESET_CLR"%s(%p) @%p\n", env[p], env[p], &env[p]);
-        printf(CYAN "Con getenv = " RESET_CLR "%s (%p)\n", getenv(var), getenv(var));
+        printf(CYAN "With main arg3 = " RESET_CLR"%s(%p) @%p\n", marg[p], marg[p], &marg[p]);
+        printf(CYAN "With environ = " RESET_CLR"%s(%p) @%p\n", env[p], env[p], &env[p]);
+        printf(CYAN "With getenv = " RESET_CLR "%s (%p)\n", getenv(var), getenv(var));
     }
 }
 
@@ -184,31 +188,32 @@ void cmd_showvar(int paramN, char* command[])
     else if (paramN == 1){
         //showvar <var>
         int pos = 0;
-        pos = postionvar(get_mainarg3(),command[0]);
+        pos = postionvar(__environ,command[0]);
         printvar(pos, command[0], __environ);
     }
 
     else invalid_param();
 } 
 
-int changevar (char** env, char* var, char* valor)
-{                                                   
-  int pos;
-  char *aux;
-   
-  if ((pos=postionvar(env, var)) == -1)
-    return(-1);
- 
-  if ((aux=(char *)malloc(strlen(var)+strlen(valor)+2)) == NULL)//for the = and the \0
-	return -1;
+int changevar (char** env, char* var, char* value)
+{   
+    int pos = 0;
+    char *aux = NULL;
 
-  strcpy(aux,var);
-  strcat(aux,"=");
-  strcat(aux,valor);
+    if ((pos=postionvar(env, var)) == -1)
+        return (pos);
 
-  env[pos]=aux;
-  return (pos);
+    if ((aux=(char *)malloc(strlen(var)+strlen(value)+2)) == NULL)//for the = and the \0
+        return (-1);
+
+    strcpy(aux,var);
+    strcat(aux,"=");
+    strcat(aux,value);
+
+    env[pos]=aux;
+    return (pos);
 }
+
 
 void cmd_changevar(int paramN, char* command[])
 {
@@ -219,34 +224,77 @@ void cmd_changevar(int paramN, char* command[])
     
     else if (paramN == 3){
     
-        if (strcmp(command[0],"-a")){
+        if (!strcmp(command[0],"-a")){
             int p = 0;
             p = changevar(get_mainarg3(), command[1], command[2]);
             printvar(p, command[1],get_mainarg3());
         }
-        else if (strcmp(command[0], "-e")){
+        else if (!strcmp(command[0], "-e")){
             int p = 0;
             p = changevar(__environ, command[1], command[2]);
             printvar(p, command[1], __environ);
         }
 
-        else if (strcmp(command[0], "-p")){
+        else if (!strcmp(command[0], "-p")){
+            char* aux;
             int p = 0;
-            p = changevar(__environ, command[1], command[2]);
+            aux=malloc(4800);
+            strcpy(aux,command[1]);
+            strcat(aux,"=");
+            strcat(aux,(command[2]));
+            printf("%s\n",aux);
+            p = putenv(aux);
+            if (p == 0)
+                printf(RED"Error: " RESET_CLR"Not created correctly");
+            p = postionvar(__environ, command[1]);
             printvar(p, command[1], __environ);
+            //printf("%s\n",getenv(aux));
         }
 
-        else invalid_param(); 
-        
-
+        else invalid_param();  
     } 
 
     else invalid_param();
 }
 
-/* void cmd_subsvar(int paramN, char* command[]) */
-/* { */
-/* } */
+void subsvar(char** env, char* var1, char* var2, char* value)
+{
+    int pos1 = 0, pos2 = 0;
+    pos1 = postionvar(env, var1);
+    pos2 = postionvar(env, var2);
+
+    if (pos1 == -1 || pos2 != -1){
+        printf(RED "Error: " RESET_CLR "cannot substitue variable %s to %s",var1, var2);
+    }
+
+    char* aux = NULL;
+    aux = (char *)malloc(strlen(var2)+strlen(value)+2);//for the = and the \0
+
+    strcpy(aux,var2);
+    strcat(aux,"=");
+    strcat(aux,value);
+
+    env[pos1]=aux;
+}
+
+void cmd_subsvar(int paramN, char* command[])
+{ 
+    //subsvar [-a | -e] var1 var2 value
+    if (paramN == 4){
+
+        if(!strcmp(command[0],"-a")){
+            subsvar(get_mainarg3(),command[1], command[2], command[3]);
+        }
+
+        else if(!strcmp(command[0],"-e")){
+            subsvar(__environ,command[1], command[2], command[3]);
+        }
+
+        else invalid_param();
+
+    } 
+    else invalid_param();
+} 
 
 
 void cmd_showenv (int paramN, char* command[])
@@ -273,9 +321,20 @@ void cmd_showenv (int paramN, char* command[])
     else invalid_param();
 }
 
-/* void cmd_fork(int paramN, char* command[]) */
-/* { */
-/* } */
+void cmd_fork(int paramN, UNUSED char* command[]) 
+{ 
+    if (paramN == 0){
+    pid_t pid;
+	
+	if ((pid=fork())==0){
+/*		VaciarListaProcesos(&LP); Depende de la implementación de cada uno*/
+		printf ("ejecutando proceso %d\n", getpid());
+	}
+	else if (pid!=-1)
+		waitpid (pid,NULL,0);
+    }
+    else invalid_param();
+}
 
 /* void cmd_exec(int paramN, char* command[]) */
 /* { */

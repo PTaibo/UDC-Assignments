@@ -16,13 +16,13 @@
 #include "process_commands.h"
 #include "env.h"
 
-int main(UNUSED int argc, UNUSED char* argv[], char* env[])
+int main(UNUSED int argc, UNUSED char* argv[], char* envp[])
 {
     char line [MAX_COMMAND_SIZE];
     init_file_list();
     init_history();
     init_mem();
-    set_mainarg3(env);
+    set_mainarg3(envp);
     init_proc();
 
     char cwd[MAX_COMMAND_SIZE];
