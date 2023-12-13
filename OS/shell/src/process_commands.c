@@ -207,24 +207,36 @@ void cmd_showvar(int paramN, char* command[])
     else invalid_param();
 } 
 
-int changevar (char** env, char* var, char* value)
+int changevar (char** env, char* var, char* value, int swtch)
 {   
     int pos = 0;
     char *aux = NULL;
 
-    if ((pos=postionvar(env, var)) == -1)
+    if (!swtch){
+        if ((pos=postionvar(env, var)) == -1)
+            return (pos);
+
+        if ((aux=(char *)malloc(strlen(var)+strlen(value)+2)) == NULL)//for the = and the \0
+            return (-1);
+
+        strcpy(aux,var);
+        strcat(aux,"=");
+        strcat(aux,value);
+
+        env[pos]=aux;
+        dynList_add(aux, &env_vars);
         return (pos);
-
-    if ((aux=(char *)malloc(strlen(var)+strlen(value)+2)) == NULL)//for the = and the \0
-        return (-1);
-
-    strcpy(aux,var);
-    strcat(aux,"=");
-    strcat(aux,value);
-
-    env[pos]=aux;
-    dynList_add(aux, &env_vars);
-    return (pos);
+    }
+    else {
+        aux=malloc(strlen(var)+strlen(value)+2);
+        strcpy(aux,var);
+        strcat(aux,"=");
+        strcat(aux,value);
+        putenv(aux);
+        dynList_add(aux, &env_vars);
+        pos = postionvar(__environ, var);
+        return pos;
+    }
 }
 
 
@@ -239,30 +251,19 @@ void cmd_changevar(int paramN, char* command[])
     
         if (!strcmp(command[0],"-a")){
             int p = 0;
-            p = changevar(get_mainarg3(), command[1], command[2]);
+            p = changevar(get_mainarg3(), command[1], command[2], 0);
             printvar(p, command[1],get_mainarg3());
         }
         else if (!strcmp(command[0], "-e")){
             int p = 0;
-            p = changevar(__environ, command[1], command[2]);
+            p = changevar(__environ, command[1], command[2], 0);
             printvar(p, command[1], __environ);
         }
 
         else if (!strcmp(command[0], "-p")){
-            char* aux;
             int p = 0;
-            aux=malloc(4800);
-            strcpy(aux,command[1]);
-            strcat(aux,"=");
-            strcat(aux,(command[2]));
-            printf("%s\n",aux);
-            p = putenv(aux);
-            if (p == 0)
-                printf(RED"Error: " RESET_CLR"Not created correctly");
-            dynList_add(aux, &env_vars);
-            p = postionvar(__environ, command[1]);
+            p = changevar(__environ, command[1], command[2], 1);
             printvar(p, command[1], __environ);
-            //printf("%s\n",getenv(aux));
         }
 
         else invalid_param();  
