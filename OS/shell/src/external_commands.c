@@ -20,8 +20,7 @@ pid_t create_child (char* command[])
     pid_t child = fork();
 
     if (child == 0) {
-        int status_code = execvp(command[0], command);
-        if (status_code == -1) {
+        if (execvp(command[0], command) == -1) {
             print_error();
             cmd_quit(0, NULL);
         }
