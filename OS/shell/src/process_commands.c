@@ -22,7 +22,7 @@
 #include "mem_commands.h"
 
 DynamicList procList;
-DynamicList env_vars;
+char* env_var[MAX_ELEMENTS];
 
 void init_proc()
 {
@@ -31,7 +31,8 @@ void init_proc()
 
 void init_env_vars()
 {
-    dynList_init(&env_vars);
+    for(int i = 0; i < MAX_ELEMENTS; i++)
+        env_var[i] = NULL;
 }
 
 void delete_procblock(void* p)
@@ -48,7 +49,11 @@ void rm_proc()
 
 void rm_env_var()
 {
-    dynList_clear(NULL, &env_vars);
+    for (int i = 0; i < MAX_ELEMENTS; i++){
+        if (env_var[i] != NULL){
+            free (env_var[i]);
+        }
+    }
 }
 
 struct cmd proc_commands[] = {
@@ -183,8 +188,11 @@ void printvar(int p, char* var, char **env)
         //perror(RED "Error: " RESET_CLR "cannot find
     } 
     else{
-        char** marg = get_mainarg3();
-        printf(CYAN "With main arg3 = " RESET_CLR"%s(%p) @%p\n", marg[p], marg[p], &marg[p]);
+        
+        if (p < get_mainarg3Size()){
+            char** marg = get_mainarg3();
+            printf(CYAN "With main arg3 = " RESET_CLR"%s(%p) @%p\n", marg[p], marg[p], &marg[p]);
+        }
         printf(CYAN "With environ = " RESET_CLR"%s(%p) @%p\n", env[p], env[p], &env[p]);
         printf(CYAN "With getenv = " RESET_CLR "%s (%p)\n", getenv(var), getenv(var));
     }
@@ -208,7 +216,7 @@ void cmd_showvar(int paramN, char* command[])
 } 
 
 int changevar (char** env, char* var, char* value, int swtch)
-{   
+{
     int pos = 0;
     char *aux = NULL;
 
@@ -224,17 +232,24 @@ int changevar (char** env, char* var, char* value, int swtch)
         strcat(aux,value);
 
         env[pos]=aux;
-        dynList_add(aux, &env_vars);
+        if (env_var[pos] != NULL){
+            free (env_var[pos]);
+        }
+        env_var[pos] = aux;
         return (pos);
     }
     else {
-        aux=malloc(strlen(var)+strlen(value)+2);
+        aux=(char *)malloc(strlen(var)+strlen(value)+2);
         strcpy(aux,var);
         strcat(aux,"=");
         strcat(aux,value);
         putenv(aux);
-        dynList_add(aux, &env_vars);
         pos = postionvar(__environ, var);
+        if (env_var[pos] != NULL){
+            free (env_var[pos]);
+        }
+        env_var[pos] = aux;
+        printf("%d\n",pos);
         return pos;
     }
 }
@@ -252,7 +267,7 @@ void cmd_changevar(int paramN, char* command[])
         if (!strcmp(command[0],"-a")){
             int p = 0;
             p = changevar(get_mainarg3(), command[1], command[2], 0);
-            printvar(p, command[1],get_mainarg3());
+            printvar(p, command[1],__environ);
         }
         else if (!strcmp(command[0], "-e")){
             int p = 0;
@@ -290,7 +305,10 @@ void subsvar(char** env, char* var1, char* var2, char* value)
     strcat(aux,value);
 
     env[pos1]=aux;
-    dynList_add(aux, &env_vars);
+    if (env_var[pos1] != NULL){
+            free (env_var[pos1]);
+        }
+    env_var[pos1] = aux;
 }
 
 void cmd_subsvar(int paramN, char* command[])
