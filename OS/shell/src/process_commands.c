@@ -356,11 +356,27 @@ void cmd_fork(int paramN, UNUSED char* command[])
 /* { */
 /* } */
 
+int status_value (char* status)
+{
+    for (int i = 0; proc_status[i].name != NULL; i++)
+        if (!strcmp(status, proc_status[i].name))
+            return proc_status[i].value;
+    return -1;
+}
+
+int status_name (int status)
+{
+    for (int i = 0; proc_status[i].name != NULL; i++)
+        if (status == proc_status[i].value)
+            return proc_status[i].value;
+    return -1;
+}
+
 void new_process (char* name, pid_t pid)
 {
     process *proc = malloc(sizeof(process));
     proc->pid = pid;
-    proc->status = proc_status[0].value;
+    proc->status = status_value("ACTIVE");
     proc->name = malloc(MAX_ELEMENTS);
     strcpy(proc->name, name);
     proc->launch_time = parse_time();
@@ -369,6 +385,12 @@ void new_process (char* name, pid_t pid)
 
 int update_proc_info (process *proc)
 {
+    int wstatus;
+    if (waitpid(proc->pid, &wstatus, 0) != -1){
+        if (WIFEXITED(wstatus))
+            proc->status = status_value("FINISHED");
+    }
+
     // TODO
     // waitpid reports status changes (not the state itself)
     // wstats has only a meaningful value if waitpid returns the pid
