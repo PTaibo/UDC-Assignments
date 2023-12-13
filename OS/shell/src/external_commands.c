@@ -7,6 +7,7 @@
 
 #include "colors.h"
 #include "process_commands.h"
+#include "basic_commands.h"
 
 void print_error()
 {
@@ -22,7 +23,7 @@ pid_t create_child (char* command[])
         int status_code = execvp(command[0], command);
         if (status_code == -1) {
             print_error();
-            return -1;
+            cmd_quit(0, NULL);
         }
     }
 

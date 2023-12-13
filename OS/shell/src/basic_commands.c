@@ -7,6 +7,7 @@
 #include <sys/utsname.h>
 #include <time.h>
 
+#include "process_commands.h"
 #include "types.h"
 #include "colors.h"
 #include "error_msgs.h"
@@ -48,6 +49,7 @@ void cmd_quit(UNUSED int paramN, UNUSED char* params[])
     rm_file_list();
     rm_history();
     rm_mem();
+    rm_proc();
     rm_env_var();
     
     exit(0);
