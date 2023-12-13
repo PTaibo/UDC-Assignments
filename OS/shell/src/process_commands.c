@@ -88,19 +88,19 @@ void dysplayUID(){
     if (u == NULL){
         perror("No user");
     }
-    else printf("Real credential: %d User:%s\n",uid, e->pw_name);
+    else printf(CYAN "Real credential: "RESET_CLR "%d User:%s\n",uid, e->pw_name);
 
     if (e == NULL){
         perror("No user");
     }
-    else printf("Effective credential: %d User:%s\n",euid, e->pw_name);
+    else printf(CYAN "Effective credential: "RESET_CLR"%d User:%s\n",euid, e->pw_name);
 }
 
 void changeUID(char* command, int type){
     uid_t uid = (uid_t) atoi(command);
     
     if (!type){
-        if (setuid(uid) == -1){
+        if (seteuid(uid) == -1){
             printf(RED "Error: " RESET_CLR "cannot change credential\n");
         }
         else dysplayUID();
@@ -111,7 +111,7 @@ void changeUID(char* command, int type){
            printf(RED "Error: " RESET_CLR "No user %s\n",command);
            return;
         }
-        if (setuid(p->pw_uid) == -1){
+        if (seteuid(p->pw_uid) == -1){
             printf(RED "Error: " RESET_CLR "cannot change credential\n");
             return;
         }
