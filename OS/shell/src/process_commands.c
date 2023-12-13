@@ -41,8 +41,6 @@ void delete_procblock(void* p)
     free(proc->launch_time);
 }
 
-//void delete_env_var (void *p){}
-
 void rm_proc()
 {
     dynList_clear(delete_procblock, &procList);
