@@ -215,45 +215,51 @@ void cmd_showvar(int paramN, char* command[])
     else invalid_param();
 } 
 
-int changevar (char** env, char* var, char* value, int swtch)
+void changevar (char** env, char* var, char* value, int swtch)
 {
     int pos = 0;
     char *aux = NULL;
 
     if (!swtch){
         if ((pos=postionvar(env, var)) == -1)
-            return (pos);
+            return;
 
         if ((aux=(char *)malloc(strlen(var)+strlen(value)+2)) == NULL)//for the = and the \0
-            return (-1);
+            return;
 
         strcpy(aux,var);
         strcat(aux,"=");
         strcat(aux,value);
 
         env[pos]=aux;
+        printf("%s\n",env[pos]);
         if (env_var[pos] != NULL){
             free (env_var[pos]);
         }
         env_var[pos] = aux;
-        return (pos);
+        return;
     }
     else {
-        aux=(char *)malloc(strlen(var)+strlen(value)+2);
+        if ((aux=(char *)malloc(strlen(var)+strlen(value)+2)) == NULL)//for the = and the \0
+            return;
+        int p = 0;
         strcpy(aux,var);
         strcat(aux,"=");
         strcat(aux,value);
-        putenv(aux);
+
+        p = putenv(aux);
+        if (p != 0){
+            printf("An error has ocurred\n");
+        }
         pos = postionvar(__environ, var);
         if (env_var[pos] != NULL){
             free (env_var[pos]);
         }
+        printf("%s\n",__environ[pos]);
         env_var[pos] = aux;
-        printf("%d\n",pos);
-        return pos;
+        return;
     }
 }
-
 
 void cmd_changevar(int paramN, char* command[])
 {
@@ -265,20 +271,20 @@ void cmd_changevar(int paramN, char* command[])
     else if (paramN == 3){
     
         if (!strcmp(command[0],"-a")){
-            int p = 0;
-            p = changevar(get_mainarg3(), command[1], command[2], 0);
-            printvar(p, command[1],__environ);
+            //int p = 0;
+            changevar(get_mainarg3(), command[1], command[2], 0);
+            //printvar(p, command[1],__environ);
         }
         else if (!strcmp(command[0], "-e")){
-            int p = 0;
-            p = changevar(__environ, command[1], command[2], 0);
-            printvar(p, command[1], __environ);
+            //int p = 0;
+            changevar(__environ, command[1], command[2], 0);
+            //printvar(p, command[1], __environ);
         }
 
         else if (!strcmp(command[0], "-p")){
-            int p = 0;
-            p = changevar(__environ, command[1], command[2], 1);
-            printvar(p, command[1], __environ);
+            //int p = 0;
+            changevar(__environ, command[1], command[2], 1);
+            //printvar(p, command[1], __environ);
         }
 
         else invalid_param();  
@@ -294,7 +300,7 @@ void subsvar(char** env, char* var1, char* var2, char* value)
     pos2 = postionvar(env, var2);
 
     if (pos1 == -1 || pos2 != -1){
-        printf(RED "Error: " RESET_CLR "cannot substitue variable %s to %s",var1, var2);
+        printf(RED "Error: " RESET_CLR "cannot substitue variable %s to %s\n",var1, var2);
     }
 
     char* aux = NULL;
