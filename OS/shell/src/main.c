@@ -24,6 +24,7 @@ int main(UNUSED int argc, UNUSED char* argv[], char* envp[])
     init_mem();
     set_mainarg3(envp);
     init_proc();
+    init_env_vars();
 
     char cwd[MAX_COMMAND_SIZE];
     getcwd(cwd, MAX_COMMAND_SIZE);

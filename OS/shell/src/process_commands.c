@@ -22,10 +22,16 @@
 #include "mem_commands.h"
 
 DynamicList procList;
+DynamicList env_vars;
 
 void init_proc()
 {
     dynList_init(&procList);
+}
+
+void init_env_vars()
+{
+    dynList_init(&env_vars);
 }
 
 void delete_procblock(void* p)
@@ -35,9 +41,16 @@ void delete_procblock(void* p)
     free(proc->launch_time);
 }
 
+//void delete_env_var (void *p){}
+
 void rm_proc()
 {
     dynList_clear(delete_procblock, &procList);
+}
+
+void rm_env_var()
+{
+    dynList_clear(NULL, &env_vars);
 }
 
 struct cmd proc_commands[] = {
@@ -212,6 +225,7 @@ int changevar (char** env, char* var, char* value)
     strcat(aux,value);
 
     env[pos]=aux;
+    dynList_add(aux, &env_vars);
     return (pos);
 }
 
@@ -247,6 +261,7 @@ void cmd_changevar(int paramN, char* command[])
             p = putenv(aux);
             if (p == 0)
                 printf(RED"Error: " RESET_CLR"Not created correctly");
+            dynList_add(aux, &env_vars);
             p = postionvar(__environ, command[1]);
             printvar(p, command[1], __environ);
             //printf("%s\n",getenv(aux));
@@ -276,6 +291,7 @@ void subsvar(char** env, char* var1, char* var2, char* value)
     strcat(aux,value);
 
     env[pos1]=aux;
+    dynList_add(aux, &env_vars);
 }
 
 void cmd_subsvar(int paramN, char* command[])

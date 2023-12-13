@@ -13,6 +13,7 @@
 #include "file_commands.h"
 #include "history_commands.h"
 #include "mem_commands.h"
+#include "process_commands.h"
 #include "help_pages.h"
 
 struct cmd command_list[] = {
@@ -47,6 +48,7 @@ void cmd_quit(UNUSED int paramN, UNUSED char* params[])
     rm_file_list();
     rm_history();
     rm_mem();
+    rm_env_var();
     
     exit(0);
 }

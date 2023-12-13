@@ -4,6 +4,8 @@
 
 void init_proc();
 void rm_proc();
+void init_env_vars();
+void rm_env_var();
 int check_process_commands (int paramN, char* commmand[]);
 
 void new_process (char* name, pid_t pid);
