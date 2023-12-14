@@ -498,7 +498,7 @@ void delete_jobs (int status)
     Pos pos = dynList_first(procList);
     while (pos != NULL) {
         process *proc = dynList_getter(pos);
-        if (proc->status == status) {
+        if ((proc->status & status) > 0) {
             Pos tmp = dynList_next(&pos);
             dynList_delete(delete_procblock, pos, &procList);
             pos = tmp;
@@ -512,12 +512,18 @@ void delete_jobs (int status)
 
 void cmd_deljobs(int paramN, char* command[])
 {
+    int status = 0;
     if (!paramN)
         return missing_param();
-    else if (paramN == 1 && !strcmp(command[0], "-term"))
-        delete_jobs(status_value("FINISHED"));
-    else if (paramN == 1 && !strcmp(command[0], "-sig"))
-        delete_jobs(status_value("SIGNALED"));
+    if (paramN == 1 || paramN == 2) {
+        for (int i = 0; i < paramN; i++) {
+            if (!strcmp(command[i], "-term"))
+                status |= status_value("FINISHED");
+            if (!strcmp(command[i], "-sig"))
+                status |= status_value("SIGNALED");
+        }
+        delete_jobs(status);
+    }
     else invalid_param();
 }
 
