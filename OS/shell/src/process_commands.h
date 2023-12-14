@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unistd.h>
+#include "types.h"
 
 void init_proc();
 void rm_proc();
@@ -15,8 +16,8 @@ void cmd_showvar (int paramN, char* command[]);
 void cmd_changevar (int paramN, char* command[]);
 void cmd_subsvar (int paramN, char* command[]);
 void cmd_showenv (int paramN, char* command[]);
-void cmd_fork (int paramN, char* command[]); 
+void cmd_fork (int paramN, UNUSED char* command[]); 
 void cmd_exec (int paramN, char* command[]);
-/* void cmd_jobs (int paramN, char* command[]); */
+void cmd_jobs (int paramN, char* command[]);
 void cmd_deljobs (int paramN, char* command[]);
 void cmd_job (int paramN, char* command[]);

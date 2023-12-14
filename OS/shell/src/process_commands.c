@@ -384,31 +384,9 @@ void cmd_exec(int paramN, char* command[])
         missing_param();
     }
     else {
-        pid_t pid;
-        
-        pid = fork();
-
-        if (pid == -1){
-            printf("Error: executing");
-            return;
-        }
-
-        if (pid == 0){
-            if (command[paramN - 1][0] == '&'){
-            command[paramN - 1] = NULL;
-            setsid();
-        }
-        
-
         execvp(command[0], command);
-        perror("Error in execvp");
-        return;
-        }
-        else{
-            if (command[paramN - 1][0] != '&'){
-                waitpid(pid, NULL, 0);
-            }
-        }
+        perror(RED "Error " RESET_CLR  "executing:");
+        return;    
     }
 } 
 
