@@ -39,6 +39,6 @@ typedef struct {
     char *name;
     char *launch_time;
     int status;
-    // ? command line
+    int signal;
 } process;
 
