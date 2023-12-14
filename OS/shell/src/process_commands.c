@@ -1,6 +1,7 @@
 #include "process_commands.h"
 
 #include <stdio.h>
+#include <signal.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -398,12 +399,20 @@ int status_value (char* status)
     return -1;
 }
 
-int status_name (int status)
+char* status_name (int status)
 {
     for (int i = 0; proc_status[i].name != NULL; i++)
         if (status == proc_status[i].value)
-            return proc_status[i].value;
-    return -1;
+            return proc_status[i].name;
+    return NULL;
+}
+
+char* signal_name (int signal)
+{
+    for (int i = 0; proc_signal[i].name != NULL; i++)
+        if (signal == proc_signal[i].value)
+            return proc_signal[i].name;
+    return NULL;
 }
 
 void new_process (char* name, pid_t pid)
@@ -411,39 +420,66 @@ void new_process (char* name, pid_t pid)
     process *proc = malloc(sizeof(process));
     proc->pid = pid;
     proc->status = status_value("ACTIVE");
+    proc->signal = -1;
     proc->name = malloc(MAX_ELEMENTS);
     strcpy(proc->name, name);
     proc->launch_time = parse_time();
     dynList_add(proc, &procList);
 }
 
+void update_status (int wstatus, process *proc)
+{
+    if (WIFSTOPPED(wstatus)){
+        proc->status = status_value("STOPPED");
+        proc->signal = WSTOPSIG(wstatus);
+    }
+    else if (WIFSIGNALED(wstatus)){
+        proc->status = status_value("SIGNALED");
+        proc->signal = WTERMSIG(wstatus);
+    }
+    else if (WIFCONTINUED(wstatus)){
+        proc->status = status_value("ACTIVE");
+        proc->signal = -1;
+    }
+    else if (WIFEXITED(wstatus)){
+        proc->status = status_value("FINISHED");
+        proc->signal = -1;
+    }
+}
+
 int update_proc_info (process *proc)
 {
-    int wstatus;
-    if (waitpid(proc->pid, &wstatus, 0) != -1){
-        if (WIFEXITED(wstatus))
-            proc->status = status_value("FINISHED");
+    if (proc->status != status_value("FINISHED")
+     && proc->status != status_value("SIGNALED")) {
+        getpriority(PRIO_PROCESS, proc->pid);
+        int wstatus;
+        int child = waitpid(proc->pid, &wstatus, WNOHANG
+                                               | WUNTRACED
+                                               | WCONTINUED);
+        if (child == -1) return -1;
+        else if (child > 0) {
+            update_status(wstatus, proc);
+        }
     }
-
-    // TODO
-    // waitpid reports status changes (not the state itself)
-    // wstats has only a meaningful value if waitpid returns the pid
-    // Priority is checked here. Return it.
-    return getpriority(PRIO_PROCESS, proc->pid);
+    if (proc->status != status_value("FINISHED")
+     && proc->status != status_value("SIGNALED"))
+        return getpriority(PRIO_PROCESS, proc->pid);
+    errno = 0;
+    return -1;
 }
 
 void print_proc_info (process *proc)
 {
     int priority = update_proc_info(proc);
+    if (priority == -1 && errno != 0) {
+        perror(RED"Error: "RESET_CLR "could not update process");
+        return; 
+    }
     printf("%d  p:%d  %s ", proc->pid,
                         priority,
                         proc-> launch_time);
-    for (int i = 0; proc_status[i].value != -1; i++) {
-        if (proc->status == proc_status[i].value){
-            printf(" %s ", proc_status[i].name);
-            break;
-        }
-    }
+    printf(" %s (%s) ", status_name(proc->status),
+                        signal_name(proc->signal));
     printf(" %s ", proc->name);
     printf("\n");
 }
@@ -541,14 +577,15 @@ void cmd_job(int paramN, char* command[])
 {
     if (!paramN)
         return missing_param();
-    if (paramN == 1 && atoi(command[0])) {
+    else if (paramN == 1 && atoi(command[0])) {
         process *proc = find_job_by_pid(atoi(command[0]));
         if (proc == NULL)
             printf(RED "Error: " RESET_CLR "pid not in list\n");
         else
             print_proc_info(proc);
     }
-    if (paramN == 2 && !strcmp(command[0], "-fg"))
+    else if (paramN == 2 && !strcmp(command[0], "-fg"))
         move_to_foreground(atoi(command[1]));
+    else invalid_param();
 }
 

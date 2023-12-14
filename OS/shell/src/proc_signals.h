@@ -13,6 +13,7 @@ static struct map proc_status[] = {
 };
 
 static struct map proc_signal[]={   
+    {"000", -1},
 	{"HUP", SIGHUP},
 	{"INT", SIGINT},
 	{"QUIT", SIGQUIT},
