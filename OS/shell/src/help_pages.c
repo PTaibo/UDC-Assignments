@@ -408,7 +408,7 @@ void help_subsvar()
 {
     printf(CMD_NAME_CLR "\nSUBSVAR\n" RESET_CLR
            "\tChanges one enviroment variable for other\n"
-           "\tUsage: [-a|-e] varold varnew value\n"
+           "\tUsage: subsvar [-a|-e] varold varnew value\n"
            "\tParameters:\n"
            "\t\t-a: accesses using the third argument of main\n"
            "\t\t-e: accesses using environ\n");
