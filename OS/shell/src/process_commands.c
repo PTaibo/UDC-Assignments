@@ -256,7 +256,6 @@ void changevar (char** env, char* var, char* value, int swtch)
         if (env_var[pos] != NULL){
             free (env_var[pos]);
         }
-        printf("%s\n",__environ[pos]);
         env_var[pos] = aux;
         return;
     }
