@@ -9,9 +9,8 @@ GROUP:6.1                     DATE:09/10/2023
 
 #include "time.h"
 
-
-
-double microseconds() { /* obtains the system time in microseconds */
+double microseconds()
+{ /* obtains the system time in microseconds */
     struct timeval t;
     if (gettimeofday(&t, NULL) < 0 )
         return 0.0;
@@ -19,19 +18,19 @@ double microseconds() { /* obtains the system time in microseconds */
     return (t.tv_usec + t.tv_sec * 1000000.0);
 }
 
-
-void printLinealTitle(){
+void printLinealTitle()
+{
 
    printf("   n\t   t(n)\t\tt(n)/n^0.8\tt(n)/n\t\t       t(n)/n^1.2\n");
 
 }
 
-void printlogTitles(){
+void printlogTitles()
+{
 
     printf(" n\t   t(n)\t\tt(n)/n^1\tt(n)/n*logn\t        t(n)/n^1.4\n");
 
 }
-
 
 void PrintLinealValues(int i,double v)
 {

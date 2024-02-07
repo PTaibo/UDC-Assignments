@@ -13,7 +13,7 @@ CPU: Four 2.8GHz Intel i5 Skylake Processors
 RAM: 7.6GB RAM
 Battery: 100% and plugged
 
-And and was compiled with the next specifications:
+And was compiled with the next specifications:
 
 Compiler: gcc (Debian 10.2.1-6) 10.2.1 20210110
 Flags: -Wall -O2 -lm
@@ -22,9 +22,9 @@ Te purpose of this practical is to implement the insertion sort and the
 shell sort algorithms.
 
 For the first test we run the algorithms with a random initialized array 
-and a decending ordered array and we checked it they were sorted correctly.
+and a descending ordered array and we checked it they were sorted correctly.
 
-Random inizalized arrays:
+Random initialized arrays:
 
     Random initialization
     [  2  4 15 10 -2  4  1 -14  4 -5 -14  4 -14 -8 -9]
@@ -89,7 +89,7 @@ Descending ordered arrays:
     Sorted? 1
 
 We have confirmed after this first test that both algorithms works correctly
-by executing them several times, so now we can procede to determine their execution
+by executing them several times, so now we can proceed to determine their execution
 times. We will use arrays of size 500, 1000, 2000, 4000, 8000, 16000 and 32000 and
 we will test both of them with a ascending ordered array, a descending ordered array
 and a random initialized array.
@@ -97,7 +97,7 @@ and a random initialized array.
 NOTES: 
     -All the executions times were measured in microseconds.
     -If the execution time is below 500 microseconds a * is indicated. In this cases 
-     to get a more accurated time we have executed it K times and computed the mean.
+     to get a more accurate time we have executed it K times and computed the mean.
      The constant K has to be a power of 10 for the measurement to be correct so we
      chose 1000.
 
@@ -118,9 +118,9 @@ Tight bound: n.
 Slightly overestimated bound:n^1.2.
 
 We presumed lineal complexity in this case because it has to iterate thorough
-the list only once. To empericaly demostrate our hipothesis we made the
-calculations with our estimateted bound and a higher and a lower bounds. 
-Analysing the results we observe the hypothesized tight bound tends to the
+the list only once. To empirically demonstrate our hypothesis we made the
+calculations with our estimated bound and a higher and a lower bounds. 
+Analysing the results we observe the hypothesized tight bound tends to
 the constant 0.008 while the other two tend to zero and infinity, respectively.
 This proves that the complexity of the algorithm is indeed lineal.
 
@@ -138,10 +138,10 @@ Slightly underestimated bound: n^1.8.
 Tight bound: n^2.
 Slightly overestimated bound:n^2.2.
 
-We presumed cuadratic complexity for this case. Analysing the results we observe 
-the hypothesized tight bound tends to the the constant 0.001 while the higher bound
-and the lower boud tend to zero and infinity, respectively. This proves that the 
-complexity of the algorithm is indeed cuadratic.
+We presumed quadratic complexity for this case. Analysing the results we observe 
+the hypothesized tight bound tends to the constant 0.001 while the higher bound
+and the lower bound tend to zero and infinity, respectively. This proves that the 
+complexity of the algorithm is indeed quadratic.
 
 Insertion sort for random array:
    n	     t(n)	   t(n)/n^1.8	t(n)/n^2	   t(n)/n^2.2
@@ -157,10 +157,10 @@ Slightly underestimated bound: n^1.8.
 Tight bound: n^2.
 Slightly overestimated bound:n^2.2.
 
-For this case we presumed cuadratic complexity. We can observe the results of the test
+For this case we presumed quadratic complexity. We can observe the results of the test
 that the tight bound tends to the constant 0.0008, meanwhile the lower bound tend to
-infinity and the higer bound to zero. So this proves that our hypothesis was correct
-and the complexity of this algorithm is indeed cuadratic.
+infinity and the higher bound to zero. So this proves that our hypothesis was correct
+and the complexity of this algorithm is indeed quadratic.
 
 Shell sort for ascending ordered array:
     n	    t(n)ll 	  t(n)/n^0.8  t(n)/n^1.1   t(n)/n^1.4
@@ -204,9 +204,9 @@ Slightly underestimated bound: n^0.8.
 Tight bound: n^1.1.
 Slightly overestimated bound:n^1.4.
 
-In these cases our initial hypothesis was that it was cuadratic but after runing
+In these cases our initial hypothesis was that it was quadratic but after running
 it we could see that it was incorrect. Our next guest was that it was of type n times
-logarithm of n but it was also incorrect altough it was getting closer. So after some 
+logarithm of n but it was also incorrect although it was getting closer. So after some 
 tries we set the tight bound to n ^ 1.1 and we can see that in these three cases it
 tends to the constants 0.02, 0.03 and 0.1. And the higher bounds and
 lower bounds tended to zero and infinity, respectively.
@@ -230,9 +230,9 @@ several times to confirm the results were correct.
 
 Conclusions:
 
-After running all these tests and emperically analysing the results we have
-demostrated that in the first case the complexity varies depending of how 
-the array is initially ordered, being the average case cuadratic. On the other hand,
+After running all these tests and empirically analysing the results we have
+demonstrated that in the first case the complexity varies depending of how 
+the array is initially ordered, being the average case quadratic. On the other hand,
 the shell sort has an empirical complexity of O(n^1.1), thus we can conclude
 that the shell sort is more efficient and fast than the insertion sort.
 

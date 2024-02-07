@@ -11,14 +11,14 @@ OS: #1 SMP Debian 5.10.191-1 (2023-08-16)
 Kernel: Linux 5.10.0-25-amd64
 CPU: Four 2.8GHz Intel i5 Skylake Processors
 RAM: 7.6GB RAM
-Batery: 100% and plugged
+Battery: 100% and plugged
 
 
 The purpose of the practical is to obtain the biggest consecutive sum from
 a given array of integers. To achieve this, two different algorithms were
 employed and then compared.
 
-For the first test we run the algorithms using a predifined set of arrays 
+For the first test we run the algorithms using a predefined set of arrays 
 to confirm they worked correctly.
 
 TEST 1:
@@ -87,15 +87,15 @@ never surpass the 500μs threshold, so the approximate time has to be calculated
 by executing it K times and computing the mean. The constant K has to be a 
 power of 10 for the measurement to be correct, so we chose 1000.
 
-For the first algorithm we presumed cuadratic complexity. To emperically
-demostrate our hipothesis we made the calculations with our estimated
+For the first algorithm we presumed quadratic complexity. To empirically
+demonstrate our hypothesis we made the calculations with our estimated
 bound and a higher and lower bounds. Analysing the results we observe
-the hypothesized tight bound tends to the the constant 0.001 while the
+the hypothesized tight bound tends to the constant 0.001 while the
 other two tend to zero and infinity, respectively. This proves that the 
-complexity of the algorithm is indeed cuadratic.
+complexity of the algorithm is indeed quadratic.
 
 For the second algorithm we assumed linear complexity. In this case the
-constant tended to 0.003 in contrast with the repective lower and higher
+constant tended to 0.003 in contrast with the respective lower and higher
 bounds which again tended to infinity and zero, which is empirical proof
 that the estimated bound was correct.
 
@@ -103,7 +103,7 @@ Observations:
 
 To ensure the accuracy of the results the tests were non-manually repeated.
 From this we observed that, in each execution of the program, the first set
-of tests, which corresponded to the cuadratic algorithm as it was the first
+of tests, which corresponded to the quadratic algorithm as it was the first
 one to be run, presented some anomalous values instead of the expected 0.001
 constant. This happened for two or three measurements before going back to the
 predicted behaviour.
@@ -126,7 +126,7 @@ extract an accurate conclusion.
 Conclusion:
 
 After running all these tests and empirically analysing the results, we have
-demonstrated that the cuadratic and linear upper bounds are good approximations
+demonstrated that the quadratic and linear upper bounds are good approximations
 for the first and second algorithms, respectively. From this we can conclude that
 the latter is more efficient than the former.
 
