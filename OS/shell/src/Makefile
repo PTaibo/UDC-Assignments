@@ -1,3 +1,6 @@
+# Name: Siyuan He              Login: siyuan.he
+# Name: Paula Taibo Suárez     Login: p.taibo
+
 #CFLAGS = -Wall -Wextra -O2
  CFLAGS = -Wall -Wextra -g
 

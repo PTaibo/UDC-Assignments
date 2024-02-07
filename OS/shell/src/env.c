@@ -1,3 +1,8 @@
+/*
+ * Name: Siyuan He              Login: siyuan.he
+ * Name: Paula Taibo Suárez     Login: p.taibo
+ */
+
 #include "env.h"
 #include <stdlib.h>
 

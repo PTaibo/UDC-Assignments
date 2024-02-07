@@ -1,3 +1,8 @@
+/*
+ * Name: Siyuan He              Login: siyuan.he
+ * Name: Paula Taibo Suárez     Login: p.taibo
+ */
+
 #define _GNU_SOURCE
 #define _XOPEN_SOURCE 500
 #include "stat_commands.h"

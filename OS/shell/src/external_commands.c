@@ -1,3 +1,8 @@
+/*
+ * Name: Siyuan He              Login: siyuan.he
+ * Name: Paula Taibo Suárez     Login: p.taibo
+ */
+
 #include "external_commands.h"
 
 #include <unistd.h>

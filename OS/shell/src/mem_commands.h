@@ -1,3 +1,8 @@
+/*
+ * Name: Siyuan He              Login: siyuan.he
+ * Name: Paula Taibo Suárez     Login: p.taibo
+ */
+
 #pragma once
 
 // Check if a command is implemented in the file
